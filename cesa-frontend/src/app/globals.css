@@ -2,6 +2,8 @@
 @plugin "flowbite-react/plugin/tailwindcss";
 @source "../../.flowbite-react/class-list.json";
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&display=swap');
 
 :root {
   --background: #ffffff;
@@ -22,6 +24,8 @@
   --color-cl3: var(--cl3);
   --color-cl4: var(--cl4);
   --font-roboto: "Roboto", sans-serif;
+  --font-oswald: "Oswald", sans-serif;
+  --font-cormorant: "Cormorant Garamond", serif;
 }
 
 @media (prefers-color-scheme: dark) {
