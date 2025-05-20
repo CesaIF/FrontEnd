@@ -7,13 +7,13 @@ export default function Login(){
 
     return(
         <>
-        <div className="min-h-screen bg-emerald-200 w-full flex flex-col items-center justify-center">
+        <div className="min-h-screen bg-cover bg-[url('/background/background.jpg')] flex flex-col items-center">
 
-            <div className="w-[35%] border-1 border-neutral-400 bg-white rounded-2xl flex flex-col justify-center items-center h-[550px] mt-[2%]">
+            <div className="flex flex-col justify-center items-center mt-[4%]">
+                <img className="w-[20%] rounded-4xl" src="/logov4/Cesav4.png"></img>
+            </div>
 
-                <div className="flex flex-col justify-center items-center mb-[6%]">
-                    <img className="w-[30%] rounded-4xl" src="/logov4/Cesav4.png"></img>
-                </div>
+            <div className="w-[35%] border-1 border-neutral-400 bg-white rounded-2xl flex flex-col justify-center items-center h-[420px] mt-[2%]">
 
                 <div className="flex flex-col justify-center items-center text-5xl font-roboto text-neutral-800 mb-10">
                     <h1 className="font-cormorant">Login</h1>
