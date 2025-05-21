@@ -6,6 +6,7 @@ import {AiOutlineMore} from "react-icons/ai";
 import { useState } from "react";
 import { IoExitOutline } from "react-icons/io5";
 import { IoIosHelpCircleOutline } from "react-icons/io";
+import { GoHistory } from "react-icons/go";
 
 export default function Header(){
 
@@ -65,10 +66,17 @@ export default function Header(){
 
             {isSecondOpen && (
                 <div className="absolute right-6 mt-3 bg-white shadow-neutral-950 shadow-2xl py-4 px-4 w-[200px] rounded-2xl border-neutral-700 text-neutral-700 font-cormorant flex flex-col justify-center">
-                    <div className="flex justify-between items-center">
+                    <div className="flex justify-between items-center mb-5">
                         <h1 className="ml-[10%]">Versão</h1>
                         <h1 className="mr-[10%]">1.0</h1>
                     </div>
+                    <div className="w-[100%] flex justify-center items-center">
+                        <div className="bg-neutral-400 h-[1px] w-[100%] mb-5"></div>
+                    </div>
+                    <button className="w-[100%] hover:bg-neutral-200 rounded-xl flex flex-row justify-between items-center">
+                        <h1 className="py-1.5 px-4" href={"/login"}>Histórico</h1>
+                        <GoHistory className="mr-[10%]" size={20}></GoHistory>
+                    </button>
                 </div>
             )}
         </header>
