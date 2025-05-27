@@ -206,14 +206,13 @@ export default function Dashboard(){
                                 <h1 className="text-3xl">Cadastro de Locação</h1>
                                 <form className="w-full mt-10 flex flex-col gap-6">
                                     <div className="flex justify-center"><ChoiceBox label={"Veículo"}>Escolha o Veículo!</ChoiceBox></div>
-                                    <div className="flex justify-center"><Input label={"Kilometragem do veículo"} type={"text"} placeholder={"Exemplo: 135000"}></Input></div>
+                                    <div className="flex justify-center"><ChoiceBox label={"Motorista"}>Escolha o Motorista!</ChoiceBox></div>
                                     <div className="flex justify-center"><Textarea label={"Itinerário"} placeholder={"Descreva o Itinerário"} maxLength={300} rows={3}></Textarea></div>
                                     <div className="flex justify-center"><Textarea label={"Motivo da Saída"} placeholder={"Descreva o motivo da Saída"} maxLength={300} rows={3}></Textarea></div>
-                                    <div className="flex justify-center"><ChoiceBox label={"Motorista"}>Escolha o Motorista!</ChoiceBox></div>
                                 </form>
                                 <div className="flex flex-row justify-between items-center mt-10 w-[80%]">
                                     <BadButton onClick={handleOpenModal}>Cancelar</BadButton>
-                                    <GoodButton>Criar</GoodButton>
+                                    <GoodButton onClick={handleFifthMiniModal}>Criar</GoodButton>
                                 </div>
                             </div>
                             <div>
@@ -280,7 +279,7 @@ export default function Dashboard(){
                                 <h1 className="mb-3">Locação cadastrada com sucesso!</h1>
                             </div>
                             <div className="flex flex-row flex-wrap w-full justify-center mt-7 gap-x-5">
-                                <GoodButton onClick={handleFourthMiniModal}>OK</GoodButton>
+                                <GoodButton onClick={handleFifthMiniModal}>OK</GoodButton>
                             </div>
                         </div>
                     </MiniModal>

@@ -74,10 +74,10 @@ export default function Header(){
                     <div className="w-[100%] flex justify-center items-center">
                         <div className="bg-neutral-400 h-[1px] w-[100%] mb-5"></div>
                     </div>
-                    <button className="w-[100%] hover:bg-neutral-200 rounded-xl flex flex-row justify-between items-center">
+                    <Link href={"/history"} className="w-[100%] hover:bg-neutral-200 rounded-xl flex flex-row justify-between items-center">
                         <h1 className="py-1.5 px-4" href={"/login"}>Histórico</h1>
                         <GoHistory className="mr-[10%]" size={20}></GoHistory>
-                    </button>
+                    </Link>
                 </div>
             )}
         </header>
