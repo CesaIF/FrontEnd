@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function DarkFooter(){
     return(
         <>
-            <div className="bg-neutral-800 h-[100px] flex justify-between font-cormorant">
+            <div className="bg-[#48793c] h-[100px] flex justify-between font-cormorant">
                 <div className="ml-[10%] flex flex-col mt-[1%]">
                     <h1>Desenvolvedores:</h1>
                     <Link className="" href={"httos://www.github.com/natanael9999"}>Natanael Dos Santos</Link>

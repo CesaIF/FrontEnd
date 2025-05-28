@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function Footer(){
     return(
         <>
-        <footer className="bg-neutral-300 flex flex-col">
+        <footer className="bg-[#d1dec7] flex flex-col">
             <div className="flex justify-between items-center">
                 <div className="flex flex-row ml-[10%] items-center">
                     <Link className="w-[20%]" href={"https://www.ifbaiano.edu.br/unidades/itapetinga/"}><img className="" src="/if/if.png"></img></Link>

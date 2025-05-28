@@ -6,7 +6,6 @@ import DarkFooter from "./components/darkfooter";
 import { CiCirclePlus } from "react-icons/ci";
 import { useState } from "react";
 import Modal from "./components/modal";
-import Input from "./components/input";
 import Textarea from "./components/textarea";
 import ChoiceBox from "./components/choicebox";
 import BadButton from "./components/badButton";
@@ -56,62 +55,62 @@ export default function Dashboard(){
                     <div className="w-[70%] mt-5">
                         <div>
                             <div className="flex flex-row justify-between items-center">
-                                <h1 className="text-2xl">Locações Agendadas</h1>
-                                <button className="py-2 px-2 hover:bg-neutral-200 rounded-2xl" onClick={handleOpenModal}><CiCirclePlus size={35}></CiCirclePlus></button>
+                                <h1 className="text-2xl text-[#48793c]">Locações Agendadas</h1>
+                                <button className="py-2 px-2 text-[#48793c] hover:bg-[#d1dec7] rounded-2xl" onClick={handleOpenModal}><CiCirclePlus size={35}></CiCirclePlus></button>
                             </div>
-                            <div className="bg-neutral-600 h-[1px] mt-4"></div>
+                            <div className="bg-[#48793c] h-[1px] mt-4"></div>
                         </div>
                         <div>
-                            <div className="bg-neutral-100 border-b-8 border-r-8 border-l-2 border-t-2 mt-[3rem] rounded-2xl px-12 py-7 lg:flex lg:flex-row lg:justify-between items-center w-full not-sm:flex-col sm:flex-col sm:justify-center">
+                            <div className="bg-white border-b-8 border-r-8 border-l-2 border-t-2 mt-[3rem] rounded-2xl px-12 py-7 lg:flex lg:flex-row lg:justify-between items-center w-full not-sm:flex-col sm:flex-col sm:justify-center border-[#a3bc98]">
                                 <div className="flex flex-col justify-between items-center flex-wrap">
                                     <div className="lg:flex lg:flex-row lg:justify-between items-center flex-wrap gap-5 not-sm:grid not-sm:grid-cols-2 sm:grid sm:grid-cols-2">
-                                        <div className="flex flex-col justify-center bg-white rounded-lg px-2 py-2">
+                                        <div className="flex flex-col justify-center bg-[#d1dec7] rounded-lg px-2 py-2">
                                             <h1 className="">ID:</h1>
                                             <h1 className="">Data!</h1>
                                         </div>
-                                        <div className="flex flex-col justify-center bg-white rounded-lg px-2 py-2">
+                                        <div className="flex flex-col justify-center bg-[#d1dec7] rounded-lg px-2 py-2">
                                             <h1 className="">Placa:</h1>
                                             <h1>Data!</h1>
                                         </div>
-                                        <div className="flex flex-col justify-center bg-white rounded-lg px-2 py-2">
+                                        <div className="flex flex-col justify-center bg-[#d1dec7] rounded-lg px-2 py-2">
                                             <h1 className="">Km Saída:</h1>
                                             <h1>Data!</h1>
                                         </div>
-                                        <div className="flex flex-col justify-center bg-white rounded-lg px-2 py-2">
+                                        <div className="flex flex-col justify-center bg-[#d1dec7] rounded-lg px-2 py-2">
                                             <h1 className="">Km Chegada:</h1>
                                             <h1>Data!</h1>
                                         </div>
                                     </div>
-                                    <div className="flex flex-row w-full mt-6 not-sm:flex-col bg-white rounded-lg px-2 py-2">
+                                    <div className="flex flex-row w-full mt-6 not-sm:flex-col bg-[#d1dec7] rounded-lg px-2 py-2">
                                         <h1 className="mr-5">Itinerário: </h1>
                                         <h1>Data!</h1>
                                     </div>
-                                    <div className="flex flex-row w-full mt-6 not-sm:flex-col bg-white rounded-lg px-2 py-2">
+                                    <div className="flex flex-row w-full mt-6 not-sm:flex-col bg-[#d1dec7] rounded-lg px-2 py-2">
                                         <h1 className="mr-5">Motivo da Saída: </h1>
                                         <h1>Data!</h1>
                                     </div>
                                 </div>
                                 <div className="flex flex-col justify-between items-center not-sm:mt-5 not-sm:items-baseline">
                                     <div className="flex lg:flex-row justify-between items-center not-sm:flex-col not-sm:justify-center not-sm:items-baseline sm:flex-col">
-                                        <div className="flex flex-col lg:mr-10 sm:mr-0 md:mr-0 not-sm:mr-0 bg-white rounded-lg px-2 py-2 sm:mt-5 lg:mt-0">
+                                        <div className="flex flex-col lg:mr-10 sm:mr-0 md:mr-0 not-sm:mr-0 bg-[#d1dec7] rounded-lg px-2 py-2 sm:mt-5 lg:mt-0">
                                             <h1>Data e Hora de Saída:</h1>
                                             <h1>Data!</h1>
                                         </div>
-                                        <div className="flex flex-col not-sm:mt-5 sm:mt-5 md:mt-5 lg:mt-0 bg-white rounded-lg px-2 py-2">
+                                        <div className="flex flex-col not-sm:mt-5 sm:mt-5 md:mt-5 lg:mt-0 bg-[#d1dec7] rounded-lg px-2 py-2">
                                             <h1>Data e Hora de Chegada:</h1>
                                             <h1>Data!</h1>
                                         </div>
                                     </div>
                                     <div className="flex lg:flex-row justify-between items-center mt-5 not-sm:flex-col not-sm:items-baseline sm:flex-col md:flex-col">
-                                        <div className="flex flex-row lg:mr-6 items-center not-sm:mr-0 not-sm:mb-5 sm:mb-5 md:mb-5 lg:mb-0 bg-white rounded-lg px-2 py-2">
+                                        <div className="flex flex-row lg:mr-6 items-center not-sm:mr-0 not-sm:mb-5 sm:mb-5 md:mb-5 lg:mb-0 bg-[#d1dec7] rounded-lg px-2 py-2">
                                             <h1 className="mr-2">ADM:</h1>
                                             <h1>Data!</h1>
                                         </div>
-                                        <div className="flex flex-row lg:mr-6 items-center not-sm:mr-0 not-sm:mb-5 sm:mb-5 md:mb-5 lg:mb-0 bg-white rounded-lg px-2 py-2">
+                                        <div className="flex flex-row lg:mr-6 items-center not-sm:mr-0 not-sm:mb-5 sm:mb-5 md:mb-5 lg:mb-0 bg-[#d1dec7] rounded-lg px-2 py-2">
                                             <h1 className="mr-2">Porteiro:</h1>
                                             <h1>Data!</h1>
                                         </div>
-                                        <div className="flex flex-row items-center not-sm:mr-0 bg-white rounded-lg px-2 py-2">
+                                        <div className="flex flex-row items-center not-sm:mr-0 bg-[#d1dec7] rounded-lg px-2 py-2">
                                             <h1 className="mr-2">Motorista:</h1>
                                             <h1>Data!</h1>
                                         </div>

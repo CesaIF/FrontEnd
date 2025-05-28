@@ -15,31 +15,31 @@ export default function Header(){
     const [isSecondOpen, setIsSecondOpen] = useState(false);
 
     return(
-        <header className="bg-white border-b-neutral-700 border-2">
+        <header className="bg-[#d1dec7]">
             <nav className="flex not-sm:flex-col justify-between">
                 <ul className="flex flex-row items-center ml-[6%] not-sm:flex-col not-sm:ml-[0%] not-sm:items-center">
-                    <li className="md:mr-[35%] sm:mr-[10%] text-neutral-700 font-outfit text-4xl not-sm:mr-[0px]">
+                    <li className="md:mr-[35%] sm:mr-[10%] text-black font-outfit text-4xl not-sm:mr-[0px]">
                         <Link href={"/"}><FaHome></FaHome></Link>
                     </li>
 
-                    <li className="md:mr-[20%] not-sm:mr-[0px] sm:mr-[6px] text-neutral-700 font-outfit 
-                    text-xl py-3 px-5 hover:bg-neutral-100 border-b-4 border-transparent 
-                    hover:border-neutral-700"><Link href={"/veiculos"}>Veículos</Link>
+                    <li className="md:mr-[20%] not-sm:mr-[0px] sm:mr-[6px] text-black font-outfit 
+                    text-xl py-3 px-5 hover:bg-white border-b-4 border-transparent 
+                    hover:border-[#48793c]"><Link href={"/veiculos"}>Veículos</Link>
                     </li>
                     
-                    <li className="md:mr-[20%] not-sm:mr-[0px] sm:mr-[6px] text-neutral-700 font-outfit 
+                    <li className="md:mr-[20%] not-sm:mr-[0px] sm:mr-[6px] text-black font-outfit 
                     text-xl py-3 px-5 hover:bg-neutral-100 border-b-4 border-transparent 
-                    hover:border-neutral-700"><Link href={"/motoristas"}>Motoristas</Link>
+                    hover:border-[#48793c]"><Link href={"/motoristas"}>Motoristas</Link>
                     </li>
 
-                    <li className="text-neutral-700 font-outfit 
+                    <li className="text-black font-outfit 
                     text-xl py-3 px-5 hover:bg-neutral-100 border-b-4 border-transparent 
-                    hover:border-neutral-700"><Link href={"/porteiros"}>Porteiros</Link>
+                    hover:border-[#48793c]"><Link href={"/porteiros"}>Porteiros</Link>
                     </li>
                 </ul>
                 <ul className="flex flex-row items-center mr-[4%] not-sm:mr-[0px] not-sm:justify-center not-sm:mb-5">
-                    <li onClick={() => setIsFirstOpen(!isFirstOpen)} className="text-neutral-700 mr-[20%] not-sm:mr-[5%] sm:mr-[10%] py-2 px-2 hover:bg-neutral-200 rounded-xl"><FaRegUserCircle size={25}></FaRegUserCircle></li>
-                    <li onClick={() => setIsSecondOpen(!isSecondOpen)} className="text-neutral-700 ml-[50%] sm:ml-[10%] not-sm:ml-[0px] py-2 px-2 hover:bg-neutral-200 rounded-xl sm:mr-[20px]"><AiOutlineMore size={25}></AiOutlineMore></li>
+                    <li onClick={() => setIsFirstOpen(!isFirstOpen)} className="text-black mr-[20%] not-sm:mr-[5%] sm:mr-[10%] py-2 px-2 hover:bg-white rounded-xl"><FaRegUserCircle size={25}></FaRegUserCircle></li>
+                    <li onClick={() => setIsSecondOpen(!isSecondOpen)} className="text-black ml-[50%] sm:ml-[10%] not-sm:ml-[0px] py-2 px-2 hover:bg-white rounded-xl sm:mr-[20px]"><AiOutlineMore size={25}></AiOutlineMore></li>
                 </ul>
             </nav>
 
