@@ -1,0 +1,219 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit&display=swap');
+
+::selection {
+    background-color: #48793c;
+    color: white;
+}
+
+.container-geral {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.container-main {
+    display: flex;
+    flex: 1;
+    padding: 1.5rem 1.5rem;
+    background-color: white;
+    flex-shrink: 0;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
+    color: black;
+}
+
+.container-interno-um {
+    width: 70%;
+    margin-top: 3rem;
+}
+
+.container-title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title-locacao {
+    font-size: 24px;
+}
+
+.butao-add {
+    padding: 0.5rem 0.5rem;
+    color: #48793c;
+    border-radius: 1rem;
+    transition: background-color 0.3s;
+}
+
+.butao-add:hover {
+    background-color: #d1dec7;
+}
+
+.line {
+    background-color: #48793c;
+    height: 1px;
+    margin-top: 1rem;
+}
+
+.card-locacao {
+    background-color: #f2efe7;
+    border-bottom-width: 8px;
+    border-right-width: 8px;
+    border-top-width: 2px;
+    border-left-width: 2px;
+    margin-top: 3rem;
+    border-radius: 1rem;
+    padding: 1.75rem 3rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border-color: #3B3030;
+}
+
+.parte-um-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.container-um {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+}
+
+.container-l-um {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: white;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.5rem;
+}
+
+.container-l-dois {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-top: 1.5rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.5rem;
+}
+
+.container-dois {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.container-l-tres {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.5rem;
+}
+
+.container-tres {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.25rem;
+    gap: 1.25rem;
+}
+
+.container-l-quatro {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: white;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.5rem;
+}
+
+.container-quatro {
+    display: flex;
+    flex-direction: row;
+    margin-top: 1.25rem;
+    width: 100%;
+    justify-content: end;
+    gap: 2rem;
+}
+
+.container-modal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 1rem 1.75rem;
+}
+
+.container-interno-modal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.form-add {
+    width: 100%;
+    margin-top: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.input {
+    display: flex;
+    justify-content: center;
+}
+
+.butao-form {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2.5rem;
+    width: 80%;
+}
+
+.container-minimodal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-in-mini {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: large;
+    flex-wrap: wrap;
+}
+
+.butao-minimodal {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+    margin-top: 1.75rem;
+    gap: 1.25rem;
+}
