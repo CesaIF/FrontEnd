@@ -6,146 +6,145 @@ import Footer from "../components/footer";
 import Header from "../components/header";
 import { CiCirclePlus } from "react-icons/ci";
 import { useState } from "react";
-const Modal = dynamic(() => import("../components/modal"), {ssr: false});
-const MiniModal = dynamic(() => import("../components/miniModal"), {ssr: false});
 import BadButton from "../components/badButton";
 import GoodButton from "../components/goodButton";
 import Input from "../components/input";
+const Modal = dynamic(() => import("../components/modal"));
 import { HiPencilAlt } from "react-icons/hi";
 import { MdDelete } from "react-icons/md";
 import RightButton from "../components/rightButton";
-import './styles.css';
+const MiniModal = dynamic(() => import("../components/miniModal"), {ssr:false});
+import styles from './Veiculos.module.css';
 
 export default function Veiculos(){
 
-    const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [miniModal, setMiniModal] = useState(false);
-    const [secondModalIsOpen, setSecondModalIsOpen] = useState(false);
-    const [secondMiniModal, setSecondMiniModal] = useState(false);
+    const [createModal, setCreateModal] = useState(false);
+    const [excludeModal, setExcludeModal] = useState(false);
+    const [updateModal, setUpdateModal] = useState(false);
+    const [popUpModal, setPopUpModal] = useState(false);
 
-    function handleOpenModal(){
-        setModalIsOpen(!modalIsOpen);
+    function handleCreateModal(){
+        setCreateModal(!createModal);
     }
 
-    function handleMiniModal(){
-        setMiniModal(!miniModal);
+    function handleExcludeModal(){
+        setExcludeModal(!excludeModal);
     }
 
-    function handleOpenSecondModal(){
-        setSecondModalIsOpen(!secondModalIsOpen);
+    function handleUpdateModal(){
+        setUpdateModal(!updateModal);
     }
 
-    function handleSecondMiniModal(){
-        setSecondMiniModal(!secondMiniModal);
+    function handlePopUpModal(){
+        setPopUpModal(!popUpModal);
     }
 
     return(
         <>
-        <div className="container-geral">
+        <div className={styles.containerGeral}>
             <Header></Header>
-                <main className="container-main">
-                    <div className="container-interno-um">
+                <main className={styles.containerMain}>
+                    <div className={styles.containerInternoUm}>
                         <div>
-                            <div className="container-title">
-                                <h1 className="title-locacao">Veículos Cadastrados</h1>
-                                <button className="butao-add" onClick={handleOpenModal}><CiCirclePlus size={35}></CiCirclePlus></button>
+                            <div className={styles.containerTitle}>
+                                <h1 className={styles.titleLocacao}>Veículos Cadastrados</h1>
+                                <button className={styles.butaoAdd} onClick={handleCreateModal}><CiCirclePlus size={35}></CiCirclePlus></button>
                             </div>
-                            <div className="line"></div>
+                            <div className={styles.line}></div>
                         </div>
-                        <div className="container-cards">
-                            <div className="card">
+                        <div className={styles.containerCards}>
+                            <div className={styles.card}>
                                 <div>
-                                    <h1 className="title-card">Data!</h1>
+                                    <h1 className={styles.titleCard}>Veículo</h1>
                                 </div>
-                                <div className="bg-neutral-700 h-[1px] w-full mt-5"></div>
-                                <div className="flex flex-col justify-between items-center">
-                                    <div className="flex flex-row mt-3 bg-white p-1 rounded-lg">
-                                        <h1 className="mr-5">Cor:</h1>
+                                <div className={styles.lineCard}></div>
+                                <div className={styles.cardInterno}>
+                                    <div className={styles.cardIUm}>
+                                        <h1>Placa:</h1>
                                         <h1>Data!</h1>
                                     </div>
-                                    <div className="flex flex-row mt-3 bg-white p-1 rounded-lg">
-                                        <h1 className="mr-5">Placa:</h1>
+                                    <div className={styles.cardIUm}>
+                                        <h1>Cor:</h1>
                                         <h1>Data!</h1>
                                     </div>
-                                    <div className="flex flex-row mt-3 bg-white p-1 rounded-lg">
-                                        <h1 className="mr-5">Km:</h1>
+                                    <div className={styles.cardIUm}>
+                                        <h1>Km:</h1>
                                         <h1>Data!</h1>
                                     </div>
-                                    <div className="flex flex-row mt-3 bg-white p-1 rounded-lg">
-                                        <h1 className="mr-5">Ano:</h1>
+                                    <div className={styles.cardIUm}>
+                                        <h1>Ano:</h1>
                                         <h1>Data!</h1>
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-2 gap-4 mt-4">
+                                <div className={styles.cardButao}>
                                     <div className="">
-                                        <BadButton onClick={handleMiniModal}><MdDelete></MdDelete></BadButton>
+                                        <BadButton onClick={handleExcludeModal}><MdDelete></MdDelete></BadButton>
                                     </div>
                                     <div>
-                                        <RightButton onClick={handleOpenSecondModal}><HiPencilAlt></HiPencilAlt></RightButton>
+                                        <RightButton onClick={handleUpdateModal}><HiPencilAlt></HiPencilAlt></RightButton>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <Modal isOpen={modalIsOpen} onClose={handleOpenModal}>
-                        <div className="flex flex-col justify-center items-center w-full px-7 py-4">
-                            <div className="flex flex-col justify-center items-center w-full">
-                                <h1 className="text-3xl">Cadastrar Veículos</h1>
-                                <form className="w-full mt-10 flex flex-col gap-6">
-                                    <div className="flex justify-center"><Input type={"text"} placeholder={"\"Corsa\""} maxLength={20} label={"Modelo"}></Input></div>
-                                    <div className="flex justify-center"><Input type={"text"} placeholder={"\"Amarelo\""} maxLength={20} label={"Cor"}></Input></div>
-                                    <div className="flex justify-center"><Input type={"text"} placeholder={"\"ABC1234\""} maxLength={7} label={"Placa"}></Input></div>
-                                    <div className="flex justify-center"><Input type={"number"} placeholder={"\"135000\""} maxLength={10} label={"Kilometragem"}></Input></div>
-                                    <div className="flex justify-center"><Input type={"text"} placeholder={"\"2025\""} maxLength={4} label={"Ano de lançamento"}></Input></div>
+                    <Modal isOpen={createModal} onClose={handleCreateModal}>
+                        <div className={styles.containerModal}>
+                            <div className={styles.containerInternoModal}>
+                                <h1 className="text-3xl">Cadastrar Veículo</h1>
+                                <form className={styles.formAdd}>
+                                    <div className={styles.input}><Input type={"text"} placeholder={"\"Siena\""} maxLength={100} label={"Modelo"}></Input></div>
+                                    <div className={styles.input}><Input type={"text"} placeholder={"\"Branco\""} maxLength={10} label={"Cor"}></Input></div>
+                                    <div className={styles.input}><Input type={"text"} placeholder={"\"ABC1234\""} maxLength={100} label={"Placa"}></Input></div>
+                                    <div className={styles.input}><Input type={"text"} placeholder={"\"130000\""} maxLength={11} label={"Quilometragem"}></Input></div>
+                                    <div className={styles.input}><Input type={"text"} placeholder={"\"2001\""} maxLength={30} label={"Ano"}></Input></div>
                                 </form>
-                                <div className="flex flex-row justify-between items-center mt-10 w-[80%]">
-                                    <BadButton onClick={handleOpenModal}>Cancelar</BadButton>
-                                    <GoodButton onClick={() => {handleOpenModal(); handleSecondMiniModal();}}>Criar</GoodButton>
+                                <div className={styles.butaoForm}>
+                                    <BadButton onClick={handleCreateModal}>Cancelar</BadButton>
+                                    <GoodButton onClick={() => {handleCreateModal(); handlePopUpModal();}}>Criar</GoodButton>
                                 </div>
                             </div>
                         </div>
                     </Modal>
 
-                    <Modal isOpen={secondModalIsOpen} onClose={handleOpenSecondModal}>
-                        <div className="flex flex-col justify-center items-center w-full px-7 py-4">
-                            <div className="flex flex-col justify-center items-center w-full">
-                                <h1 className="text-3xl">Atualizar Veículos</h1>
-                                <form className="w-full mt-10 flex flex-col gap-6">
-                                    <div className="flex justify-center"><Input type={"text"} placeholder={"\"Corsa\""} maxLength={20} label={"Modelo"}></Input></div>
-                                    <div className="flex justify-center"><Input type={"text"} placeholder={"\"Amarelo\""} maxLength={20} label={"Cor"}></Input></div>
-                                    <div className="flex justify-center"><Input type={"text"} placeholder={"\"ABC1234\""} maxLength={7} label={"Placa"}></Input></div>
-                                    <div className="flex justify-center"><Input type={"number"} placeholder={"\"135000\""} maxLength={10} label={"Kilometragem"}></Input></div>
-                                    <div className="flex justify-center"><Input type={"text"} placeholder={"\"2025\""} maxLength={4} label={"Ano de lançamento"}></Input></div>
+                    <Modal isOpen={updateModal} onClose={handleUpdateModal}>
+                        <div className={styles.containerModal}>
+                            <div className={styles.containerInternoModal}>
+                                <h1 className="text-3xl">Atualizar Veículo</h1>
+                                <form className={styles.formAdd}>
+                                    <div className={styles.input}><Input type={"text"} placeholder={"\"Siena\""} maxLength={100} label={"Modelo"}></Input></div>
+                                    <div className={styles.input}><Input type={"text"} placeholder={"\"Branco\""} maxLength={10} label={"Cor"}></Input></div>
+                                    <div className={styles.input}><Input type={"text"} placeholder={"\"130000\""} maxLength={11} label={"Quilometragem"}></Input></div>
+                                    <div className={styles.input}><Input type={"text"} placeholder={"\"2001\""} maxLength={30} label={"Ano"}></Input></div>
                                 </form>
-                                <div className="flex flex-row justify-between items-center mt-10 w-[80%]">
-                                    <BadButton onClick={handleOpenSecondModal}>Cancelar</BadButton>
-                                    <GoodButton onClick={() => {handleOpenSecondModal(); handleSecondMiniModal();}}>Atualizar</GoodButton>
+                                <div className={styles.butaoForm}>
+                                    <BadButton onClick={handleUpdateModal}>Cancelar</BadButton>
+                                    <GoodButton onClick={() => {handleUpdateModal(); handlePopUpModal();}}>Atualizar</GoodButton>
                                 </div>
                             </div>
                         </div>
                     </Modal>
 
-                    <MiniModal isOpen={miniModal} onClose={handleMiniModal}>
-                        <div className="flex flex-col justify-center items-center">
-                            <div className="flex flex-col justify-center items-center text-lg flex-wrap">
-                                <h1 className="mb-3">Tem certeza que deseja deletar o veículo:</h1>
-                                <h1>Data!</h1>
+                    <MiniModal isOpen={excludeModal} onClose={handleExcludeModal}>
+                        <div className={styles.containerMinimodal}>
+                            <div className={styles.containerInMini}>
+                                <h1 className="mb-3">Tem certeza que deseja deletar o Veículo?</h1>
                             </div>
-                            <div className="flex flex-row flex-wrap w-full justify-center mt-7 gap-x-5">
-                                <GoodButton onClick={handleMiniModal} >Cancelar</GoodButton>
-                                <BadButton onClick={() => {handleMiniModal(); handleSecondMiniModal();}}>Deletar</BadButton>
+                            <div className={styles.butaoMinimodal}>
+                                <GoodButton onClick={handleExcludeModal}>Cancelar</GoodButton>
+                                <BadButton onClick={() => {handleExcludeModal(); handlePopUpModal();}}>Deletar</BadButton>
                             </div>
                         </div>
                     </MiniModal>
 
-                    <MiniModal isOpen={secondMiniModal} onClose={handleSecondMiniModal}>
-                        <div className="flex flex-col justify-center items-center">
-                            <div className="flex flex-col justify-center items-center text-lg flex-wrap">
-                                <h1 className="mb-3">Veículo Cadastrado com Sucesso!</h1>
+                    <MiniModal isOpen={popUpModal} onClose={handlePopUpModal}>
+                        <div className={styles.containerMinimodal}>
+                            <div className={styles.containerInMini}>
+                                <h1 className="mb-3">Mensagem de confirmação!</h1>
+                                <h1>Data!</h1>
                             </div>
-                            <div className="flex flex-row flex-wrap w-full justify-center mt-7 gap-x-5">
-                                <GoodButton onClick={handleSecondMiniModal} >OK</GoodButton>
+                            <div className={styles.butaoMinimodal}>
+                                <GoodButton onClick={handlePopUpModal}>OK</GoodButton>
                             </div>
                         </div>
                     </MiniModal>

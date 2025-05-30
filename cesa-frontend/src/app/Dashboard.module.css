@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit&display=swap');
+
+.containerGeral {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.containerMain {
+    display: flex;
+    flex: 1;
+    padding: 1.5rem 1.5rem;
+    background-color: white;
+    flex-shrink: 0;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
+    color: black;
+    gap: 60px;
+}
+
+.containerInternoUm {
+    width: 70%;
+}
+
+.containerTitle {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.titleLocacao {
+    font-size: 24px;
+}
+
+.butaoAdd {
+    padding: 0.5rem 0.5rem;
+    color: #48793c;
+    border-radius: 1rem;
+    transition: background-color 0.3s;
+}
+
+.butaoAdd:hover {
+    background-color: #d1dec7;
+}
+
+.line {
+    background-color: #48793c;
+    height: 1px;
+    margin-top: 1rem;
+}
+
+.containerLocacao {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.cardLocacao {
+    background-color: white;
+    border-width: 1px;
+    margin-top: 3rem;
+    border-radius: 1rem;
+    padding: 3rem 1.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-color: black;
+}
+
+.cardLUm {
+    background-color: white;
+    border-radius: 1rem;
+    padding: 0.5rem;
+}
+
+.cardInterno {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.containerModal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 1rem 1.75rem;
+}
+
+.containerInternoModal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.formAdd {
+    width: 100%;
+    margin-top: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.input {
+    display: flex;
+    justify-content: center;
+}
+
+.butaoForm {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2.5rem;
+    width: 80%;
+}
+
+.containerMinimodal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.containerInMini {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: large;
+    flex-wrap: wrap;
+}
+
+.butaoMinimodal {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+    margin-top: 1.75rem;
+    gap: 1.25rem;
+}

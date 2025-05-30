@@ -1,17 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit&display=swap');
 
-::selection {
-    background-color: #48793c;
-    color: white;
-}
-
-.container-geral {
+.containerGeral {
     display: flex;
     flex-direction: column;
     height: 100vh;
 }
 
-.container-main {
+.containerMain {
     display: flex;
     flex: 1;
     padding: 1.5rem 1.5rem;
@@ -22,32 +17,32 @@
     font-family: 'Outfit', sans-serif;
     font-weight: 500;
     color: black;
+    gap: 60px;
 }
 
-.container-interno-um {
+.containerInternoUm {
     width: 70%;
-    margin-top: 3rem;
 }
 
-.container-title {
+.containerTitle {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
 }
 
-.title-locacao {
+.titleLocacao {
     font-size: 24px;
 }
 
-.butao-add {
+.butaoAdd {
     padding: 0.5rem 0.5rem;
     color: #48793c;
     border-radius: 1rem;
     transition: background-color 0.3s;
 }
 
-.butao-add:hover {
+.butaoAdd:hover {
     background-color: #d1dec7;
 }
 
@@ -57,103 +52,71 @@
     margin-top: 1rem;
 }
 
-.card-locacao {
-    background-color: #f2efe7;
-    border-bottom-width: 8px;
-    border-right-width: 8px;
-    border-top-width: 2px;
-    border-left-width: 2px;
-    margin-top: 3rem;
+.containerCards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.card {
+    background-color: white;
+    border-bottom-width: 1px;
+    border-right-width: 1px;
+    border-left-width: 1px;
+    border-top-width: 1px;
+    margin-top: 2rem;
     border-radius: 1rem;
-    padding: 1.75rem 3rem;
+    padding: 1.75rem 1.75rem;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    border-color: #3B3030;
+    border-color: #3b3030;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
-.parte-um-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
+.card:hover {
+    transform: translate(-10px, 10px);
+    box-shadow: 10px 10px 45px #808080;
 }
 
-.container-um {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1.25rem;
+.titleCard {
+    font-size: 30px;
 }
 
-.container-l-um {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background-color: white;
-    border-radius: 0.5rem;
-    padding: 0.5rem 0.5rem;
-}
-
-.container-l-dois {
-    display: flex;
-    flex-direction: row;
+.lineCard {
+    background-color: #3b3030;
+    height: 1px;
     width: 100%;
-    margin-top: 1.5rem;
-    background-color: white;
-    border-radius: 0.5rem;
-    padding: 0.5rem 0.5rem;
-}
-
-.container-dois {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1.25rem;
-}
-
-.container-l-tres {
-    display: flex;
-    flex-direction: column;
-    background-color: white;
-    border-radius: 0.5rem;
-    padding: 0.5rem 0.5rem;
-}
-
-.container-tres {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
     margin-top: 1.25rem;
-    gap: 1.25rem;
 }
 
-.container-l-quatro {
+.cardInterno {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    background-color: white;
-    border-radius: 0.5rem;
-    padding: 0.5rem 0.5rem;
 }
 
-.container-quatro {
+.cardIUm {
     display: flex;
     flex-direction: row;
-    margin-top: 1.25rem;
-    width: 100%;
-    justify-content: end;
-    gap: 2rem;
+    margin-top: 0.75rem;
+    background-color: white;
+    padding: 0.25rem;
+    border-radius: 0.5rem;
+    gap: 24px;
 }
 
-.container-modal {
+.cardButao {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.containerModal {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -162,7 +125,7 @@
     padding: 1rem 1.75rem;
 }
 
-.container-interno-modal {
+.containerInternoModal {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -170,7 +133,7 @@
     width: 100%;
 }
 
-.form-add {
+.formAdd {
     width: 100%;
     margin-top: 2.5rem;
     display: flex;
@@ -183,7 +146,7 @@
     justify-content: center;
 }
 
-.butao-form {
+.butaoForm {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -192,14 +155,14 @@
     width: 80%;
 }
 
-.container-minimodal {
+.containerMinimodal {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.container-in-mini {
+.containerInMini {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -208,7 +171,7 @@
     flex-wrap: wrap;
 }
 
-.butao-minimodal {
+.butaoMinimodal {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
