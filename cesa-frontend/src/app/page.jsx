@@ -14,269 +14,215 @@ import GoodButton from "./components/goodButton";
 import { MdDelete } from "react-icons/md";
 const MiniModal = dynamic(() => import("./components/miniModal"), {ssr: false});
 import RightButton from "./components/rightButton";
-import './styles.css';
+import styles from './Dashboard.module.css';
 
 export default function Dashboard(){
 
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [miniModal, setMiniModal] = useState(false);
-    const [secondMiniModal, setSecondMiniModal] = useState(false);
-    const [thirdMiniModal, setThirdMiniModal] = useState(false);
-    const [fourthMiniModal, setFourthMiniModal] = useState(false);
-    const [fifthMiniModal, setFifthMiniModal] = useState(false);
+    const [sureModal, setSureModal] = useState(false);
+    const [privilegeModal, setPrivilegeModal] = useState(false);
+    const [popUpModal, setPopUpModal] = useState(false);
+    const [expandModal, setExpandModal] = useState(false);
 
     function handleOpenModal(){
         setModalIsOpen(!modalIsOpen);
     }
 
-    function handleMiniModal(){
-        setMiniModal(!miniModal);
+    function handleSureModal(){
+        setSureModal(!sureModal);
     }
 
-    function handleSecondMiniModal(){
-        setSecondMiniModal(!secondMiniModal);
+    function handlePrivilegeModal(){
+      setPrivilegeModal(!privilegeModal);
     }
 
-    function handleThirdMiniModal(){
-        setThirdMiniModal(!thirdMiniModal);
+    function handlePopUpModal(){
+      setPopUpModal(!popUpModal);
     }
 
-    function handleFourthMiniModal(){
-      setFourthMiniModal(!fourthMiniModal);
-    }
-
-    function handleFifthMiniModal(){
-      setFifthMiniModal(!fifthMiniModal);
+    function handleExpandModal(){
+        setExpandModal(!expandModal);
     }
 
     return(
         <>
-            <div className="container-geral">
+            <div className={styles.containerGeral}>
                 <Header></Header>
-                <main className="container-main">
-                    <div className="container-interno-um">
+                <main className={styles.containerMain}>
+                    <div className={styles.containerInternoUm}>
                         <div>
-                            <div className="container-title">
-                                <h1 className="title-locacao">Locações Agendadas</h1>
-                                <button className="butao-add" onClick={handleOpenModal}><CiCirclePlus size={35}></CiCirclePlus></button>
+                            <div className={styles.containerTitle}>
+                                <h1 className={styles.titleLocacao}>Locações Agendadas</h1>
+                                <button className={styles.butaoAdd} onClick={handleOpenModal}><CiCirclePlus size={35}></CiCirclePlus></button>
                             </div>
-                            <div className="line"></div>
+                            <div className={styles.line}></div>
                         </div>
-                        <div>
-                            <div className="card-locacao">
-                                <div className="parte-um-card">
-                                    <div className="container-um">
-                                        <div className="container-l-um">
-                                            <h1 className="">ID:</h1>
-                                            <h1 className="">Data!</h1>
-                                        </div>
-                                        <div className="container-l-um">
-                                            <h1 className="">Placa:</h1>
-                                            <h1>Data!</h1>
-                                        </div>
-                                        <div className="container-l-um">
-                                            <h1 className="">Km Saída:</h1>
-                                            <h1>Data!</h1>
-                                        </div>
-                                        <div className="container-l-um">
-                                            <h1 className="">Km Chegada:</h1>
-                                            <h1>Data!</h1>
-                                        </div>
-                                    </div>
-                                    <div className="container-l-dois">
-                                        <h1 className="mr-5">Itinerário: </h1>
-                                        <h1>Data!</h1>
-                                    </div>
-                                    <div className="container-l-dois">
-                                        <h1 className="mr-5">Motivo da Saída: </h1>
+                        <div className={styles.containerLocacao}>
+                            <div className={styles.cardLocacao}>
+                                <div className={styles.cardLUm}>
+                                    <div className={styles.cardInterno}>
+                                        <h1>Id:</h1>
                                         <h1>Data!</h1>
                                     </div>
                                 </div>
-                                <div className="parte-um-card">
-                                    <div className="container-dois">
-                                        <div className="container-l-tres">
-                                            <h1>Data e Hora de Saída:</h1>
-                                            <h1>Data!</h1>
-                                        </div>
-                                        <div className="container-l-tres">
-                                            <h1>Data e Hora de Chegada:</h1>
-                                            <h1>Data!</h1>
-                                        </div>
+                                <div className="bg-white rounded-lg p-2 mt-5">
+                                    <div className="flex flex-col gap-4 items-center">
+                                        <h1>Automóvel:</h1>
+                                        <h1>Data!</h1>
                                     </div>
-                                    <div className="container-tres">
-                                        <div className="container-l-quatro">
-                                            <h1 className="mr-2">ADM:</h1>
-                                            <h1>Data!</h1>
-                                        </div>
-                                        <div className="container-l-quatro">
-                                            <h1 className="mr-2">Porteiro:</h1>
-                                            <h1>Data!</h1>
-                                        </div>
-                                        <div className="container-l-quatro">
-                                            <h1 className="mr-2">Motorista:</h1>
-                                            <h1>Data!</h1>
-                                        </div>
-                                    </div>
-                                    <div className="container-quatro">
-                                        <div>
-                                            <BadButton onClick={handleMiniModal}><MdDelete className="w-6 h-6"></MdDelete></BadButton>
-                                        </div>
-                                        <div>
-                                            <GoodButton onClick={handleSecondMiniModal}>Iniciar</GoodButton>
-                                        </div>
-                                    </div>
+                                </div>
+                                <div className="mt-5">
+                                    <GoodButton onClick={handleExpandModal}>Expandir</GoodButton>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className="container-interno-um">
+                    <div className={styles.containerInternoUm}>
                         <div>
-                            <div className="container-title">
-                                <h1 className="title-locacao">Locações Iniciadas</h1>
+                            <div className={styles.containerTitle}>
+                                <h1 className={styles.titleLocacao}>Locações Iniciadas</h1>
                             </div>
-                            <div className="line"></div>
+                            <div className={styles.line}></div>
                         </div>
-                        <div>
-                            <div className="card-locacao">
-                                <div className="parte-um-card">
-                                    <div className="container-um">
-                                        <div className="container-l-um">
-                                            <h1 className="">ID:</h1>
-                                            <h1 className="">Data!</h1>
-                                        </div>
-                                        <div className="container-l-um">
-                                            <h1 className="">Placa:</h1>
-                                            <h1>Data!</h1>
-                                        </div>
-                                        <div className="container-l-um">
-                                            <h1 className="">Km Saída:</h1>
-                                            <h1>Data!</h1>
-                                        </div>
-                                        <div className="container-l-um">
-                                            <h1 className="">Km Chegada:</h1>
-                                            <h1>Data!</h1>
-                                        </div>
-                                    </div>
-                                    <div className="container-l-dois">
-                                        <h1 className="mr-5">Itinerário: </h1>
-                                        <h1>Data!</h1>
-                                    </div>
-                                    <div className="container-l-dois">
-                                        <h1 className="mr-5">Motivo da Saída: </h1>
+                        <div className="grid grid-cols-5">
+                            <div className="bg-neutral-100 border-b-8 border-r-8 border-l-2 border-t-2 mt-[3rem] rounded-2xl px-12 py-7 flex flex-col items-center">
+                                <div className="bg-white rounded-lg p-2">
+                                    <div className="flex flex-row gap-4">
+                                        <h1>Id:</h1>
                                         <h1>Data!</h1>
                                     </div>
                                 </div>
-                                <div className="container-parte-um">
-                                    <div className="container-dois">
-                                        <div className="container-l-tres">
-                                            <h1>Data e Hora de Saída:</h1>
-                                            <h1>Data!</h1>
-                                        </div>
-                                        <div className="container-l-tres">
-                                            <h1>Data e Hora de Chegada:</h1>
-                                            <h1>Data!</h1>
-                                        </div>
+                                <div className="bg-white rounded-lg p-2 mt-5">
+                                    <div className="flex flex-col gap-4 items-center">
+                                        <h1>Automóvel:</h1>
+                                        <h1>Data!</h1>
                                     </div>
-                                    <div className="container-tres">
-                                        <div className="container-l-quatro">
-                                            <h1 className="mr-2">ADM:</h1>
-                                            <h1>Data!</h1>
-                                        </div>
-                                        <div className="container-l-quatro">
-                                            <h1 className="mr-2">Porteiro:</h1>
-                                            <h1>Data!</h1>
-                                        </div>
-                                        <div className="container-l-quatro">
-                                            <h1 className="mr-2">Motorista:</h1>
-                                            <h1>Data!</h1>
-                                        </div>
-                                    </div>
-                                    <div className="container-quatro">
-                                        <div>
-                                            <GoodButton onClick={handleThirdMiniModal}>Finalizar</GoodButton>
-                                        </div>
-                                    </div>
+                                </div>
+                                <div className="mt-5">
+                                    <GoodButton onClick={handleExpandModal}>Expandir</GoodButton>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <Modal isOpen={modalIsOpen} onClose={handleOpenModal}>
-                        <div className="container-modal">
-                            <div className="container-interno-modal">
+                        <div className={styles.containerModal}>
+                            <div className={styles.containerInternoModal}>
                                 <h1 className="text-3xl">Cadastro de Locação</h1>
-                                <form className="form-add">
-                                    <div className="input"><ChoiceBox label={"Veículo"}>Escolha o Veículo!</ChoiceBox></div>
-                                    <div className="input"><ChoiceBox label={"Motorista"}>Escolha o Motorista!</ChoiceBox></div>
-                                    <div className="input"><Textarea label={"Itinerário"} placeholder={"Descreva o Itinerário"} maxLength={300} rows={3}></Textarea></div>
-                                    <div className="input"><Textarea label={"Motivo da Saída"} placeholder={"Descreva o motivo da Saída"} maxLength={300} rows={3}></Textarea></div>
+                                <form className={styles.formAdd}>
+                                    <div className={styles.input}><ChoiceBox label={"Veículo"}>Escolha o Veículo!</ChoiceBox></div>
+                                    <div className={styles.input}><ChoiceBox label={"Motorista"}>Escolha o Motorista!</ChoiceBox></div>
+                                    <div className={styles.input}><Textarea label={"Itinerário"} placeholder={"Descreva o Itinerário"} maxLength={300} rows={3}></Textarea></div>
+                                    <div className={styles.input}><Textarea label={"Motivo da Saída"} placeholder={"Descreva o motivo da Saída"} maxLength={300} rows={3}></Textarea></div>
                                 </form>
-                                <div className="butao-form">
+                                <div className={styles.butaoForm}>
                                     <BadButton onClick={handleOpenModal}>Cancelar</BadButton>
-                                    <GoodButton onClick={handleFifthMiniModal}>Criar</GoodButton>
+                                    <GoodButton onClick={handlePopUpModal}>Criar</GoodButton>
                                 </div>
                             </div>
                         </div>
                     </Modal>
 
-                    <MiniModal isOpen={miniModal} onClose={handleMiniModal}>
-                        <div className="container-minimodal">
-                            <div className="container-in-mini">
+                    <Modal isOpen={expandModal} onClose={handleExpandModal}>
+                        <div className="flex flex-col justify-center items-center">
+                            <div className="grid grid-cols-4 gap-4 w-[80%]">
+                                <div className="flex flex-col bg-neutral-200 rounded-lg p-2">
+                                    <h1 className="h1">Id:</h1>
+                                    <h1 className="h1">Data!</h1>
+                                </div>
+
+                                <div className="flex flex-col bg-neutral-200 rounded-lg p-2">
+                                    <h1 className="h1">Placa:</h1>
+                                    <h1 className="h1">Data!</h1>
+                                </div>
+
+                                <div className="flex flex-col bg-neutral-200 rounded-lg p-2">
+                                    <h1 className="h1">Km Saída:</h1>
+                                    <h1 className="h1">Data!</h1>
+                                </div>
+
+                                <div className="flex flex-col bg-neutral-200 rounded-lg p-2">
+                                    <h1 className="h1">Km Chegada:</h1>
+                                    <h1 className="h1">Data!</h1>
+                                </div>
+                            </div>
+
+                            <div className="w-[100%] flex justify-center mt-5">
+                                <div className="w-[80%] bg-neutral-200 rounded-lg flex flex-row p-2">
+                                    <h1>Itinerário:</h1>
+                                    <h1>Data!</h1>
+                                </div>
+                            </div>
+
+                            <div className="w-[100%] flex justify-center mt-5">
+                                <div className="w-[80%] bg-neutral-200 rounded-lg flex flex-row p-2">
+                                    <h1>Motivo da Saída:</h1>
+                                    <h1>Data!</h1>
+                                </div>
+                            </div>
+
+                            <div className="w-[80%] mt-5 grid grid-cols-2 gap-4">
+                                <div className="flex flex-col bg-neutral-200 p-2 rounded-lg">
+                                    <h1>Data e Hora de Saída:</h1>
+                                    <h1>Data!</h1>
+                                </div>
+                                <div className="flex flex-col bg-neutral-200 p-2 rounded-lg">
+                                    <h1>Data e Hora de Chegada:</h1>
+                                    <h1>Data!</h1>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-3 gap-4 w-[80%] mt-5">
+                                <div className="flex flex-col bg-neutral-200 p-2 rounded-lg">
+                                    <h1>Gestor:</h1>
+                                    <h1>Data!</h1>
+                                </div>
+                                <div className="flex flex-col bg-neutral-200 p-2 rounded-lg">
+                                    <h1>Porteiro:</h1>
+                                    <h1>Data!</h1>
+                                </div>
+                                <div className="flex flex-col bg-neutral-200 p-2 rounded-lg">
+                                    <h1>Motorista:</h1>
+                                    <h1>Data!</h1>
+                                </div>
+                            </div>
+                            <div className="flex justify-center items-center mt-10">
+                                <GoodButton onClick={handleExpandModal}>OK</GoodButton>
+                            </div>
+                        </div>
+                    </Modal>
+
+                    <MiniModal isOpen={sureModal} onClose={handleSureModal}>
+                        <div className={styles.containerMinimodal}>
+                            <div className={styles.containerInMini}>
                                 <h1 className="mb-3">Tem certeza que deseja deletar a locação?</h1>
                                 <h1>Data!</h1>
                             </div>
-                            <div className="butao-minimodal">
-                                <RightButton onClick={handleMiniModal}>Cancelar</RightButton>
+                            <div className={styles.butaoMinimodal}>
+                                <RightButton onClick={handleSureModal}>Cancelar</RightButton>
                                 <BadButton>Deletar</BadButton>
                             </div>
                         </div>
-
                     </MiniModal>
 
-                    <MiniModal isOpen={secondMiniModal} onClose={handleSecondMiniModal}>
-                        <div className="container-minimodal">
-                            <div className="container-in-mini">
-                                <h1 className="mb-3">Deseja iniciar a locação?</h1>
-                                <h1 className="text-red-700">Essa ação é irreversível!</h1>
-                            </div>
-                            <div className="butao-minimodal">
-                                <GoodButton onClick={handleSecondMiniModal}>Cancelar</GoodButton>
-                                <BadButton>Iniciar</BadButton>
-                            </div>
-                        </div>
-                    </MiniModal>
-
-                    <MiniModal isOpen={thirdMiniModal} onClose={handleThirdMiniModal}>
-                        <div className="container-minimodal">
-                            <div className="container-in-mini">
-                                <h1 className="mb-3">Deseja Finalizar A Locação?</h1>
-                                <h1 className="text-red-700">Essa ação é irreversível!</h1>
-                            </div>
-                            <div className="butao-minimodal">
-                                <GoodButton onClick={handleThirdMiniModal} >Cancelar</GoodButton>
-                                <BadButton>Finalizar</BadButton>
-                            </div>
-                        </div>
-                    </MiniModal>
-
-                    <MiniModal isOpen={fourthMiniModal} onClose={handleFourthMiniModal}>
-                        <div className="container-minimodal">
-                            <div className="container-in-mini">
+                    <MiniModal isOpen={privilegeModal} onClose={handlePrivilegeModal}>
+                        <div className={styles.containerMinimodal}>
+                            <div className={styles.containerInMini}>
                                 <h1 className="mb-3">Você não tem permissão pra isso!</h1>
                             </div>
-                            <div className="butao-minimodal">
-                                <BadButton onClick={handleFourthMiniModal}>OK</BadButton>
+                            <div className={styles.butaoMinimodal}>
+                                <BadButton onClick={handlePrivilegeModal}>OK</BadButton>
                             </div>
                         </div>
                     </MiniModal>
 
-                    <MiniModal isOpen={fifthMiniModal} onClose={handleFifthMiniModal}>
-                        <div className="container-minimodal">
-                            <div className="container-in-mini">
+                    <MiniModal isOpen={popUpModal} onClose={handlePopUpModal}>
+                        <div className={styles.containerMinimodal}>
+                            <div className={styles.containerInMini}>
                                 <h1 className="mb-3">Locação cadastrada com sucesso!</h1>
                             </div>
-                            <div className="butao-minimodal">
-                                <GoodButton onClick={handleFifthMiniModal}>OK</GoodButton>
+                            <div className={styles.butaoMinimodal}>
+                                <GoodButton onClick={handlePopUpModal}>OK</GoodButton>
                             </div>
                         </div>
                     </MiniModal>
