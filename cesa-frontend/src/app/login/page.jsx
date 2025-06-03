@@ -1,38 +1,45 @@
+"use client";
+
 import Input from "../components/input";
 import GoodButton from "../components/goodButton";
+import styles from './Login.module.css';
+import { useState } from "react";
+
+function formatarCPF(cpf) {
+    cpf = cpf.replace(/\D/g, '');
+    if (cpf.length > 3) cpf = cpf.slice(0, 3) + '.' + cpf.slice(3);
+    if (cpf.length > 7) cpf = cpf.slice(0, 7) + '.' + cpf.slice(7);
+    if (cpf.length > 11) cpf = cpf.slice(0, 11) + '-' + cpf.slice(11);
+    return cpf.slice(0, 14);
+}
 
 export default function Login(){
 
+    const [cpf, setCpf] = useState('');
+
+    const handleCPF = (e) => {
+        const formatted = formatarCPF(e.target.value);
+        setCpf(formatted);
+    }
+
     return(
         <>
-        <div className="min-h-screen bg-cover bg-[url('/background/background.jpg')] flex flex-col items-center selection:bg-green-500 selection:text-white">
-
-            
-
-            <div className="lg:w-[35%] not-sm:w-[70%] sm:w-[60%] border-[#769b6a] bg-white rounded-2xl flex flex-col justify-center items-center h-[550px] mt-[6rem] border-b-4 border-r-4 border-l-2 border-t-2">
-
-                <div className="flex flex-col justify-center items-center">
-                    <img className="w-[35%]" src="/logov4/Cesav4.jpg"></img>
+        <div className={styles.containerMain}>
+            <div className={styles.containerUm}>
+                <h1 className={styles.tituloUm}>INSTITUTO FEDERAL</h1>
+                <h1 className={styles.tituloDois}>BAIANO</h1>
+                <h1 className={styles.tituloTres}><i>Campus</i> Itapetinga</h1>
+                <img className={styles.imgUm} src="https://i.postimg.cc/W4ZWWPn4/20250516-1728-Car-Logo-Design-remix-01jvdcf81demwtw3c2qfwe9gs7-removebg-preview-1.png"></img>
+            </div>
+            <div className={styles.containerDois}>
+                <div className={styles.formContainer}>
+                    <h1 className={styles.tituloQuatro}>LOGIN</h1>
+                    <form className={styles.form}>
+                        <Input onChange={handleCPF} value={cpf} htmlFor={"cpf"} type={"text"} placeholder={"123.456.789-10"} label={"CPF"} maxLength={14} mask={"000.000.000-00"}></Input>
+                        <Input type={"password"} placeholder={"Sua senha aqui!"} label={"Senha"} maxLength={20}></Input>
+                    </form>
+                    <GoodButton>Entrar</GoodButton>
                 </div>
-
-                <div className="flex flex-col justify-center items-center text-5xl font-roboto text-neutral-800 mb-10 mt-2">
-                    <h1 className="font-outfit font-medium text-[#48793c]">Login</h1>
-                </div>
-
-                <form className="w-full">
-                    <div className="flex flex-col justify-center items-center mb-10 w-full">
-                        <Input maxLength={11} type={"text"} label={"CPF"} placeholder={"000.000.000-00"}></Input>
-                    </div>
-
-                    <div className="flex flex-col justify-center items-center mb-10 w-full">
-                        <Input maxLength={30} type={"password"} label={"Senha"}></Input>
-                    </div>
-                    
-                    <div className="flex flex-col justify-center items-center">
-                        <GoodButton>Entrar</GoodButton>
-                    </div>
-                    
-                </form>
             </div>
         </div>
     </>

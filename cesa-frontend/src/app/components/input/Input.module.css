@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit&display=swap');
+
+.inputContainer {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+}
+
+.input {
+    border-bottom-width: 2px;
+    outline: none;
+    font-size: 1.5rem;
+    width: 100%;
+}

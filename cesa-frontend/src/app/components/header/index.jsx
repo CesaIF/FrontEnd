@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+{/*import Link from "next/link";
 import {FaRegUserCircle} from "react-icons/fa";
 import {AiOutlineMore} from "react-icons/ai";
 import { useState } from "react";
@@ -15,7 +15,7 @@ export default function Header(){
     const [isSecondOpen, setIsSecondOpen] = useState(false);
 
     return(
-        <header className="bg-[#d1dec7]">
+        <aside className="bg-[#d1dec7]">
             <nav className="flex not-sm:flex-col justify-between">
                 <ul className="flex flex-row items-center ml-[6%] not-sm:flex-col not-sm:ml-[0%] not-sm:items-center">
                     <li className="md:mr-[35%] sm:mr-[10%] text-black font-outfit text-4xl not-sm:mr-[0px]">
@@ -80,6 +80,104 @@ export default function Header(){
                     </Link>
                 </div>
             )}
-        </header>
+        </aside>
+    )
+}*/}
+
+import Link from "next/link";
+import styles from "./Header.module.css";
+import { IoExitOutline } from "react-icons/io5";
+import { GoHistory, GoPasskeyFill } from "react-icons/go";
+import { FaHome, FaCar, FaRegUserCircle } from "react-icons/fa";
+import { BsPersonVcard } from "react-icons/bs";
+import { CiCircleInfo } from "react-icons/ci";
+import { FiTable } from "react-icons/fi";
+
+export default function Header({isOpen, onClick}){
+    return (
+        <>
+            <aside className={`${styles.aside} ${isOpen ? styles.open : ''}`}>
+                <nav className={styles.nav}>
+                    <ul className={styles.ul}>
+                        <li className={styles.liUm}>
+                            <button className={styles.button} onClick={onClick}>
+                                <FiTable />
+                            </button>
+                        </li>
+
+                        <li className={styles.liDois}>
+                            <Link className={styles.link} href={"/"}>
+                                <span>
+                                    <FaHome />
+                                </span>
+                                <span className={styles.title}>Página Inicial</span>
+                            </Link>
+                        </li>
+
+                        <li className={styles.liDois}>
+                            <Link className={styles.link} href={"/profile"}>
+                                <span>
+                                    <FaRegUserCircle />
+                                </span>
+                                <span className={styles.title}>Meu Perfil</span>
+                            </Link>
+                        </li>
+
+                        <li className={styles.liDois}>
+                            <Link className={styles.link} href={"/veiculos"}>
+                                <span>
+                                    <FaCar />
+                                </span>
+                                <span className={styles.title}>Veículos</span>
+                            </Link>
+                        </li>
+                        <li className={styles.liDois}>
+                            <Link className={styles.link} href={"/motoristas"}>
+                                <span>
+                                    <BsPersonVcard />
+                                </span>
+                                <span className={styles.title}>Motoristas</span>
+                            </Link>
+                        </li>
+
+                        <li className={styles.liDois}>
+                            <Link className={styles.link} href={"/porteiros"}>
+                                <span>
+                                    <GoPasskeyFill />
+                                </span>
+                                <span className={styles.title}>Porteiros</span>
+                            </Link>
+                        </li>
+
+                        <li className={styles.liDois}>
+                            <Link className={styles.link} href={"/history"}>
+                                <span>
+                                    <GoHistory />
+                                </span>
+                                <span className={styles.title}>Histórico</span>
+                            </Link>
+                        </li>
+
+                        <li className={styles.liDois}>
+                            <Link className={styles.link} href={"/"}>
+                                <span>
+                                    <CiCircleInfo />
+                                </span>
+                                <span className={styles.title}>Info</span>
+                            </Link>
+                        </li>
+
+                        <li className={`${styles.liDois} ${styles.out}`}>
+                            <Link className={styles.link} href={"/login"}>
+                                <span>
+                                    <IoExitOutline />
+                                </span>
+                                <span className={styles.title}>Sair</span>
+                            </Link>
+                        </li>
+                    </ul>
+                </nav>
+            </aside>
+        </>
     )
 }

@@ -3,7 +3,6 @@
 import dynamic from "next/dynamic";
 import Header from "./components/header";
 import Footer from "./components/footer";
-import DarkFooter from "./components/darkfooter";
 import { CiCirclePlus } from "react-icons/ci";
 import { useState } from "react";
 const Modal = dynamic(() => import("./components/modal"), {ssr: false});
@@ -11,7 +10,6 @@ import Textarea from "./components/textarea";
 import ChoiceBox from "./components/choicebox";
 import BadButton from "./components/badButton";
 import GoodButton from "./components/goodButton";
-import { MdDelete } from "react-icons/md";
 const MiniModal = dynamic(() => import("./components/miniModal"), {ssr: false});
 import RightButton from "./components/rightButton";
 import styles from './Dashboard.module.css';
@@ -23,6 +21,7 @@ export default function Dashboard(){
     const [privilegeModal, setPrivilegeModal] = useState(false);
     const [popUpModal, setPopUpModal] = useState(false);
     const [expandModal, setExpandModal] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
 
     function handleOpenModal(){
         setModalIsOpen(!modalIsOpen);
@@ -46,8 +45,8 @@ export default function Dashboard(){
 
     return(
         <>
-            <div className={styles.containerGeral}>
-                <Header></Header>
+            <div className={`${styles.containerGeral} ${isOpen ? styles.asideOpen : ''}`}>
+                <Header onClick={() => {setIsOpen(!isOpen)}} isOpen={isOpen}></Header>
                 <main className={styles.containerMain}>
                     <div className={styles.containerInternoUm}>
                         <div>
@@ -57,25 +56,23 @@ export default function Dashboard(){
                             </div>
                             <div className={styles.line}></div>
                         </div>
-                        <div className={styles.containerLocacao}>
+                        <div className={styles.containerCard}>
                             <div className={styles.cardLocacao}>
-                                <div className={styles.cardLUm}>
-                                    <div className={styles.cardInterno}>
-                                        <h1>Id:</h1>
-                                        <h1>Data!</h1>
-                                    </div>
+                                <div onClick={handleSureModal} className={styles.img}>
+                                    <img src="https://i.postimg.cc/Fs7ZnVTn/20250603-1649-Cute-Black-Car-simple-compose-01jwvnew1ef6xa5kp9jpyq56mk.png"></img>
                                 </div>
-                                <div className="bg-white rounded-lg p-2 mt-5">
-                                    <div className="flex flex-col gap-4 items-center">
-                                        <h1>Automóvel:</h1>
-                                        <h1>Data!</h1>
-                                    </div>
+                                <div>
+                                    <span className={styles.titleCard}>#1</span>
                                 </div>
-                                <div className="mt-5">
-                                    <GoodButton onClick={handleExpandModal}>Expandir</GoodButton>
+                                <div>
+                                    <span className={styles.titleCard}>Ford - Focus</span>
+                                </div>
+                                <div>
+                                    <span className={styles.titleCardDois}>Recife - Pernambuco</span>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                     <div className={styles.containerInternoUm}>
                         <div>
@@ -84,22 +81,20 @@ export default function Dashboard(){
                             </div>
                             <div className={styles.line}></div>
                         </div>
-                        <div className="grid grid-cols-5">
-                            <div className="bg-neutral-100 border-b-8 border-r-8 border-l-2 border-t-2 mt-[3rem] rounded-2xl px-12 py-7 flex flex-col items-center">
-                                <div className="bg-white rounded-lg p-2">
-                                    <div className="flex flex-row gap-4">
-                                        <h1>Id:</h1>
-                                        <h1>Data!</h1>
-                                    </div>
+                        
+                        <div className={styles.containerCard}>
+                            <div onClick={handleSureModal} className={styles.cardLocacao}>
+                                <div className={styles.img}>
+                                    <img src="https://i.postimg.cc/Fs7ZnVTn/20250603-1649-Cute-Black-Car-simple-compose-01jwvnew1ef6xa5kp9jpyq56mk.png"></img>
                                 </div>
-                                <div className="bg-white rounded-lg p-2 mt-5">
-                                    <div className="flex flex-col gap-4 items-center">
-                                        <h1>Automóvel:</h1>
-                                        <h1>Data!</h1>
-                                    </div>
+                                <div>
+                                    <span className={styles.titleCard}>#2</span>
                                 </div>
-                                <div className="mt-5">
-                                    <GoodButton onClick={handleExpandModal}>Expandir</GoodButton>
+                                <div>
+                                    <span className={styles.titleCard}>Fiat - Siena</span>
+                                </div>
+                                <div>
+                                    <span className={styles.titleCardDois}>Natal - Rio Grande do Norte</span>
                                 </div>
                             </div>
                         </div>
@@ -228,8 +223,9 @@ export default function Dashboard(){
                     </MiniModal>
 
                 </main>
-                <Footer></Footer>
-                <DarkFooter></DarkFooter>
+                <div className={styles.footer}>
+                    <Footer></Footer>
+                </div>
             </div>
         </>
     )
