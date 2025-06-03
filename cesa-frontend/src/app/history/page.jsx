@@ -1,11 +1,13 @@
 "use client";
 
+import dynamic from "next/dynamic";
+import Header from "./components/header";
+import Footer from "./components/footer";
+import DarkFooter from "./components/darkfooter";
 import { useState } from "react";
-import DarkFooter from "../components/darkfooter";
-import Footer from "../components/footer";
-import GoodButton from "../components/goodButton";
-import Header from "../components/header";
-import Modal from "../components/modal";
+const Modal = dynamic(() => import("./components/modal"), {ssr: false});
+import GoodButton from "./components/goodButton";
+import styles from './Dashboard.module.css';
 
 export default function History(){
 
@@ -14,23 +16,23 @@ export default function History(){
     function handleExpandModal(){
         setExpandModal(!expandModal);
     }
-    
+
     return(
         <>
-            <div className="flex flex-col h-[100vh] selection:bg-green-500 selection:text-white">
+            <div className={styles.containerGeral}>
                 <Header></Header>
-                <main className="flex flex-1 py-16 px-6 bg-white shrink-0 flex-col items-center font-outfit font-medium text-neutral-700">
-                    <div className="w-[70%] mt-5">
+                <main className={styles.containerMain}>
+                    <div className={styles.containerInternoUm}>
                         <div>
-                            <div className="flex flex-row justify-between items-center">
-                                <h1 className="text-2xl">Locações Agendadas</h1>
+                            <div className={styles.containerTitle}>
+                                <h1 className={styles.titleLocacao}>Locações Finalizadas</h1>
                             </div>
-                            <div className="bg-neutral-600 h-[1px] mt-4"></div>
+                            <div className={styles.line}></div>
                         </div>
-                        <div className="grid grid-cols-6 gap-2">
-                            <div className="bg-neutral-100 border-b-8 border-r-8 border-l-2 border-t-2 mt-[3rem] rounded-2xl px-12 py-7 flex flex-col items-center">
-                                <div className="bg-white rounded-lg p-2">
-                                    <div className="flex flex-row gap-4">
+                        <div className={styles.containerLocacao}>
+                            <div className={styles.cardLocacao}>
+                                <div className={styles.cardLUm}>
+                                    <div className={styles.cardInterno}>
                                         <h1>Id:</h1>
                                         <h1>Data!</h1>
                                     </div>

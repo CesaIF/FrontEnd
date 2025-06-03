@@ -18,6 +18,7 @@
     font-weight: 500;
     color: black;
     gap: 60px;
+    transition: 0.3s;
 }
 
 .containerInternoUm {
@@ -52,33 +53,33 @@
     margin-top: 1rem;
 }
 
-.containerLocacao {
+.containerCard {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+    margin-top: 40px;
 }
 
 .cardLocacao {
-    background-color: white;
-    border-width: 1px;
-    margin-top: 3rem;
-    border-radius: 1rem;
-    padding: 3rem 1.75rem;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    border-color: black;
+    padding: 1rem 1rem;
+    transition: box-shadow 0.3s, transform 0.3s;
+    cursor: pointer;
 }
 
-.cardLUm {
-    background-color: white;
-    border-radius: 1rem;
-    padding: 0.5rem;
+.img {
+    width: 80%;
 }
 
-.cardInterno {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
+.cardLocacao:hover {
+    transform: translate(-5px, -5px);
+    box-shadow: 8px 8px 20px #b9b6b9;
+}
+
+.titleCardDois {
+    color: #769b6a;
+    font-size: 14px;
 }
 
 .containerModal {
@@ -144,4 +145,16 @@
     justify-content: center;
     margin-top: 1.75rem;
     gap: 1.25rem;
+}
+
+.footer {
+    transition: 0.5s;
+}
+
+.asideOpen .containerMain {
+    margin-left: 100px;
+}
+
+.asideOpen .footer {
+    margin-left: 200px;
 }
