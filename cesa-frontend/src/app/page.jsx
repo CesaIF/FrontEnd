@@ -9,7 +9,6 @@ const Modal = dynamic(() => import("./components/modal"), {ssr: false});
 import Textarea from "./components/textarea";
 import ChoiceBox from "./components/choicebox";
 import BadButton from "./components/badButton";
-import GoodButton from "./components/goodButton";
 const MiniModal = dynamic(() => import("./components/miniModal"), {ssr: false});
 import RightButton from "./components/rightButton";
 import styles from './Dashboard.module.css';
@@ -57,8 +56,8 @@ export default function Dashboard(){
                             <div className={styles.line}></div>
                         </div>
                         <div className={styles.containerCard}>
-                            <div className={styles.cardLocacao}>
-                                <div onClick={handleSureModal} className={styles.img}>
+                            <div onClick={handleExpandModal} className={styles.cardLocacao}>
+                                <div className={styles.img}>
                                     <img src="https://i.postimg.cc/Fs7ZnVTn/20250603-1649-Cute-Black-Car-simple-compose-01jwvnew1ef6xa5kp9jpyq56mk.png"></img>
                                 </div>
                                 <div>
@@ -83,7 +82,7 @@ export default function Dashboard(){
                         </div>
                         
                         <div className={styles.containerCard}>
-                            <div onClick={handleSureModal} className={styles.cardLocacao}>
+                            <div onClick={handleExpandModal} className={styles.cardLocacao}>
                                 <div className={styles.img}>
                                     <img src="https://i.postimg.cc/Fs7ZnVTn/20250603-1649-Cute-Black-Car-simple-compose-01jwvnew1ef6xa5kp9jpyq56mk.png"></img>
                                 </div>
@@ -111,8 +110,8 @@ export default function Dashboard(){
                                     <div className={styles.input}><Textarea label={"Motivo da Saída"} placeholder={"Descreva o motivo da Saída"} maxLength={300} rows={3}></Textarea></div>
                                 </form>
                                 <div className={styles.butaoForm}>
-                                    <BadButton onClick={handleOpenModal}>Cancelar</BadButton>
-                                    <GoodButton onClick={handlePopUpModal}>Criar</GoodButton>
+                                    <BadButton cor={"#c80f06"} onClick={handleOpenModal}>Cancelar</BadButton>
+                                    <BadButton cor={"#36962a"} onClick={handlePopUpModal}>Criar</BadButton>
                                 </div>
                             </div>
                         </div>
@@ -182,7 +181,7 @@ export default function Dashboard(){
                                 </div>
                             </div>
                             <div className="flex justify-center items-center mt-10">
-                                <GoodButton onClick={handleExpandModal}>OK</GoodButton>
+                                <BadButton onClick={handleExpandModal}>OK</BadButton>
                             </div>
                         </div>
                     </Modal>
@@ -217,7 +216,7 @@ export default function Dashboard(){
                                 <h1 className="mb-3">Locação cadastrada com sucesso!</h1>
                             </div>
                             <div className={styles.butaoMinimodal}>
-                                <GoodButton onClick={handlePopUpModal}>OK</GoodButton>
+                                <BadButton onClick={handlePopUpModal}>OK</BadButton>
                             </div>
                         </div>
                     </MiniModal>

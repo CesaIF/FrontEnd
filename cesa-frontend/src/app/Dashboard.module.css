@@ -149,6 +149,7 @@
 
 .footer {
     transition: 0.5s;
+    margin-left: 4rem;
 }
 
 .asideOpen .containerMain {

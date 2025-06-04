@@ -1,19 +1,49 @@
 import Link from "next/link";
+import styles from './Footer.module.css';
+import { FaLink } from "react-icons/fa6";
 
 export default function Footer(){
     return(
         <>
-        <footer className="bg-[#181818] flex flex-col">
-            <div className="flex justify-between items-center">
-                <div className="flex flex-row ml-[10%] items-center">
-                    <Link className="w-[20%]" href={"https://www.ifbaiano.edu.br/unidades/itapetinga/"}><img className="" src="/if/if.png"></img></Link>
-                    <h1 className="font-cormorant text-neutral-700">@ 2025 <Link href={"google.com"}>IF Baiano <i>campus</i> Itapetinga</Link>. Todos os direitos reservados.</h1>
+        <footer className={styles.footer}>
+                <div className={styles.containerUm}>
+                    <div>
+                        <h1>Sobre o CESA</h1>
+                        <p>Sistema de Controle de Entrada e Saída de Veículos</p>
+                    </div>
+                    <div>
+                        <h1>Equipe</h1>
+                        <div className={styles.techUsed}>
+                            <Link className={styles.link} href={"https://www.github.com/thellllima02"}>Hércules da Silva Santos</Link>
+                            <Link className={styles.link} href={"https://www.github.com/natanael9999"}>Natanael Dos Santos Gonçalves</Link>
+                        </div>
+                    </div>
+                    <div>
+                        <h1>Insituição</h1>
+                        <Link className={styles.link} href={"https://www.ifbaiano.edu.br/unidades/itapetinga/"}>IF Baiano <i>campus</i> Itapetinga</Link>
+                        <p>Núcleo: NGTI</p>
+                    </div>
+                    <Link href={"https://www.ifbaiano.edu.br/unidades/itapetinga/"} className={styles.link}>
+                        <img className={styles.imgUm} src="https://www.ifbaiano.edu.br/unidades/itapetinga/files/2020/04/marca-if-baiano-campus-itapetinga-horizontal.png"></img>
+                    </Link>
+                    <div>
+                        <h1>Orientadores/Supervisores</h1>
+                        <p>Éber Chargas</p>
+                        <p>Sandoelton Coelho</p>
+                    </div>
+                    <div className={styles.techUsed}>
+                        <div>
+                            <h1>Desenvolvido com:</h1>
+                        </div>
+                        <div className={styles.techUsedUm}>
+                            <Link className={styles.link} href={"/"}>Next.js</Link>
+                            <Link className={styles.link} href={"/"}>Node.js</Link>
+                            <Link className={styles.link} href={"/"}>MariaDB</Link>
+                            <Link className={styles.link} href={"/"}>Docker</Link>
+                        </div>
+                    </div>
+                    
                 </div>
-                <div className="flex flex-row items-center mr-[10%]">
-                    <Link className="mr-[10%]" href={"https://nodejs.org/pt"}><img className="h-[100px]" src="/node/nodejs.png"></img></Link>
-                    <Link href={"https://nextjs.org/"}><img className="h-[100px]" src="/next/nextjs2.png"></img></Link>
-                </div>
-            </div>
         </footer>
         </>
     )

@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit&display=swap');
+
+.footer {
+    background-color: #181818;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
+    color: white;
+    padding: 2rem;
+}
+
+.imgUm {
+    height: 4rem;
+}
+
+.link {
+    transition: color 0.3s;
+}
+
+.link:hover {
+    color: #555555;
+}
+
+.containerUm {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+}
+
+.techUsed {
+    display: flex;
+    flex-direction: column;
+}
+
+.techUsedUm {
+    display: flex;
+    gap: 0rem 1rem;
+}
