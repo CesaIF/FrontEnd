@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit&display=swap');
+
+.choiceboxContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 0.125rem 2.5rem;
+    height: 45px;
+    width: 80%;
+    justify-content: center;
+    border-bottom-width: 2px;
+    border-color: #a3bc98;
+}
+
+.choicebox {
+    color: black;
+    background-color: white;
+}

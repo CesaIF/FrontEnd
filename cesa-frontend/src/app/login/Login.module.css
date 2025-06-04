@@ -15,12 +15,13 @@
 .containerUm {
     background-color: #769b6a;
     height: 100%;
-    width: 90%;
+    width: 70%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     color: white;
+    gap: 1rem;
 }
 
 .containerDois {
@@ -32,25 +33,26 @@
     color: #769b6a;
 }
 
+.containerImg {
+    width: 30%;
+    background-color: white;
+    border-radius: 10%;
+}
+
 .tituloUm {
-    font-size: 2rem;
+    font-size: 3rem;
 }
 
 .tituloDois {
-    font-size: 5.2rem;
+    font-size: 5rem;
 }
 
 .tituloTres {
-
+    font-size: 1.5rem;
 }
 
 .tituloQuatro {
     font-size: 3rem;
-}
-
-.imgUm {
-    margin-top: 2rem;
-    height: 20%;
 }
 
 .figUm {

@@ -26,10 +26,12 @@ export default function Login(){
         <>
         <div className={styles.containerMain}>
             <div className={styles.containerUm}>
-                <h1 className={styles.tituloUm}>INSTITUTO FEDERAL</h1>
-                <h1 className={styles.tituloDois}>BAIANO</h1>
-                <h1 className={styles.tituloTres}><i>Campus</i> Itapetinga</h1>
-                <img className={styles.imgUm} src="https://i.postimg.cc/W4ZWWPn4/20250516-1728-Car-Logo-Design-remix-01jvdcf81demwtw3c2qfwe9gs7-removebg-preview-1.png"></img>
+                <h1 className={styles.tituloUm}>Bem-vindo ao</h1>
+                <div className={styles.containerImg}>
+                    <img className={styles.imgUm} src={"/logo/logo.png"}></img>
+                </div>
+                <h1 className={styles.tituloTres}>Controle de Entrada e Saída de Veículo</h1>
+                <h1 className={styles.tituloTres}>IF BAIANO - <i>campus</i> Itapetinga</h1>
             </div>
             <div className={styles.containerDois}>
                 <div className={styles.formContainer}>

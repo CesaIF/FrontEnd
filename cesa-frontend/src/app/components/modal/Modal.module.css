@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit&display=swap');
+
+.containerModal {
+    position: fixed;
+    inset: 0rem;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.containerModalUm {
+    position: absolute;
+    inset: 0rem;
+    background-color: black;
+    opacity: 50%;
+}
+
+.containerInterno {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 10;
+    height: auto;
+    max-height: 600px;
+    width: 100%;
+    max-width: 650px;
+    background-color: white;
+    padding: 1.6rem;
+    border-radius: 0.25rem;
+}
