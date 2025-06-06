@@ -54,7 +54,7 @@ export default function Veiculos(){
                         </div>
                         
                         <div className={styles.containerCard}>
-                            <div onClick={handleExpandModal} className={styles.cardVeiculo}>
+                            <div onClick={handleExpandModal} className={styles.card}>
                                 <div>
                                     <span className={styles.titleCardTres}>Renault Sandero</span>
                                 </div>

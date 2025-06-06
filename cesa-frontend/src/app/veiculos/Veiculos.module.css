@@ -68,7 +68,7 @@
     margin-top: 40px;
 }
 
-.cardVeiculo {
+.card {
     display: flex;
     flex-direction: column;
     padding: 1rem 1rem;
@@ -80,7 +80,7 @@
     width: 80%;
 }
 
-.cardVeiculo:hover {
+.card:hover {
     transform: translate(-5px, -5px);
     box-shadow: 8px 8px 20px #b9b6b9;
 }

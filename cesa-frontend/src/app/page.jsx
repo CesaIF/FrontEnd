@@ -155,7 +155,7 @@ export default function Dashboard(){
                                 </div>
                             </div>
 
-                            <div className="w-[80%] mt-5 grid grid-cols-2 gap-4">
+                            <div className={styles.partDois}>
                                 <div className={styles.itemPartUm}>
                                     <h1>Data e Hora de Saída:</h1>
                                     <h1>Data!</h1>
@@ -166,7 +166,7 @@ export default function Dashboard(){
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-3 gap-4 w-[80%] mt-5">
+                            <div className={styles.partTres}>
                                 <div className={styles.itemPartUm}>
                                     <h1>Gestor:</h1>
                                     <h1>Data!</h1>

@@ -32,7 +32,7 @@ export default function Footer(){
                     </div>
                     <div>
                         <h1>Orientadores/Supervisores</h1>
-                        <p>Éber Chargas</p>
+                        <p>Éber Chagas</p>
                         <p>Sandoelton Coelho</p>
                     </div>
                     <div className={styles.techUsed}>
