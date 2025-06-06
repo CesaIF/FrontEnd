@@ -1,6 +1,10 @@
 import Link from "next/link";
 import styles from './Footer.module.css';
 import { FaLink } from "react-icons/fa6";
+import { RiNextjsLine } from "react-icons/ri";
+import { FaNodeJs } from "react-icons/fa";
+import { SiMariadbfoundation } from "react-icons/si";
+import { FaDocker } from "react-icons/fa";
 
 export default function Footer(){
     return(
@@ -9,7 +13,7 @@ export default function Footer(){
                 <div className={styles.containerUm}>
                     <div>
                         <h1>Sobre o CESA</h1>
-                        <p>Sistema de Controle de Entrada e Saída de Veículos</p>
+                        <p>Sistema de Controle de Entrada e Saída de Veículos.</p>
                     </div>
                     <div>
                         <h1>Equipe</h1>
@@ -19,13 +23,13 @@ export default function Footer(){
                         </div>
                     </div>
                     <div>
-                        <h1>Insituição</h1>
+                        <h1>Instituição</h1>
                         <Link className={styles.link} href={"https://www.ifbaiano.edu.br/unidades/itapetinga/"}>IF Baiano <i>campus</i> Itapetinga</Link>
                         <p>Núcleo: NGTI</p>
                     </div>
-                    <Link href={"https://www.ifbaiano.edu.br/unidades/itapetinga/"} className={styles.link}>
-                        <img className={styles.imgUm} src="https://www.ifbaiano.edu.br/unidades/itapetinga/files/2020/04/marca-if-baiano-campus-itapetinga-horizontal.png"></img>
-                    </Link>
+                    <div>
+                        <h1>Nossa missão é garantir a segurança e eficiência no controle de locações de veículos institucionais.</h1>
+                    </div>
                     <div>
                         <h1>Orientadores/Supervisores</h1>
                         <p>Éber Chargas</p>
@@ -36,10 +40,10 @@ export default function Footer(){
                             <h1>Desenvolvido com:</h1>
                         </div>
                         <div className={styles.techUsedUm}>
-                            <Link className={styles.link} href={"/"}>Next.js</Link>
-                            <Link className={styles.link} href={"/"}>Node.js</Link>
-                            <Link className={styles.link} href={"/"}>MariaDB</Link>
-                            <Link className={styles.link} href={"/"}>Docker</Link>
+                            <Link className={styles.link} href={"https://nextjs.org/"}><RiNextjsLine size={35}/></Link>
+                            <Link className={styles.link} href={"https://nodejs.org/pt"}><FaNodeJs size={35}/></Link>
+                            <Link className={styles.link} href={"https://mariadb.org/"}><SiMariadbfoundation size={35}/></Link>
+                            <Link className={styles.link} href={"https://www.docker.com/"}><FaDocker size={35}/></Link>
                         </div>
                     </div>
                     

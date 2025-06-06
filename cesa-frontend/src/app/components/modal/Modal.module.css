@@ -25,7 +25,7 @@
     height: auto;
     max-height: 600px;
     width: 100%;
-    max-width: 650px;
+    max-width: var(--width-modal, 500px);
     background-color: white;
     padding: 1.6rem;
     border-radius: 0.25rem;

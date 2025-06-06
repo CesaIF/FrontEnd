@@ -36,4 +36,5 @@
 .techUsedUm {
     display: flex;
     gap: 0rem 1rem;
+    margin-top: 10px;
 }

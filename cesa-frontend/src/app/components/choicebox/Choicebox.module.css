@@ -5,13 +5,15 @@
     flex-direction: column;
     padding: 0.125rem 2.5rem;
     height: 45px;
-    width: 80%;
+    width: 100%;
     justify-content: center;
-    border-bottom-width: 2px;
+    background-color: #efeeef;
     border-color: #a3bc98;
+    border-bottom-width: 2px;
 }
 
 .choicebox {
     color: black;
     background-color: white;
+    width: 100%;
 }

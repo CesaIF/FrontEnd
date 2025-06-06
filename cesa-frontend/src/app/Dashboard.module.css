@@ -38,13 +38,14 @@
 
 .butaoAdd {
     padding: 0.5rem 0.5rem;
-    color: #48793c;
+    color: #FF7601;
     border-radius: 1rem;
     transition: background-color 0.3s;
+    cursor: pointer;
 }
 
 .butaoAdd:hover {
-    background-color: #d1dec7;
+    background-color: #fde9b6;
 }
 
 .line {
@@ -99,6 +100,51 @@
     width: 100%;
 }
 
+.modalExpand {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.partUm {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+    width: 80%;
+}
+
+.itemPartUm {
+    display: flex;
+    flex-direction: column;
+    background-color: #e8e5e8;
+    border-radius: 10px;
+    padding: 0.5rem;
+}
+
+.itemUm {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 1.25rem;
+}
+
+.itemInternoUm {
+    width: 80%;
+    background-color: #e8e5e8;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    padding: 0.5rem;
+}
+
+.partDois {
+    width: 80%;
+    margin-top: 1.25rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .formAdd {
     width: 100%;
     margin-top: 2.5rem;
@@ -118,33 +164,7 @@
     justify-content: space-between;
     align-items: center;
     margin-top: 2.5rem;
-    width: 80%;
-}
-
-.containerMinimodal {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.containerInMini {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-size: large;
-    flex-wrap: wrap;
-}
-
-.butaoMinimodal {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
     width: 100%;
-    justify-content: center;
-    margin-top: 1.75rem;
-    gap: 1.25rem;
 }
 
 .footer {

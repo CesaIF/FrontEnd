@@ -21,7 +21,7 @@ export default function Dashboard(){
     const [popUpModal, setPopUpModal] = useState(false);
     const [expandModal, setExpandModal] = useState(false);
     const [isOpen, setIsOpen] = useState(true);
-
+    
     function handleOpenModal(){
         setModalIsOpen(!modalIsOpen);
     }
@@ -110,83 +110,83 @@ export default function Dashboard(){
                                     <div className={styles.input}><Textarea label={"Motivo da Saída"} placeholder={"Descreva o motivo da Saída"} maxLength={300} rows={3}></Textarea></div>
                                 </form>
                                 <div className={styles.butaoForm}>
-                                    <BadButton cor={"#c80f06"} onClick={handleOpenModal}>Cancelar</BadButton>
-                                    <BadButton cor={"#36962a"} onClick={handlePopUpModal}>Criar</BadButton>
+                                    <BadButton textColor={"#48793c"} colorHover={"#a3bc98"} cor={"#d1dec7"} onClick={handleOpenModal}>Cancelar</BadButton>
+                                    <BadButton colorHover={"#769b6a"} cor={"#48793c"} onClick={handlePopUpModal}>Criar Locação</BadButton>
                                 </div>
                             </div>
                         </div>
                     </Modal>
 
                     <Modal isOpen={expandModal} onClose={handleExpandModal}>
-                        <div className="flex flex-col justify-center items-center">
-                            <div className="grid grid-cols-4 gap-4 w-[80%]">
-                                <div className="flex flex-col bg-neutral-200 rounded-lg p-2">
+                        <div className={styles.modalExpand}>
+                            <div className={styles.partUm}>
+                                <div className={styles.itemPartUm}>
                                     <h1 className="h1">Id:</h1>
                                     <h1 className="h1">Data!</h1>
                                 </div>
 
-                                <div className="flex flex-col bg-neutral-200 rounded-lg p-2">
+                                <div className={styles.itemPartUm}>
                                     <h1 className="h1">Placa:</h1>
                                     <h1 className="h1">Data!</h1>
                                 </div>
 
-                                <div className="flex flex-col bg-neutral-200 rounded-lg p-2">
+                                <div className={styles.itemPartUm}>
                                     <h1 className="h1">Km Saída:</h1>
                                     <h1 className="h1">Data!</h1>
                                 </div>
 
-                                <div className="flex flex-col bg-neutral-200 rounded-lg p-2">
+                                <div className={styles.itemPartUm}>
                                     <h1 className="h1">Km Chegada:</h1>
                                     <h1 className="h1">Data!</h1>
                                 </div>
                             </div>
 
-                            <div className="w-[100%] flex justify-center mt-5">
-                                <div className="w-[80%] bg-neutral-200 rounded-lg flex flex-row p-2">
+                            <div className={styles.itemUm}>
+                                <div className={styles.itemInternoUm}>
                                     <h1>Itinerário:</h1>
                                     <h1>Data!</h1>
                                 </div>
                             </div>
 
-                            <div className="w-[100%] flex justify-center mt-5">
-                                <div className="w-[80%] bg-neutral-200 rounded-lg flex flex-row p-2">
+                            <div className={styles.itemUm}>
+                                <div className={styles.itemInternoUm}>
                                     <h1>Motivo da Saída:</h1>
                                     <h1>Data!</h1>
                                 </div>
                             </div>
 
                             <div className="w-[80%] mt-5 grid grid-cols-2 gap-4">
-                                <div className="flex flex-col bg-neutral-200 p-2 rounded-lg">
+                                <div className={styles.itemPartUm}>
                                     <h1>Data e Hora de Saída:</h1>
                                     <h1>Data!</h1>
                                 </div>
-                                <div className="flex flex-col bg-neutral-200 p-2 rounded-lg">
+                                <div className={styles.itemPartUm}>
                                     <h1>Data e Hora de Chegada:</h1>
                                     <h1>Data!</h1>
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-3 gap-4 w-[80%] mt-5">
-                                <div className="flex flex-col bg-neutral-200 p-2 rounded-lg">
+                                <div className={styles.itemPartUm}>
                                     <h1>Gestor:</h1>
                                     <h1>Data!</h1>
                                 </div>
-                                <div className="flex flex-col bg-neutral-200 p-2 rounded-lg">
+                                <div className={styles.itemPartUm}>
                                     <h1>Porteiro:</h1>
                                     <h1>Data!</h1>
                                 </div>
-                                <div className="flex flex-col bg-neutral-200 p-2 rounded-lg">
+                                <div className={styles.itemPartUm}>
                                     <h1>Motorista:</h1>
                                     <h1>Data!</h1>
                                 </div>
                             </div>
-                            <div className="flex justify-center items-center mt-10">
-                                <BadButton onClick={handleExpandModal}>OK</BadButton>
+                            <div className={styles.butaoForm}>
+                                <BadButton colorHover={"#fdbc4d"} cor={"#fca61d"} onClick={handleExpandModal}>OK</BadButton>
                             </div>
                         </div>
                     </Modal>
 
-                    <MiniModal isOpen={sureModal} onClose={handleSureModal}>
+                    <Modal isOpen={sureModal} onClose={handleSureModal}>
                         <div className={styles.containerMinimodal}>
                             <div className={styles.containerInMini}>
                                 <h1 className="mb-3">Tem certeza que deseja deletar a locação?</h1>
@@ -197,9 +197,9 @@ export default function Dashboard(){
                                 <BadButton>Deletar</BadButton>
                             </div>
                         </div>
-                    </MiniModal>
+                    </Modal>
 
-                    <MiniModal isOpen={privilegeModal} onClose={handlePrivilegeModal}>
+                    <Modal isOpen={privilegeModal} onClose={handlePrivilegeModal}>
                         <div className={styles.containerMinimodal}>
                             <div className={styles.containerInMini}>
                                 <h1 className="mb-3">Você não tem permissão pra isso!</h1>
@@ -208,9 +208,9 @@ export default function Dashboard(){
                                 <BadButton onClick={handlePrivilegeModal}>OK</BadButton>
                             </div>
                         </div>
-                    </MiniModal>
+                    </Modal>
 
-                    <MiniModal isOpen={popUpModal} onClose={handlePopUpModal}>
+                    <Modal isOpen={popUpModal} onClose={handlePopUpModal}>
                         <div className={styles.containerMinimodal}>
                             <div className={styles.containerInMini}>
                                 <h1 className="mb-3">Locação cadastrada com sucesso!</h1>
@@ -219,7 +219,7 @@ export default function Dashboard(){
                                 <BadButton onClick={handlePopUpModal}>OK</BadButton>
                             </div>
                         </div>
-                    </MiniModal>
+                    </Modal>
 
                 </main>
                 <div className={styles.footer}>
