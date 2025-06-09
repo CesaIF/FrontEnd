@@ -47,7 +47,7 @@ export default function Veiculos(){
                     <div className={styles.containerInternoUm}>
                         <div>
                             <div className={styles.containerTitle}>
-                                <h1 className={styles.titleLocacao}>Veículos Cadstrados</h1>
+                                <h1 className={styles.titleLocacao}>Motoristas Cadstrados</h1>
                                 <button className={styles.butaoAdd} onClick={handleOpenModal}><CiCirclePlus size={35}></CiCirclePlus></button>
                             </div>
                             <div className={styles.line}></div>
@@ -56,19 +56,19 @@ export default function Veiculos(){
                         <div className={styles.containerCard}>
                             <div onClick={handleExpandModal} className={styles.card}>
                                 <div>
-                                    <span className={styles.titleCardTres}>Renault Sandero</span>
+                                    <span className={styles.titleCardTres}>João Souza Brito</span>
                                 </div>
                                 <div>
                                     <span className={styles.titleCard}>#1</span>
                                 </div>
                                 <div>
-                                    <span className={styles.titleCard}>ABC-1234</span>
+                                    <span className={styles.titleCard}>123.456.789-10</span>
                                 </div>
                                 <div>
-                                    <span className={styles.titleCard}>Preto</span>
+                                    <span className={styles.titleCard}>(77) 98765-4321</span>
                                 </div>
                                 <div>
-                                    <span className={styles.titleCardDois}>2025</span>
+                                    <span className={styles.titleCardDois}>joaosouzabrito@email.com</span>
                                 </div>
                             </div>
                         </div>
@@ -77,17 +77,16 @@ export default function Veiculos(){
                     <Modal isOpen={modalIsOpen} onClose={handleOpenModal}>
                         <div className={styles.containerModal}>
                             <div className={styles.containerInternoModal}>
-                                <h1 className="text-3xl">Cadastro de Veículos</h1>
+                                <h1 className="text-3xl">Cadastro de Motoristas</h1>
                                 <form className={styles.formAdd}>
-                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"Siena\""} maxLength={200} label={"Modelo"}></Ginput></div>
-                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"Fiat\""} maxLength={200} label={"Marca"}></Ginput></div>
-                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"ABC-1234\""} maxLength={7} label={"Placa"}></Ginput></div>
-                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"Branco\""} maxLength={30} label={"Cor"}></Ginput></div>
-                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"2025\""} maxLength={4} label={"Ano"}></Ginput></div>
+                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"João Barreto Hünnerbein\""} maxLength={200} label={"Nome"}></Ginput></div>
+                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"joaobarreto@email.com\""} maxLength={200} label={"Email"}></Ginput></div>
+                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"123.456.789-10\""} maxLength={14} label={"CPF"}></Ginput></div>
+                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"(77) 12345-6789\""} maxLength={15} label={"Telefone"}></Ginput></div>
                                 </form>
                                 <div className={styles.butaoForm}>
                                     <BadButton textColor={"#48793c"} colorHover={"#a3bc98"} cor={"#d1dec7"} onClick={handleOpenModal}>Cancelar</BadButton>
-                                    <BadButton colorHover={"#769b6a"} cor={"#48793c"} onClick={handlePopUpModal}>Criar Veículo</BadButton>
+                                    <BadButton colorHover={"#769b6a"} cor={"#48793c"} onClick={handlePopUpModal}>Cadastrar Motoristas</BadButton>
                                 </div>
                             </div>
                         </div>
@@ -96,16 +95,15 @@ export default function Veiculos(){
                     <Modal isOpen={updateModal} onClose={handleUpdateModal}>
                         <div className={styles.containerModal}>
                             <div className={styles.containerInternoModal}>
-                                <h1 className="text-3xl">Atualizar Veículos</h1>
+                                <h1 className="text-3xl">Atualizar Motoristas</h1>
                                 <form className={styles.formAdd}>
-                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"Siena\""} maxLength={200} label={"Modelo"}></Ginput></div>
-                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"Fiat\""} maxLength={200} label={"Marca"}></Ginput></div>
-                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"Branco\""} maxLength={30} label={"Cor"}></Ginput></div>
-                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"2025\""} maxLength={4} label={"Ano"}></Ginput></div>
+                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"João Barreto Hünnerbein\""} maxLength={200} label={"Nome"}></Ginput></div>
+                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"joaobarreto@email.com\""} maxLength={200} label={"Email"}></Ginput></div>
+                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"(77) 12345-6789\""} maxLength={15} label={"Telefone"}></Ginput></div>
                                 </form>
                                 <div className={styles.butaoForm}>
                                     <BadButton textColor={"#48793c"} colorHover={"#a3bc98"} cor={"#d1dec7"} onClick={handleUpdateModal} >Cancelar</BadButton>
-                                    <BadButton colorHover={"#769b6a"} cor={"#48793c"} onClick={() => {handleUpdateModal(); handlePopUpModal();}}>Atualizar Veículo</BadButton>
+                                    <BadButton colorHover={"#769b6a"} cor={"#48793c"} onClick={() => {handleUpdateModal(); handlePopUpModal();}}>Atualizar Motorista</BadButton>
                                 </div>
                             </div>
                         </div>
@@ -113,7 +111,7 @@ export default function Veiculos(){
 
                     <Modal isOpen={expandModal} onClose={handleExpandModal}>
                         <div className={styles.containerExpand}>
-                            <span className={styles.titleCardQuatro}>Painel de Veículos</span>
+                            <span className={styles.titleCardQuatro}>Painel de Motoristas</span>
                             <BadButton onClick={() => {handleSureModal(); handleExpandModal();}} textColor={"#48793c"} colorHover={"#a3bc98"} cor={"#d1dec7"} buttonWidth={"400px"}>Deletar</BadButton>
                             <BadButton onClick={() => {handleExpandModal(); handleUpdateModal();}} colorHover={"#769b6a"} cor={"#48793c"} buttonWidth={"400px"}>Atualizar</BadButton>
                             <BadButton onClick={handleExpandModal} colorHover={"#181818"} buttonWidth={"400px"}>Fechar</BadButton>

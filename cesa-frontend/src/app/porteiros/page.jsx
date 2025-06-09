@@ -56,19 +56,19 @@ export default function Porteiros(){
                         <div className={styles.containerCard}>
                             <div onClick={handleExpandModal} className={styles.card}>
                                 <div>
-                                    <span className={styles.titleCardTres}>Renault Sandero</span>
+                                    <span className={styles.titleCardTres}>Maria Araújo Santos</span>
                                 </div>
                                 <div>
                                     <span className={styles.titleCard}>#1</span>
                                 </div>
                                 <div>
-                                    <span className={styles.titleCard}>ABC-1234</span>
+                                    <span className={styles.titleCard}>987.654.321-01</span>
                                 </div>
                                 <div>
-                                    <span className={styles.titleCard}>Preto</span>
+                                    <span className={styles.titleCard}>(77) 91234-5678</span>
                                 </div>
                                 <div>
-                                    <span className={styles.titleCardDois}>2025</span>
+                                    <span className={styles.titleCardDois}>maria@email.com</span>
                                 </div>
                             </div>
                         </div>
@@ -79,15 +79,15 @@ export default function Porteiros(){
                             <div className={styles.containerInternoModal}>
                                 <h1 className="text-3xl">Cadastro de Porteiros</h1>
                                 <form className={styles.formAdd}>
-                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"Siena\""} maxLength={200} label={"Modelo"}></Ginput></div>
-                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"Fiat\""} maxLength={200} label={"Marca"}></Ginput></div>
-                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"ABC-1234\""} maxLength={7} label={"Placa"}></Ginput></div>
-                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"Branco\""} maxLength={30} label={"Cor"}></Ginput></div>
-                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"2025\""} maxLength={4} label={"Ano"}></Ginput></div>
+                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"João Barreto Hünnerbein\""} maxLength={200} label={"Nome"}></Ginput></div>
+                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"joaobarreto@email.com\""} maxLength={200} label={"Email"}></Ginput></div>
+                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"123.456.789-10\""} maxLength={14} label={"CPF"}></Ginput></div>
+                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"(77) 12345-6789\""} maxLength={15} label={"Telefone"}></Ginput></div>
+                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"Digite sua senha\""} maxLength={30} label={"Senha"}></Ginput></div>
                                 </form>
                                 <div className={styles.butaoForm}>
                                     <BadButton textColor={"#48793c"} colorHover={"#a3bc98"} cor={"#d1dec7"} onClick={handleOpenModal}>Cancelar</BadButton>
-                                    <BadButton colorHover={"#769b6a"} cor={"#48793c"} onClick={handlePopUpModal}>Criar Porteiro</BadButton>
+                                    <BadButton colorHover={"#769b6a"} cor={"#48793c"} onClick={handlePopUpModal}>Cadastrar Porteiro</BadButton>
                                 </div>
                             </div>
                         </div>
@@ -98,10 +98,10 @@ export default function Porteiros(){
                             <div className={styles.containerInternoModal}>
                                 <h1 className="text-3xl">Atualizar Porteiros</h1>
                                 <form className={styles.formAdd}>
-                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"Siena\""} maxLength={200} label={"Modelo"}></Ginput></div>
-                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"Fiat\""} maxLength={200} label={"Marca"}></Ginput></div>
-                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"Branco\""} maxLength={30} label={"Cor"}></Ginput></div>
-                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"2025\""} maxLength={4} label={"Ano"}></Ginput></div>
+                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"João Barreto Hünnerbein\""} maxLength={200} label={"Nome"}></Ginput></div>
+                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"joaobarreto@email.com\""} maxLength={200} label={"Email"}></Ginput></div>
+                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"(77) 12345-6789\""} maxLength={15} label={"Telefone"}></Ginput></div>
+                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"Digite sua senha\""} maxLength={30} label={"Senha"}></Ginput></div>
                                 </form>
                                 <div className={styles.butaoForm}>
                                     <BadButton textColor={"#48793c"} colorHover={"#a3bc98"} cor={"#d1dec7"} onClick={handleUpdateModal} >Cancelar</BadButton>

@@ -27,8 +27,7 @@
 
 .containerTitle {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
 }
 
@@ -73,34 +72,33 @@
     display: flex;
     background-color: white;
     flex-direction: column;
+    align-items: center;
     padding: 1rem 1rem;
     transition: box-shadow 0.3s, transform 0.3s;
-    cursor: pointer;
     border-radius: 10px;
     box-shadow: 6px 6px 10px #e0dee0;
+    gap: 1rem;  
 }
 
 .img {
     width: 80%;
 }
 
-.card:hover {
-    transform: translate(-5px, -5px);
-    box-shadow: 8px 8px 20px #e0dee0;
-}
-
 .titleCardTres {
     color: #fca61d;
     font-size: 1.5rem;
+    text-align: justify;
 }
 
 .titleCardDois {
     color: #769b6a;
     font-size: 14px;
+    text-align: justify;
 }
 
 .titleCardQuatro {
     font-size: 25px;
+    text-align: justify;
 }
 
 .containerModal {

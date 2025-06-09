@@ -45,7 +45,7 @@ export default function Dashboard(){
     return(
         <>
             <div className={`${styles.containerGeral} ${isOpen ? styles.asideOpen : ''}`}>
-                <Header onClick={() => {setIsOpen(!isOpen)}} isOpen={isOpen}></Header>
+                <Header background={"white"} onClick={() => {setIsOpen(!isOpen)}} isOpen={isOpen}></Header>
                 <main className={styles.containerMain}>
                     <div className={styles.containerInternoUm}>
                         <div>
@@ -61,13 +61,15 @@ export default function Dashboard(){
                                     <img src="https://i.postimg.cc/Fs7ZnVTn/20250603-1649-Cute-Black-Car-simple-compose-01jwvnew1ef6xa5kp9jpyq56mk.png"></img>
                                 </div>
                                 <div>
-                                    <span className={styles.titleCard}>#1</span>
-                                </div>
-                                <div>
-                                    <span className={styles.titleCard}>Ford - Focus</span>
-                                </div>
-                                <div>
-                                    <span className={styles.titleCardDois}>Recife - Pernambuco</span>
+                                    <div className={styles.containerTitles}>
+                                        <span className={styles.titleCard}>#2</span>
+                                    </div>
+                                    <div>
+                                        <span className={styles.titleCard}>Fiat - Siena</span>
+                                    </div>
+                                    <div>
+                                        <span className={styles.titleCardDois}>Natal - Rio Grande do Norte</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -87,13 +89,15 @@ export default function Dashboard(){
                                     <img src="https://i.postimg.cc/Fs7ZnVTn/20250603-1649-Cute-Black-Car-simple-compose-01jwvnew1ef6xa5kp9jpyq56mk.png"></img>
                                 </div>
                                 <div>
-                                    <span className={styles.titleCard}>#2</span>
-                                </div>
-                                <div>
-                                    <span className={styles.titleCard}>Fiat - Siena</span>
-                                </div>
-                                <div>
-                                    <span className={styles.titleCardDois}>Natal - Rio Grande do Norte</span>
+                                    <div className={styles.containerTitles}>
+                                        <span className={styles.titleCard}>#2</span>
+                                    </div>
+                                    <div>
+                                        <span className={styles.titleCard}>Fiat - Siena</span>
+                                    </div>
+                                    <div>
+                                        <span className={styles.titleCardDois}>Natal - Rio Grande do Norte</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

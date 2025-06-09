@@ -59,6 +59,7 @@
     padding: 0rem 1.6rem;
     width: 100%;
     transition: background-color 0.3s, color 0.3s;
+    background-color: var(--btn-background);
 }
 
 .out {
