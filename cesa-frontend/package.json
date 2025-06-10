@@ -10,7 +10,7 @@
     "postinstall": "flowbite-react patch"
   },
   "dependencies": {
-    "flowbite-react": "^0.11.7",
+    "flowbite-react": "^0.11.8",
     "jquery": "^3.7.1",
     "jquery-mask-plugin": "^1.14.16",
     "next": "15.3.2",

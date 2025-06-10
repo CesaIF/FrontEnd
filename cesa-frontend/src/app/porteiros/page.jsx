@@ -1,103 +1,93 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import DarkFooter from "../components/darkfooter";
-import Footer from "../components/footer";
 import Header from "../components/header";
+import Footer from "../components/footer";
 import { CiCirclePlus } from "react-icons/ci";
 import { useState } from "react";
+const Modal = dynamic(() => import("../components/modal"), {ssr: false});
 import BadButton from "../components/badButton";
-import GoodButton from "../components/goodButton";
-import Input from "../components/input";
-const Modal = dynamic(() => import("../components/modal"));
-import { HiPencilAlt } from "react-icons/hi";
-import { MdDelete } from "react-icons/md";
-import RightButton from "../components/rightButton";
-const MiniModal = dynamic(() => import("../components/miniModal"), {ssr:false});
 import styles from './Porteiro.module.css';
+import Ginput from "../components/gInput";
 
 export default function Porteiros(){
 
-    const [createModal, setCreateModal] = useState(false);
-    const [excludeModal, setExcludeModal] = useState(false);
-    const [updateModal, setUpdateModal] = useState(false);
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [sureModal, setSureModal] = useState(false);
     const [popUpModal, setPopUpModal] = useState(false);
-
-    function handleCreateModal(){
-        setCreateModal(!createModal);
+    const [expandModal, setExpandModal] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
+    const [updateModal, setUpdateModal] = useState(false);
+    
+    function handleOpenModal(){
+        setModalIsOpen(!modalIsOpen);
     }
 
-    function handleExcludeModal(){
-        setExcludeModal(!excludeModal);
+    function handleSureModal(){
+        setSureModal(!sureModal);
+    }
+
+    function handlePopUpModal(){
+      setPopUpModal(!popUpModal);
+    }
+
+    function handleExpandModal(){
+        setExpandModal(!expandModal);
     }
 
     function handleUpdateModal(){
         setUpdateModal(!updateModal);
     }
 
-    function handlePopUpModal(){
-        setPopUpModal(!popUpModal);
-    }
-
     return(
         <>
-        <div className={styles.containerGeral}>
-            <Header></Header>
+            <div className={`${styles.containerGeral} ${isOpen ? styles.asideOpen : ''}`}>
+                <Header onClick={() => {setIsOpen(!isOpen)}} isOpen={isOpen}></Header>
                 <main className={styles.containerMain}>
                     <div className={styles.containerInternoUm}>
                         <div>
                             <div className={styles.containerTitle}>
-                                <h1 className={styles.titleLocacao}>Porteiros Cadastrados</h1>
-                                <button className={styles.butaoAdd} onClick={handleCreateModal}><CiCirclePlus size={35}></CiCirclePlus></button>
+                                <h1 className={styles.titleLocacao}>Porteiros Cadstrados</h1>
+                                <button className={styles.butaoAdd} onClick={handleOpenModal}><CiCirclePlus size={35}></CiCirclePlus></button>
                             </div>
                             <div className={styles.line}></div>
                         </div>
-                        <div className={styles.containerCards}>
-                            <div className={styles.card}>
+                        
+                        <div className={styles.containerCard}>
+                            <div onClick={handleExpandModal} className={styles.card}>
                                 <div>
-                                    <h1 className={styles.titleCard}>Nome</h1>
+                                    <span className={styles.titleCardTres}>Maria Araújo Santos</span>
                                 </div>
-                                <div className={styles.lineCard}></div>
-                                <div className={styles.cardInterno}>
-                                    <div className={styles.cardIUm}>
-                                        <h1>CPF:</h1>
-                                        <h1>Data!</h1>
-                                    </div>
-                                    <div className={styles.cardIUm}>
-                                        <h1>Telefone:</h1>
-                                        <h1>Data!</h1>
-                                    </div>
-                                    <div className={styles.cardIUm}>
-                                        <h1>Email:</h1>
-                                        <h1>Data!</h1>
-                                    </div>
+                                <div>
+                                    <span className={styles.titleCard}>#1</span>
                                 </div>
-                                <div className={styles.cardButao}>
-                                    <div className="">
-                                        <BadButton onClick={handleExcludeModal}><MdDelete></MdDelete></BadButton>
-                                    </div>
-                                    <div>
-                                        <RightButton onClick={handleUpdateModal}><HiPencilAlt></HiPencilAlt></RightButton>
-                                    </div>
+                                <div>
+                                    <span className={styles.titleCard}>987.654.321-01</span>
+                                </div>
+                                <div>
+                                    <span className={styles.titleCard}>(77) 91234-5678</span>
+                                </div>
+                                <div>
+                                    <span className={styles.titleCardDois}>maria@email.com</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <Modal isOpen={createModal} onClose={handleCreateModal}>
+                    <Modal isOpen={modalIsOpen} onClose={handleOpenModal}>
                         <div className={styles.containerModal}>
                             <div className={styles.containerInternoModal}>
-                                <h1 className="text-3xl">Cadastrar Porteiro</h1>
+                                <h1 className="text-3xl">Cadastro de Porteiros</h1>
                                 <form className={styles.formAdd}>
-                                    <div className={styles.input}><Input type={"text"} placeholder={"\"12345678910\""} maxLength={11} label={"CPF"}></Input></div>
-                                    <div className={styles.input}><Input type={"text"} placeholder={"\"José Silva Santos\""} maxLength={10} label={"Nome"}></Input></div>
-                                    <div className={styles.input}><Input type={"text"} placeholder={"\"exemplo@exemplo.com\""} maxLength={100} label={"Email"}></Input></div>
-                                    <div className={styles.input}><Input type={"text"} placeholder={"\"77987654321\""} maxLength={11} label={"Telefone"}></Input></div>
-                                    <div className={styles.input}><Input type={"password"} placeholder={"\"Sua Senha aqui\""} maxLength={30} label={"Senha"}></Input></div>
+                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"João Barreto Hünnerbein\""} maxLength={200} label={"Nome"}></Ginput></div>
+                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"joaobarreto@email.com\""} maxLength={200} label={"Email"}></Ginput></div>
+                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"123.456.789-10\""} maxLength={14} label={"CPF"}></Ginput></div>
+                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"(77) 12345-6789\""} maxLength={15} label={"Telefone"}></Ginput></div>
+                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"Digite sua senha\""} maxLength={30} label={"Senha"}></Ginput></div>
                                 </form>
                                 <div className={styles.butaoForm}>
-                                    <BadButton onClick={handleCreateModal}>Cancelar</BadButton>
-                                    <GoodButton onClick={() => {handleCreateModal(); handlePopUpModal();}}>Criar</GoodButton>
+                                    <BadButton textColor={"#48793c"} colorHover={"#a3bc98"} cor={"#d1dec7"} onClick={handleOpenModal}>Cancelar</BadButton>
+                                    <BadButton colorHover={"#769b6a"} cor={"#48793c"} onClick={handlePopUpModal}>Cadastrar Porteiro</BadButton>
                                 </div>
                             </div>
                         </div>
@@ -106,50 +96,59 @@ export default function Porteiros(){
                     <Modal isOpen={updateModal} onClose={handleUpdateModal}>
                         <div className={styles.containerModal}>
                             <div className={styles.containerInternoModal}>
-                                <h1 className="text-3xl">Atualizar Porteiro</h1>
+                                <h1 className="text-3xl">Atualizar Porteiros</h1>
                                 <form className={styles.formAdd}>
-                                    <div className={styles.input}><Input type={"text"} placeholder={"\"José Silva Santos\""} maxLength={10} label={"Nome"}></Input></div>
-                                    <div className={styles.input}><Input type={"text"} placeholder={"\"exemplo@exemplo.com\""} maxLength={100} label={"Email"}></Input></div>
-                                    <div className={styles.input}><Input type={"text"} placeholder={"\"77987654321\""} maxLength={11} label={"Telefone"}></Input></div>
-                                    <div className={styles.input}><Input type={"password"} placeholder={"\"Sua Senha aqui\""} maxLength={30} label={"Senha"}></Input></div>
+                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"João Barreto Hünnerbein\""} maxLength={200} label={"Nome"}></Ginput></div>
+                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"joaobarreto@email.com\""} maxLength={200} label={"Email"}></Ginput></div>
+                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"(77) 12345-6789\""} maxLength={15} label={"Telefone"}></Ginput></div>
+                                    <div className={styles.input}><Ginput type={"text"} placeholder={"\"Digite sua senha\""} maxLength={30} label={"Senha"}></Ginput></div>
                                 </form>
                                 <div className={styles.butaoForm}>
-                                    <BadButton onClick={handleUpdateModal}>Cancelar</BadButton>
-                                    <GoodButton onClick={() => {handleUpdateModal(); handlePopUpModal();}}>Atualizar</GoodButton>
+                                    <BadButton textColor={"#48793c"} colorHover={"#a3bc98"} cor={"#d1dec7"} onClick={handleUpdateModal} >Cancelar</BadButton>
+                                    <BadButton colorHover={"#769b6a"} cor={"#48793c"} onClick={() => {handleUpdateModal(); handlePopUpModal();}}>Atualizar Porteiro</BadButton>
                                 </div>
                             </div>
                         </div>
                     </Modal>
 
-                    <MiniModal isOpen={excludeModal} onClose={handleExcludeModal}>
-                        <div className={styles.containerMinimodal}>
-                            <div className={styles.containerInMini}>
-                                <h1 className="mb-3">Tem certeza que deseja deletar o Porteiro:</h1>
-                                <h1>Data!</h1>
-                            </div>
-                            <div className={styles.butaoMinimodal}>
-                                <GoodButton onClick={handleExcludeModal} >Cancelar</GoodButton>
-                                <BadButton onClick={() => {handleExcludeModal(); handlePopUpModal();}}>Deletar</BadButton>
-                            </div>
+                    <Modal isOpen={expandModal} onClose={handleExpandModal}>
+                        <div className={styles.containerExpand}>
+                            <span className={styles.titleCardQuatro}>Painel de Porteiros</span>
+                            <BadButton onClick={() => {handleSureModal(); handleExpandModal();}} textColor={"#48793c"} colorHover={"#a3bc98"} cor={"#d1dec7"} buttonWidth={"400px"}>Deletar</BadButton>
+                            <BadButton onClick={() => {handleExpandModal(); handleUpdateModal();}} colorHover={"#769b6a"} cor={"#48793c"} buttonWidth={"400px"}>Atualizar</BadButton>
+                            <BadButton onClick={handleExpandModal} colorHover={"#fdbc4d"} cor={"#fca61d"} buttonWidth={"400px"}>Fechar</BadButton>
                         </div>
-                    </MiniModal>
+                    </Modal>
 
-                    <MiniModal isOpen={popUpModal} onClose={handlePopUpModal}>
-                        <div className={styles.containerMinimodal}>
+                    <Modal isOpen={sureModal} onClose={handleSureModal}>
+                        <div className={styles.containerModal}>
                             <div className={styles.containerInMini}>
-                                <h1 className="mb-3">Mensagem de confirmação!</h1>
+                                <h1 className="mb-3">Tem certeza que deseja deletar?</h1>
                                 <h1>Data!</h1>
                             </div>
-                            <div className={styles.butaoMinimodal}>
-                                <GoodButton onClick={handlePopUpModal}>OK</GoodButton>
+                            <div className={styles.butaoForm}>
+                                <BadButton textColor={"#48793c"} colorHover={"#a3bc98"} cor={"#d1dec7"} onClick={handleSureModal}>Cancelar</BadButton>
+                                <BadButton colorHover={"#769b6a"} cor={"#48793c"} onClick={() => {handleSureModal(); handlePopUpModal();}}>Deletar</BadButton>
                             </div>
                         </div>
-                    </MiniModal>
+                    </Modal>
+
+                    <Modal isOpen={popUpModal} onClose={handlePopUpModal}>
+                        <div className={styles.containerMinimodal}>
+                            <div className={styles.containerInMini}>
+                                <h1 className="mb-3">Porteiro cadastrada com sucesso!</h1>
+                            </div>
+                            <div className={styles.butaoMinimodal}>
+                                <BadButton onClick={handlePopUpModal}>OK</BadButton>
+                            </div>
+                        </div>
+                    </Modal>
 
                 </main>
-            <Footer></Footer>
-            <DarkFooter></DarkFooter>
-        </div>
+                <div className={styles.footer}>
+                    <Footer></Footer>
+                </div>
+            </div>
         </>
     )
 }
