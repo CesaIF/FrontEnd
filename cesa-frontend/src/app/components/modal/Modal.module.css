@@ -23,7 +23,7 @@
     justify-content: center;
     z-index: 10;
     height: auto;
-    max-height: 600px;
+    max-height: 620px;
     width: 100%;
     max-width: var(--width-modal, 500px);
     background-color: white;
