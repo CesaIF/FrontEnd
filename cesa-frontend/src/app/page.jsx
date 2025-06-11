@@ -1,4 +1,3 @@
-
 // "use client" porque está rodando no lado do cliente.
 "use client";
 
@@ -9,13 +8,14 @@ import dynamic from "next/dynamic";
 import Header from "./components/header";
 import Footer from "./components/footer";
 import { CiCirclePlus } from "react-icons/ci";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 const Modal = dynamic(() => import("./components/modal"), {ssr: false});
 import Textarea from "./components/textarea";
 import ChoiceBox from "./components/choicebox";
 import BadButton from "./components/badButton";
 import styles from './Dashboard.module.css';
 import Ginput from "./components/gInput";
+import { BsThreeDotsVertical } from "react-icons/bs";
 
 // exportação da página principal a ser chamada nas rotas.
 export default function Dashboard(){
@@ -32,6 +32,39 @@ export default function Dashboard(){
     const [confirmacao, setConfirmacao] = useState('cadastrado');
     // constante que altera o tipo de modal de expansão dos dados que vai inferir na funcionalidade deles.
     const [expandType, setExpandType] = useState(1);
+    // constante que altera o valor do popUp e permite que ele seja aberto.
+    const [popUp, setPopUp] = useState(false);
+    // constante que informa a localização do popUp.
+    const [popUpPosition, setPopUpPosition] = useState({x: 0, y: 0});
+    // constante que inicializa o useRef do popUp.
+    const popupRef = useRef(null);
+
+    // função que fecha o pop-up modal ao clicar na tela fora dele.
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (popupRef.current && !popupRef.current.contains(event.target)){
+                setPopUp(!popUp);
+            }
+        };
+
+        if (popUp) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+
+    }, [popUp]);
+
+    // função que lida com a abertura do pop up de locação.
+    function handlePopUp(e){
+        e.stopPropagation();
+        setPopUp(!popUp);
+        const x = e.pageX;
+        const y = e.pageY;
+        setPopUpPosition({x, y});
+    }
 
     // função que renderiza os botões que dependerão do tipo do modal de expansão.
     function renderExpandType(){
@@ -40,8 +73,6 @@ export default function Dashboard(){
                 return(
                     <>
                         <BadButton colorHover={"#a3bc98"} textColor={"#48793c"} cor={"#d1dec7"} onClick={handleOpenModal}>Fechar</BadButton>
-                        <BadButton onClick={() => {handleOpenModal(); handleConfirmacaoIsOpen(); setConfirmacao('deletar');}} colorHover={"#dd4f33"} cor={"#bd3b26"}>Deletar</BadButton>
-                        <BadButton colorHover={"#181818"} cor={"black"} onClick={() => {setModalContent('edicao')}}>Editar</BadButton>
                         <BadButton onClick={() => {setConfirmacao('iniciar'); handleOpenModal(); handleConfirmacaoIsOpen();}} colorHover={"#769b6a"} cor={"#48793c"}>Iniciar</BadButton>
                     </>
                 )
@@ -59,7 +90,6 @@ export default function Dashboard(){
         }
     }
 
-    
     // função que muda o texto dos modais de confirmação conforme necessário.
     // os cases são declarados nos onClick{}.
     function renderContentConfirmacao(){
@@ -207,74 +237,76 @@ export default function Dashboard(){
             case 'expand':
                 return(
                     <>
-                        <div className={styles.modalExpand}>
-                            <div className={styles.partUm}>
+                        <div className={styles.containerModalGeral}>
+                            <div className={styles.modalExpand}>
+                                <div className={styles.partUm}>
 
-                                <div className={styles.itemPartUm}>
-                                    <h1 className="h1">Placa:</h1>
-                                    <h1 className="h1">Data!</h1>
+                                    <div className={styles.itemPartUm}>
+                                        <h1 className="h1">Placa:</h1>
+                                        <h1 className="h1">Data!</h1>
+                                    </div>
+
+                                    <div className={styles.itemPartUm}>
+                                        <h1 className="h1">Km Saída:</h1>
+                                        <h1 className="h1">Data!</h1>
+                                    </div>
+
+                                    <div className={styles.itemPartUm}>
+                                        <h1 className="h1">Km Chegada:</h1>
+                                        <h1 className="h1">Data!</h1>
+                                    </div>
                                 </div>
 
-                                <div className={styles.itemPartUm}>
-                                    <h1 className="h1">Km Saída:</h1>
-                                    <h1 className="h1">Data!</h1>
+                                <div className={styles.itemUm}>
+                                    <div className={styles.itemInternoUm}>
+                                        <h1>Itinerário:</h1>
+                                        <h1>Data!</h1>
+                                    </div>
                                 </div>
 
-                                <div className={styles.itemPartUm}>
-                                    <h1 className="h1">Km Chegada:</h1>
-                                    <h1 className="h1">Data!</h1>
+                                <div className={styles.itemUm}>
+                                    <div className={styles.itemInternoUm}>
+                                        <h1>Motivo da Saída:</h1>
+                                        <h1>Data!</h1>
+                                    </div>
+                                </div>
+
+                                <div className={styles.partDois}>
+                                    <div className={styles.itemPartUm}>
+                                        <h1>Data e Hora de Saída:</h1>
+                                        <h1>Data!</h1>
+                                    </div>
+                                    <div className={styles.itemPartUm}>
+                                        <h1>Data e Hora de Chegada:</h1>
+                                        <h1>Data!</h1>
+                                    </div>
+                                </div>
+
+                                <div className={styles.partDois}>
+                                    <div className={styles.itemPartUm}>
+                                        <h1>Gestor:</h1>
+                                        <h1>Data!</h1>
+                                    </div>
+                                    <div className={styles.itemPartUm}>
+                                        <h1>Motorista:</h1>
+                                        <h1>Data!</h1>
+                                    </div>
+                                </div>
+
+                                <div className={styles.partDois}>
+                                    <div className={styles.itemPartUm}>
+                                        <h1>Porteiro Saída</h1>
+                                        <h1>Data!</h1>
+                                    </div>
+                                    <div className={styles.itemPartUm}>
+                                        <h1>Porteiro Chegada</h1>
+                                        <h1>Data!</h1>
+                                    </div>
                                 </div>
                             </div>
-
-                            <div className={styles.itemUm}>
-                                <div className={styles.itemInternoUm}>
-                                    <h1>Itinerário:</h1>
-                                    <h1>Data!</h1>
-                                </div>
+                            <div className={styles.butaoForm}>
+                                {renderExpandType()}
                             </div>
-
-                            <div className={styles.itemUm}>
-                                <div className={styles.itemInternoUm}>
-                                    <h1>Motivo da Saída:</h1>
-                                    <h1>Data!</h1>
-                                </div>
-                            </div>
-
-                            <div className={styles.partDois}>
-                                <div className={styles.itemPartUm}>
-                                    <h1>Data e Hora de Saída:</h1>
-                                    <h1>Data!</h1>
-                                </div>
-                                <div className={styles.itemPartUm}>
-                                    <h1>Data e Hora de Chegada:</h1>
-                                    <h1>Data!</h1>
-                                </div>
-                            </div>
-
-                            <div className={styles.partDois}>
-                                <div className={styles.itemPartUm}>
-                                    <h1>Gestor:</h1>
-                                    <h1>Data!</h1>
-                                </div>
-                                <div className={styles.itemPartUm}>
-                                    <h1>Motorista:</h1>
-                                    <h1>Data!</h1>
-                                </div>
-                            </div>
-
-                            <div className={styles.partDois}>
-                                <div className={styles.itemPartUm}>
-                                    <h1>Porteiro Saída</h1>
-                                    <h1>Data!</h1>
-                                </div>
-                                <div className={styles.itemPartUm}>
-                                    <h1>Porteiro Chegada</h1>
-                                    <h1>Data!</h1>
-                                </div>
-                            </div>
-                        </div>
-                        <div className={styles.butaoExpand}>
-                            {renderExpandType()}
                         </div>
                     </>
                 )
@@ -289,6 +321,7 @@ export default function Dashboard(){
         setModalIsOpen(!modalIsOpen);
     }
 
+    // função que abre e fecha os modais menores quando chamada.
     function handleConfirmacaoIsOpen(){
         setConfirmacaoIsOpen(!confirmacaoIsOpen);
     }
@@ -309,7 +342,7 @@ export default function Dashboard(){
                             <div className={styles.line}></div>
                         </div>
                         <div className={styles.containerCard}>
-                            <div onClick={() => {handleOpenModal(); setModalContent('expand'); setExpandType(1)}} className={styles.cardLocacao}>
+                            <div onContextMenu={(e) => {e.preventDefault(); handlePopUp(e);}} onClick={() => {handleOpenModal(); setModalContent('expand'); setExpandType(1)}} className={styles.cardLocacao}>
                                 <div className={styles.img}>
                                     <img src="https://i.postimg.cc/Fs7ZnVTn/20250603-1649-Cute-Black-Car-simple-compose-01jwvnew1ef6xa5kp9jpyq56mk.png"></img>
                                 </div>
@@ -323,6 +356,9 @@ export default function Dashboard(){
                                     <div>
                                         <span className={styles.titleCardDois}>Natal - Rio Grande do Norte</span>
                                     </div>
+                                </div>
+                                <div>
+                                    <button onClick={handlePopUp} className={styles.threeDots}><BsThreeDotsVertical /></button>
                                 </div>
                             </div>
                         </div>
@@ -365,6 +401,15 @@ export default function Dashboard(){
                             {renderContentConfirmacao()}
                         </div>
                     </Modal>
+
+                    {popUp && (
+                        <div ref={popupRef} style={{top: popUpPosition.y, left: popUpPosition.x}} className={styles.popUp}>
+                            <div className={styles.containerPopUp}>
+                                <BadButton colorHover={"#769b6a"} cor={"#48793c"} onClick={() => {handleOpenModal(); setModalContent('edicao')}}>Editar</BadButton>
+                                <BadButton onClick={() => {handleConfirmacaoIsOpen(); setConfirmacao('deletar');}} colorHover={"#dd4f33"} cor={"#bd3b26"}>Deletar</BadButton>
+                            </div>
+                        </div>
+                    )}
 
                 </main>
                 <div className={styles.footer}>
