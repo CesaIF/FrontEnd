@@ -13,26 +13,50 @@ import Ginput from "../components/gInput";
 export default function Perfil(){
 
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [sureModal, setSureModal] = useState(false);
-    const [popUpModal, setPopUpModal] = useState(false);
+    const [confirmacaoIsOpen, setConfirmacaoIsOpen] = useState(false);
+    const [confirmacao, setConfirmacao] = useState('cadastrado');
     const [expandModal, setExpandModal] = useState(false);
     const [isOpen, setIsOpen] = useState(true);
     const [updateModal, setUpdateModal] = useState(false);
     
+    function renderConfirmacao(){
+        switch (confirmacao) {
+            case 'cadastrado':
+                return(
+                    <>
+                    <div className={styles.containerInMini}>
+                        <h1 className="mb-3">Motorista cadastrado com sucesso!</h1>
+                        <h1>Data!</h1>
+                    </div>
+                    <div className={styles.butaoForm}>
+                        <BadButton colorHover={"#769b6a"} cor={"#48793c"} onClick={handleConfirmacaoIsOpen}>Ok</BadButton>
+                    </div>
+                    </>
+                )
+
+            case 'editado':
+                return(
+                    <>
+                    <div className={styles.containerInMini}>
+                        <h1 className="mb-3">Motorista editado com sucesso!</h1>
+                    </div>
+                    <div className={styles.butaoForm}>
+                        <BadButton colorHover={"#769b6a"} cor={"#48793c"} onClick={handleConfirmacaoIsOpen}>Ok</BadButton>
+                    </div>
+                    </>
+                )
+        
+            default:
+                return null;
+        }
+    }
+
     function handleOpenModal(){
         setModalIsOpen(!modalIsOpen);
     }
 
-    function handleSureModal(){
-        setSureModal(!sureModal);
-    }
-
-    function handlePopUpModal(){
-      setPopUpModal(!popUpModal);
-    }
-
-    function handleExpandModal(){
-        setExpandModal(!expandModal);
+    function handleConfirmacaoIsOpen(){
+        setConfirmacaoIsOpen(!confirmacaoIsOpen);
     }
 
     function handleUpdateModal(){
@@ -61,7 +85,19 @@ export default function Perfil(){
                                     <h1 className={styles.titleCard}>Edite seus dados e sua senha clicando abaixo:</h1>
                                 </div>
                                 <div>
-                                    <BadButton onClick={handleUpdateModal} colorHover="#a3bc98" cor="#769b6a">Editar Dados</BadButton>
+                                    <BadButton buttonWidth={"15rem"} onClick={handleUpdateModal} colorHover="#a3bc98" cor="#769b6a">Editar Dados</BadButton>
+                                </div>
+                            </div>
+
+                            <div className={styles.card}>
+                                <div>
+                                    <h1 className={styles.titleCardTres}>Cadastrar Gestor</h1>
+                                </div>
+                                <div>
+                                    <h1 className={styles.titleCard}>Cadastre um novo gestor clicando abaixo:</h1>
+                                </div>
+                                <div>
+                                    <BadButton buttonWidth={"15rem"} onClick={handleOpenModal} colorHover="#a3bc98" cor="#769b6a">Cadastrar Gestor</BadButton>
                                 </div>
                             </div>
                         </div>
@@ -80,7 +116,7 @@ export default function Perfil(){
                                 </form>
                                 <div className={styles.butaoForm}>
                                     <BadButton textColor={"#48793c"} colorHover={"#a3bc98"} cor={"#d1dec7"} onClick={handleOpenModal}>Cancelar</BadButton>
-                                    <BadButton colorHover={"#769b6a"} cor={"#48793c"} onClick={handlePopUpModal}>Cadastrar Gestor</BadButton>
+                                    <BadButton colorHover={"#769b6a"} cor={"#48793c"} onClick={() => {handleConfirmacaoIsOpen(); handleOpenModal(); setConfirmacao('cadastrado')}}>Cadastrar Gestor</BadButton>
                                 </div>
                             </div>
                         </div>
@@ -98,42 +134,15 @@ export default function Perfil(){
                                 </form>
                                 <div className={styles.butaoForm}>
                                     <BadButton textColor={"#48793c"} colorHover={"#a3bc98"} cor={"#d1dec7"} onClick={handleUpdateModal} >Cancelar</BadButton>
-                                    <BadButton colorHover={"#769b6a"} cor={"#48793c"} onClick={() => {handleUpdateModal(); handlePopUpModal();}}>Atualizar Dados</BadButton>
+                                    <BadButton colorHover={"#769b6a"} cor={"#48793c"} onClick={() => {handleUpdateModal(); handleConfirmacaoIsOpen(); setConfirmacao('editado')}}>Atualizar Dados</BadButton>
                                 </div>
                             </div>
                         </div>
                     </Modal>
 
-                    <Modal isOpen={expandModal} onClose={handleExpandModal}>
-                        <div className={styles.containerExpand}>
-                            <span className={styles.titleCardQuatro}>Painel de Veículos</span>
-                            <BadButton onClick={() => {handleSureModal(); handleExpandModal();}} textColor={"#48793c"} colorHover={"#a3bc98"} cor={"#d1dec7"} buttonWidth={"400px"}>Deletar</BadButton>
-                            <BadButton onClick={() => {handleExpandModal(); handleUpdateModal();}} colorHover={"#769b6a"} cor={"#48793c"} buttonWidth={"400px"}>Atualizar</BadButton>
-                            <BadButton onClick={handleExpandModal} colorHover={"#fdbc4d"} cor={"#fca61d"} buttonWidth={"400px"}>Fechar</BadButton>
-                        </div>
-                    </Modal>
-
-                    <Modal isOpen={sureModal} onClose={handleSureModal}>
+                    <Modal isOpen={confirmacaoIsOpen} onClose={handleConfirmacaoIsOpen}>
                         <div className={styles.containerModal}>
-                            <div className={styles.containerInMini}>
-                                <h1 className="mb-3">Tem certeza que deseja deletar?</h1>
-                                <h1>Data!</h1>
-                            </div>
-                            <div className={styles.butaoForm}>
-                                <BadButton textColor={"#48793c"} colorHover={"#a3bc98"} cor={"#d1dec7"} onClick={handleSureModal}>Cancelar</BadButton>
-                                <BadButton colorHover={"#769b6a"} cor={"#48793c"} onClick={() => {handleSureModal(); handlePopUpModal();}}>Deletar</BadButton>
-                            </div>
-                        </div>
-                    </Modal>
-
-                    <Modal isOpen={popUpModal} onClose={handlePopUpModal}>
-                        <div className={styles.containerMinimodal}>
-                            <div className={styles.containerInMini}>
-                                <h1 className="mb-3">Veículo cadastrada com sucesso!</h1>
-                            </div>
-                            <div className={styles.butaoMinimodal}>
-                                <BadButton onClick={handlePopUpModal}>OK</BadButton>
-                            </div>
+                            {renderConfirmacao()}
                         </div>
                     </Modal>
 

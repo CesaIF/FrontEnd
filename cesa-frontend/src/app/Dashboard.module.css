@@ -183,13 +183,22 @@
     width: 80%;
 }
 
-.butaoExpand {
+.containerModalGeral {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
-    margin-top: 2.5rem;
-    gap: 5rem;
-    width: 100%;
+    align-items: center;
+}
+
+.threeDots {
+    padding: 0.5em;
+    border-radius: 100%;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.threeDots:hover {
+    background-color: #efeeef;
 }
 
 .footer {
@@ -203,4 +212,22 @@
 
 .asideOpen .footer {
     margin-left: 200px;
+}
+
+.popUp {
+    position: absolute;
+    background-color: white;
+    box-shadow: 8px 8px 20px #808080;
+    padding: 1rem 1rem;
+    width: 20rem;
+    border-radius: 2rem;
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    justify-items: center;
+}
+
+.containerPopUp {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
 }

@@ -75,128 +75,79 @@ export default function History(){
 
                     </div>
 
-                    <Modal isOpen={modalIsOpen} onClose={handleOpenModal}>
-                        <div className={styles.containerModal}>
-                            <div className={styles.containerInternoModal}>
-                                <h1 className="text-3xl">Cadastro de Locação</h1>
-                                <form className={styles.formAdd}>
-                                    <div className={styles.input}><ChoiceBox label={"Veículo"}>Escolha o Veículo!</ChoiceBox></div>
-                                    <div className={styles.input}><ChoiceBox label={"Motorista"}>Escolha o Motorista!</ChoiceBox></div>
-                                    <div className={styles.input}><Textarea label={"Itinerário"} placeholder={"Descreva o Itinerário"} maxLength={300} rows={3}></Textarea></div>
-                                    <div className={styles.input}><Textarea label={"Motivo da Saída"} placeholder={"Descreva o motivo da Saída"} maxLength={300} rows={3}></Textarea></div>
-                                </form>
-                                <div className={styles.butaoForm}>
-                                    <BadButton textColor={"#48793c"} colorHover={"#a3bc98"} cor={"#d1dec7"} onClick={handleOpenModal}>Cancelar</BadButton>
-                                    <BadButton colorHover={"#769b6a"} cor={"#48793c"} onClick={handlePopUpModal}>Criar Locação</BadButton>
-                                </div>
-                            </div>
-                        </div>
-                    </Modal>
+                    <Modal width={"1000px"} isOpen={expandModal} onClose={handleExpandModal}>
+                        <div className={styles.containerModalGeral}>
+                            <div className={styles.modalExpand}>
+                                <div className={styles.partUm}>
 
-                    <Modal isOpen={expandModal} onClose={handleExpandModal}>
-                        <div className={styles.modalExpand}>
-                            <div className={styles.partUm}>
-                                <div className={styles.itemPartUm}>
-                                    <h1 className="h1">Id:</h1>
-                                    <h1 className="h1">Data!</h1>
+                                    <div className={styles.itemPartUm}>
+                                        <h1 className="h1">Placa:</h1>
+                                        <h1 className="h1">Data!</h1>
+                                    </div>
+
+                                    <div className={styles.itemPartUm}>
+                                        <h1 className="h1">Km Saída:</h1>
+                                        <h1 className="h1">Data!</h1>
+                                    </div>
+
+                                    <div className={styles.itemPartUm}>
+                                        <h1 className="h1">Km Chegada:</h1>
+                                        <h1 className="h1">Data!</h1>
+                                    </div>
                                 </div>
 
-                                <div className={styles.itemPartUm}>
-                                    <h1 className="h1">Placa:</h1>
-                                    <h1 className="h1">Data!</h1>
+                                <div className={styles.itemUm}>
+                                    <div className={styles.itemInternoUm}>
+                                        <h1>Itinerário:</h1>
+                                        <h1>Data!</h1>
+                                    </div>
                                 </div>
 
-                                <div className={styles.itemPartUm}>
-                                    <h1 className="h1">Km Saída:</h1>
-                                    <h1 className="h1">Data!</h1>
+                                <div className={styles.itemUm}>
+                                    <div className={styles.itemInternoUm}>
+                                        <h1>Motivo da Saída:</h1>
+                                        <h1>Data!</h1>
+                                    </div>
                                 </div>
 
-                                <div className={styles.itemPartUm}>
-                                    <h1 className="h1">Km Chegada:</h1>
-                                    <h1 className="h1">Data!</h1>
+                                <div className={styles.partDois}>
+                                    <div className={styles.itemPartUm}>
+                                        <h1>Data e Hora de Saída:</h1>
+                                        <h1>Data!</h1>
+                                    </div>
+                                    <div className={styles.itemPartUm}>
+                                        <h1>Data e Hora de Chegada:</h1>
+                                        <h1>Data!</h1>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className={styles.itemUm}>
-                                <div className={styles.itemInternoUm}>
-                                    <h1>Itinerário:</h1>
-                                    <h1>Data!</h1>
+                                <div className={styles.partDois}>
+                                    <div className={styles.itemPartUm}>
+                                        <h1>Gestor:</h1>
+                                        <h1>Data!</h1>
+                                    </div>
+                                    <div className={styles.itemPartUm}>
+                                        <h1>Motorista:</h1>
+                                        <h1>Data!</h1>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className={styles.itemUm}>
-                                <div className={styles.itemInternoUm}>
-                                    <h1>Motivo da Saída:</h1>
-                                    <h1>Data!</h1>
-                                </div>
-                            </div>
-
-                            <div className={styles.partDois}>
-                                <div className={styles.itemPartUm}>
-                                    <h1>Data e Hora de Saída:</h1>
-                                    <h1>Data!</h1>
-                                </div>
-                                <div className={styles.itemPartUm}>
-                                    <h1>Data e Hora de Chegada:</h1>
-                                    <h1>Data!</h1>
-                                </div>
-                            </div>
-
-                            <div className={styles.partTres}>
-                                <div className={styles.itemPartUm}>
-                                    <h1>Gestor:</h1>
-                                    <h1>Data!</h1>
-                                </div>
-                                <div className={styles.itemPartUm}>
-                                    <h1>Porteiro:</h1>
-                                    <h1>Data!</h1>
-                                </div>
-                                <div className={styles.itemPartUm}>
-                                    <h1>Motorista:</h1>
-                                    <h1>Data!</h1>
+                                <div className={styles.partDois}>
+                                    <div className={styles.itemPartUm}>
+                                        <h1>Porteiro Saída</h1>
+                                        <h1>Data!</h1>
+                                    </div>
+                                    <div className={styles.itemPartUm}>
+                                        <h1>Porteiro Chegada</h1>
+                                        <h1>Data!</h1>
+                                    </div>
                                 </div>
                             </div>
                             <div className={styles.butaoForm}>
-                                <BadButton colorHover={"#fdbc4d"} cor={"#fca61d"} onClick={handleExpandModal}>OK</BadButton>
+                                <BadButton colorHover={"#a3bc98"} textColor={"#48793c"} cor={"#d1dec7"} onClick={handleExpandModal}>Fechar</BadButton>
                             </div>
                         </div>
                     </Modal>
-
-                    <Modal isOpen={sureModal} onClose={handleSureModal}>
-                        <div className={styles.containerMinimodal}>
-                            <div className={styles.containerInMini}>
-                                <h1 className="mb-3">Tem certeza que deseja deletar a locação?</h1>
-                                <h1>Data!</h1>
-                            </div>
-                            <div className={styles.butaoMinimodal}>
-                                <RightButton onClick={handleSureModal}>Cancelar</RightButton>
-                                <BadButton>Deletar</BadButton>
-                            </div>
-                        </div>
-                    </Modal>
-
-                    <Modal isOpen={privilegeModal} onClose={handlePrivilegeModal}>
-                        <div className={styles.containerMinimodal}>
-                            <div className={styles.containerInMini}>
-                                <h1 className="mb-3">Você não tem permissão pra isso!</h1>
-                            </div>
-                            <div className={styles.butaoMinimodal}>
-                                <BadButton onClick={handlePrivilegeModal}>OK</BadButton>
-                            </div>
-                        </div>
-                    </Modal>
-
-                    <Modal isOpen={popUpModal} onClose={handlePopUpModal}>
-                        <div className={styles.containerMinimodal}>
-                            <div className={styles.containerInMini}>
-                                <h1 className="mb-3">Locação cadastrada com sucesso!</h1>
-                            </div>
-                            <div className={styles.butaoMinimodal}>
-                                <BadButton onClick={handlePopUpModal}>OK</BadButton>
-                            </div>
-                        </div>
-                    </Modal>
-
                 </main>
                 <div className={styles.footer}>
                     <Footer></Footer>
