@@ -7,8 +7,10 @@ import { GoHistory, GoPasskeyFill } from "react-icons/go";
 import { FaHome, FaCar, FaRegUserCircle } from "react-icons/fa";
 import { BsPersonVcard } from "react-icons/bs";
 import { FiTable } from "react-icons/fi";
+import { useAuth } from "@/app/hooks/useAuth";
 
 export default function Header({isOpen, onClick}){
+    useAuth();
     return (
         <>
             <aside className={`${styles.aside} ${isOpen ? styles.open : ''}`}>

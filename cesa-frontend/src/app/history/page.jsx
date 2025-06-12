@@ -11,8 +11,10 @@ import ChoiceBox from "../components/choicebox";
 import BadButton from "../components/badButton";
 import RightButton from "../components/rightButton";
 import styles from './History.module.css';
+import { useAuth } from "../hooks/useAuth";
 
 export default function History(){
+    useAuth();
 
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [sureModal, setSureModal] = useState(false);
