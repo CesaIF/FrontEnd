@@ -9,8 +9,10 @@ const Modal = dynamic(() => import("../components/modal"), {ssr: false});
 import BadButton from "../components/badButton";
 import styles from './Motoristas.module.css';
 import Ginput from "../components/gInput";
+import { useAuth } from "../hooks/useAuth";
 
 export default function Veiculos(){
+    useAuth();
 
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [confirmacaoIsOpen, setConfirmacaoIsOpen] = useState(false);

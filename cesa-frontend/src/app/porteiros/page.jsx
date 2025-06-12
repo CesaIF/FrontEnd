@@ -9,8 +9,10 @@ const Modal = dynamic(() => import("../components/modal"), {ssr: false});
 import BadButton from "../components/badButton";
 import styles from './Porteiro.module.css';
 import Ginput from "../components/gInput";
+import { useAuth } from "../hooks/useAuth";
 
 export default function Porteiros(){
+    useAuth();
 
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [confirmacaoIsOpen, setConfirmacaoIsOpen] = useState(false);
