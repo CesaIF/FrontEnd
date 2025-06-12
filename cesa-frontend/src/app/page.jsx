@@ -2,6 +2,7 @@
 "use client";
 
 // todos os módulos usados na página.
+
 //importação do dynamic para aumentar desempenho e renderizar dinamicamente os modais (evitam renderizar conteúdo não utilizado.)
 import dynamic from "next/dynamic";
 import Header from "./components/header";
@@ -37,14 +38,6 @@ export default function Dashboard(){
     const [popUpPosition, setPopUpPosition] = useState({x: 0, y: 0});
     // constante que inicializa o useRef do popUp.
     const popupRef = useRef(null);
-
-    const [locacoes, setLocacoes] = useState('');
-    const [erro, setErro] = useState('');
-
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-
-    })
 
     // função que fecha o pop-up modal ao clicar na tela fora dele.
     useEffect(() => {
