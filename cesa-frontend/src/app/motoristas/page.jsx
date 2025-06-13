@@ -15,19 +15,28 @@ export default function Veiculos() {
   useAuth();
 
   const [motoristas, setMotoristas] = useState([]);
+  const [motoristaEditando, setMotoristaEditando] = useState({
+    nome: "",
+    telefone: "",
+    email: "",
+  });
+
   useEffect(() => {
     const fetchMotoristas = async () => {
       try {
         const token = localStorage.getItem("token");
-        const receberAPI = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}/motoristas`, {
-            headers:{
-                Authorization: `Bearer ${token}`
+        const receberAPI = await fetch(
+          `${process.env.NEXT_PUBLIC_LOCAL}/motoristas`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
             },
-        });
+          }
+        );
         const data = await receberAPI.json();
-        console.log("Tipo de data:", typeof data);
-        console.log("É array?", Array.isArray(data));
-        console.log("Conteúdo:", data);
+        console.log("Tipo de data:", typeof data); //Apagar isso depois 
+        console.log("É array?", Array.isArray(data));//Apagar isso depois 
+        console.log("Conteúdo:", data);//Apagar isso depois 
         setMotoristas(data);
       } catch (error) {
         console.error("Ero ao buscar motorista".error);
@@ -35,6 +44,12 @@ export default function Veiculos() {
     };
     fetchMotoristas();
   }, []);
+  //Para realizar editar o motorista selecionado
+  const handleEditarMotorista = (motorista) => {
+    setMotoristaEditando(motorista);
+    handleExpandModal();
+    //handleUpdateModal(); // abre o modal
+  };
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [confirmacaoIsOpen, setConfirmacaoIsOpen] = useState(false);
@@ -176,31 +191,37 @@ export default function Veiculos() {
             <div className={styles.containerCard}>
               {motoristas.length === 0 ? (
                 <p>Nenhum motorista cadastrado.</p>
-              ) : (
-                motoristas.map((motorista) => (
+              ) : (motoristas.map((motorista) => (
                   <div
-                    key={motorista.id}
-                    onClick={handleExpandModal}
+                    key={motorista.cpf}
+                    onClick={() => {handleEditarMotorista(motorista)}}
                     className={styles.card}
                   >
                     <div>
-                      <span className={styles.titleCardTres}>{motorista.nome}</span>
+                      <span className={styles.titleCardTres}>
+                        {motorista.nome}
+                      </span>
                     </div>
                     <div>
-                      <span className={styles.titleCard}>{motorista.cpf}</span>
+                      <span className={styles.titleCard}>
+                        {`CPF: `+motorista.cpf}</span>
                     </div>
                     <div>
-                      <span className={styles.titleCard}>{motorista.telefone}</span>
+                      <span className={styles.titleCard}>
+                        {`Telefone: `+motorista.telefone}
+                      </span>
                     </div>
                     <div>
-                      <span className={styles.titleCardDois}>{motorista.email}</span>
+                      <span className={styles.titleCardDois}>
+                        {`Email: `+motorista.email}
+                      </span>
                     </div>
                   </div>
                 ))
               )}
             </div>
           </div>
-
+          {/*Modal para a cadastrar motorista*/}
           <Modal isOpen={modalIsOpen} onClose={handleOpenModal}>
             <div className={styles.containerModal}>
               <div className={styles.containerInternoModal}>
@@ -264,6 +285,8 @@ export default function Veiculos() {
             </div>
           </Modal>
 
+          {/*Modal para a atualizar motorista*/}
+
           <Modal isOpen={updateModal} onClose={handleUpdateModal}>
             <div className={styles.containerModal}>
               <div className={styles.containerInternoModal}>
@@ -272,25 +295,46 @@ export default function Veiculos() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={'"João Barreto Hünnerbein"'}
+                      placeholder={'""'}
                       maxLength={200}
                       label={"Nome"}
+                      value={motoristaEditando.nome}
+                      onChange={(e) =>
+                        setMotoristaEditando({
+                          ...motoristaEditando,
+                          nome: e.target.value,
+                        })
+                      }
                     ></Ginput>
                   </div>
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={'"joaobarreto@email.com"'}
+                      placeholder={'""'}
+                      maxLength={200}
+                      label={"Telefone"}
+                      value={motoristaEditando.telefone}
+                      onChange={(e) =>
+                        setMotoristaEditando({
+                          ...motoristaEditando,
+                          telefone: e.target.value,
+                        })
+                      }
+                    ></Ginput>
+                  </div>
+                  <div className={styles.input}>
+                    <Ginput
+                      type={"text"}
+                      placeholder={'""'}
                       maxLength={200}
                       label={"Email"}
-                    ></Ginput>
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput
-                      type={"text"}
-                      placeholder={'"(77) 12345-6789"'}
-                      maxLength={15}
-                      label={"Telefone"}
+                      value={motoristaEditando.email}
+                      onChange={(e) =>
+                        setMotoristaEditando({
+                          ...motoristaEditando,
+                          email: e.target.value,
+                        })
+                      }
                     ></Ginput>
                   </div>
                 </form>
@@ -306,10 +350,33 @@ export default function Veiculos() {
                   <BadButton
                     colorHover={"#769b6a"}
                     cor={"#48793c"}
-                    onClick={() => {
-                      handleUpdateModal();
-                      handleConfirmacaoIsOpen();
-                      setConfirmacao("editado");
+                    onClick={async () => {
+                      const token = localStorage.getItem("token");
+                      const response = await fetch(
+                        `${process.env.NEXT_PUBLIC_LOCAL}/motoristas/${motoristaEditando.cpf}`,
+                        {
+                          method: "PUT",
+                          headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`,
+                          },
+                          body: JSON.stringify({
+                            cpf: motoristaEditando.cpf,
+                            nome: motoristaEditando.nome,
+                            email: motoristaEditando.email,
+                            telefone: motoristaEditando.telefone,
+                          }),
+                        }
+                      );
+                      const data = await response.json();
+                      if (response.ok) {
+                        alert("Motorista atualizado com sucesso! ");
+                        handleUpdateModal();
+                        handleConfirmacaoIsOpen();
+                        setConfirmacao("editado");
+                      } else {
+                        alert(data.message || "Erro ao atualizar motorista");
+                      }
                     }}
                   >
                     Atualizar Motorista
