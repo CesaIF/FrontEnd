@@ -10,6 +10,7 @@
     "postinstall": "flowbite-react patch"
   },
   "dependencies": {
+    "dotenv": "^16.5.0",
     "flowbite-react": "^0.11.8",
     "jquery": "^3.7.1",
     "jquery-mask-plugin": "^1.14.16",
