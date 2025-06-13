@@ -42,13 +42,21 @@ export default function Dashboard() {
 
   useAuth();
 
-  const [locacoes, setLocacoes] = useState('');
+  const [locacoes, setLocacoes] = useState([]);
   const [erro, setErro] = useState('');
+  const [veiculo, setVeiculo] = useState([]);
+  const [motorista, setMotorista] = useState([]);
+  const [itinerario, setItinerario] = useState("");
+  const [motivo, setMotivo] = useState("");
+  const [placaSelecionada, setPlacaSelecionada] = useState("");
+  const [motoristaSelecionado, setMotoristaSelecionado] = useState("");
 
+
+  // fetch dados de locação iniciada.
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU3NjE4NDM1MDE0Iiwicm9sZSI6Imdlc3RvciIsImlhdCI6MTc0OTgzMTc4MywiZXhwIjoxNzQ5ODM4OTgzfQ.hVVYLOVaSsaN1sMpT72ZrdfXiVx4ndTzeDmLatvxDb8");
 
-    fetch("http://localhost/locacoes/all", {
+    fetch("https://localhost/locacoes/all", {
         method: "GET",
         headers: {
             "Authorization": `Bearer ${token}`,
@@ -69,6 +77,83 @@ export default function Dashboard() {
         console.error(err);
     })
   }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    fetch("https://localhost/veiculos", {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`, 
+      },
+    })
+    .then(async (res) => {
+      const data = await res.json();
+
+      if (res.ok) {
+        setVeiculo(data);
+      } else {
+        alert("Erro ao encontrar veículos");
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+  }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    fetch("https://localhost/motoristas", {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`, 
+      },
+    })
+    .then(async (res) => {
+      const data = await res.json();
+
+      if (res.ok) {
+        setMotorista(data);
+      } else {
+        alert("Erro ao encontrar veículos");
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const token = localStorage.getItem("token");
+
+    const response = await fetch("https://localhost/locacoes", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        motorista_cpf_fk: motoristaSelecionado,
+        veiculo_placa_fk: placaSelecionada,
+        itinerario: itinerario,
+        motivo_saida: motivo,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      setMotoristaSelecionado("");
+      setPlacaSelecionada("");
+      setItinerario("");
+      setMotivo("");
+    } else {
+      alert(data.message || "Erro ao cadastrar.");
+    }
+  } 
 
   // função que fecha o pop-up modal ao clicar na tela fora dele.
   useEffect(() => {
@@ -287,10 +372,10 @@ export default function Dashboard() {
                 <h1 className="text-3xl">Cadastro de Locação</h1>
                 <form className={styles.formAdd}>
                   <div className={styles.input}>
-                    <ChoiceBox label={"Veículo"}>Escolha o Veículo!</ChoiceBox>
+                    <ChoiceBox onChange={(e) => setPlacaSelecionada(e.target.value)} key={veiculo.placa} value={veiculo.modelo} valueSelect={placaSelecionada} label={"Veículo"}>Escolha o Veículo!</ChoiceBox>
                   </div>
                   <div className={styles.input}>
-                    <ChoiceBox label={"Motorista"}>
+                    <ChoiceBox onChange={(e) => setMotoristaSelecionado(e.target.value)} valueSelect={motoristaSelecionado} key={motorista.cpf} value={motorista.nome} label={"Motorista"}>
                       Escolha o Motorista!
                     </ChoiceBox>
                   </div>
@@ -300,6 +385,8 @@ export default function Dashboard() {
                       placeholder={"Descreva o Itinerário"}
                       maxLength={300}
                       rows={2}
+                      value={itinerario}
+                      onChange={(e) => setItinerario(e.target.value)}
                     ></Textarea>
                   </div>
                   <div className={styles.input}>
@@ -308,14 +395,9 @@ export default function Dashboard() {
                       placeholder={"Descreva o motivo da Saída"}
                       maxLength={300}
                       rows={2}
+                      value={motivo}
+                      onChange={(e) => setMotivo(e.target.value)}
                     ></Textarea>
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput
-                      label={"Data Prevista"}
-                      placeholder={"10/02/2020"}
-                      maxLength={300}
-                    ></Ginput>
                   </div>
                 </form>
                 <div className={styles.butaoForm}>
@@ -330,11 +412,7 @@ export default function Dashboard() {
                   <BadButton
                     colorHover={"#769b6a"}
                     cor={"#48793c"}
-                    onClick={() => {
-                      handleOpenModal();
-                      handleConfirmacaoIsOpen();
-                      setConfirmacao("cadastrado");
-                    }}
+                    type={"submit"}
                   >
                     Criar Locação
                   </BadButton>
@@ -574,7 +652,7 @@ export default function Dashboard() {
             </div>
 
             <div className={styles.containerCard}>
-                {locacoes.map((locacao) => {
+                {locacoes.map((locacao, index) => (
                     <div
                     onClick={() => {
                     handleOpenModal();
@@ -582,7 +660,7 @@ export default function Dashboard() {
                     setExpandType(2);
                     }}
                     className={styles.cardLocacao}
-                    key={locacao.id}
+                    key={index}
                     >
                     <div className={styles.img}>
                     <img src="https://i.postimg.cc/Fs7ZnVTn/20250603-1649-Cute-Black-Car-simple-compose-01jwvnew1ef6xa5kp9jpyq56mk.png"></img>
@@ -592,14 +670,14 @@ export default function Dashboard() {
                         <span className={styles.titleCard}>#{locacao.id}</span>
                     </div>
                     <div>
-                        <span className={styles.titleCard}>{locacao.placa}</span>
+                        <span className={styles.titleCard}>{locacao.veiculo_placa_fk}</span>
                     </div>
                     <div>
                         <span className={styles.titleCardDois}>{locacao.itinerario}</span>
                     </div>
                     </div>
                 </div>
-                })}
+                ))}
               
             </div>
           </div>
