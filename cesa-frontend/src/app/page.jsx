@@ -42,6 +42,34 @@ export default function Dashboard() {
 
   useAuth();
 
+  const [locacoes, setLocacoes] = useState('');
+  const [erro, setErro] = useState('');
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    fetch("http://localhost/locacoes/all", {
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+        }
+    })
+    .then(async (res) => {
+        const data = await res.json();
+
+        if (res.ok) {
+            setLocacoes(data);
+        } else {
+            setErro(data.message || "Erro ao buscar dados");
+        }
+    })
+    .catch((err) => {
+        setErro("Erro de conexão");
+        console.error(err);
+    })
+  }, []);
+
   // função que fecha o pop-up modal ao clicar na tela fora dele.
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -546,31 +574,33 @@ export default function Dashboard() {
             </div>
 
             <div className={styles.containerCard}>
-              <div
-                onClick={() => {
-                  handleOpenModal();
-                  setModalContent("expand");
-                  setExpandType(2);
-                }}
-                className={styles.cardLocacao}
-              >
-                <div className={styles.img}>
-                  <img src="https://i.postimg.cc/Fs7ZnVTn/20250603-1649-Cute-Black-Car-simple-compose-01jwvnew1ef6xa5kp9jpyq56mk.png"></img>
+                {locacoes.map((locacao) => {
+                    <div
+                    onClick={() => {
+                    handleOpenModal();
+                    setModalContent("expand");
+                    setExpandType(2);
+                    }}
+                    className={styles.cardLocacao}
+                    key={locacao.id}
+                    >
+                    <div className={styles.img}>
+                    <img src="https://i.postimg.cc/Fs7ZnVTn/20250603-1649-Cute-Black-Car-simple-compose-01jwvnew1ef6xa5kp9jpyq56mk.png"></img>
+                    </div>
+                    <div>
+                    <div className={styles.containerTitles}>
+                        <span className={styles.titleCard}>#{locacao.id}</span>
+                    </div>
+                    <div>
+                        <span className={styles.titleCard}>{locacao.placa}</span>
+                    </div>
+                    <div>
+                        <span className={styles.titleCardDois}>{locacao.itinerario}</span>
+                    </div>
+                    </div>
                 </div>
-                <div>
-                  <div className={styles.containerTitles}>
-                    <span className={styles.titleCard}>#2</span>
-                  </div>
-                  <div>
-                    <span className={styles.titleCard}>Fiat - Siena</span>
-                  </div>
-                  <div>
-                    <span className={styles.titleCardDois}>
-                      Natal - Rio Grande do Norte
-                    </span>
-                  </div>
-                </div>
-              </div>
+                })}
+              
             </div>
           </div>
 
