@@ -20,6 +20,12 @@ export default function Veiculos() {
     telefone: "",
     email: "",
   });
+  const [novoMotorista, setNovoMotorista] = useState({
+    cpf: "",
+    nome: "",
+    telefone: "",
+    email: "",
+  });
 
   useEffect(() => {
     const fetchMotoristas = async () => {
@@ -34,12 +40,9 @@ export default function Veiculos() {
           }
         );
         const data = await receberAPI.json();
-        console.log("Tipo de data:", typeof data); //Apagar isso depois 
-        console.log("É array?", Array.isArray(data));//Apagar isso depois 
-        console.log("Conteúdo:", data);//Apagar isso depois 
         setMotoristas(data);
       } catch (error) {
-        console.error("Ero ao buscar motorista".error);
+        console.error("Erro ao buscar motorista".error);
       }
     };
     fetchMotoristas();
@@ -191,10 +194,13 @@ export default function Veiculos() {
             <div className={styles.containerCard}>
               {motoristas.length === 0 ? (
                 <p>Nenhum motorista cadastrado.</p>
-              ) : (motoristas.map((motorista) => (
+              ) : (
+                motoristas.map((motorista) => (
                   <div
                     key={motorista.cpf}
-                    onClick={() => {handleEditarMotorista(motorista)}}
+                    onClick={() => {
+                      handleEditarMotorista(motorista);
+                    }}
                     className={styles.card}
                   >
                     <div>
@@ -204,16 +210,17 @@ export default function Veiculos() {
                     </div>
                     <div>
                       <span className={styles.titleCard}>
-                        {`CPF: `+motorista.cpf}</span>
+                        {`CPF: ` + motorista.cpf}
+                      </span>
                     </div>
                     <div>
                       <span className={styles.titleCard}>
-                        {`Telefone: `+motorista.telefone}
+                        {`Telefone: ` + motorista.telefone}
                       </span>
                     </div>
                     <div>
                       <span className={styles.titleCardDois}>
-                        {`Email: `+motorista.email}
+                        {`Email: ` + motorista.email}
                       </span>
                     </div>
                   </div>
@@ -221,6 +228,7 @@ export default function Veiculos() {
               )}
             </div>
           </div>
+
           {/*Modal para a cadastrar motorista*/}
           <Modal isOpen={modalIsOpen} onClose={handleOpenModal}>
             <div className={styles.containerModal}>
@@ -230,33 +238,58 @@ export default function Veiculos() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={'"João Barreto Hünnerbein"'}
+                      placeholder={'"123.456.789-89"'}
+                      maxLength={200}
+                      label={"CPF"}
+                      value={novoMotorista.cpf}
+                      onChange={(e) =>
+                        setNovoMotorista({ ...novoMotorista, cpf: e.target.value })
+                      }
+                    ></Ginput>
+                  </div>
+                  <div className={styles.input}>
+                    <Ginput
+                      type={"text"}
+                      placeholder={'"Admael Santos"'}
                       maxLength={200}
                       label={"Nome"}
+                      value={novoMotorista.nome}
+                      onChange={(e) =>
+                        setNovoMotorista({
+                          ...novoMotorista,
+                          nome: e.target.value,
+                        })
+                      }
                     ></Ginput>
                   </div>
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={'"joaobarreto@email.com"'}
+                      placeholder={'"(77) 9 9988-8155"'}
+                      maxLength={200}
+                      label={"telefone"}
+                      value={novoMotorista.telefone}
+                      onChange={(e) =>
+                        setNovoMotorista({
+                          ...novoMotorista,
+                          telefone: e.target.value,
+                        })
+                      }
+                    ></Ginput>
+                  </div>
+                  <div className={styles.input}>
+                    <Ginput
+                      type={"text"}
+                      placeholder={'"user@hotmail.com"'}
                       maxLength={200}
                       label={"Email"}
-                    ></Ginput>
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput
-                      type={"text"}
-                      placeholder={'"123.456.789-10"'}
-                      maxLength={14}
-                      label={"CPF"}
-                    ></Ginput>
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput
-                      type={"text"}
-                      placeholder={'"(77) 12345-6789"'}
-                      maxLength={15}
-                      label={"Telefone"}
+                      value={novoMotorista.email}
+                      onChange={(e) =>
+                        setNovoMotorista({
+                          ...novoMotorista,
+                          email: e.target.value,
+                        })
+                      }
                     ></Ginput>
                   </div>
                 </form>
@@ -272,10 +305,31 @@ export default function Veiculos() {
                   <BadButton
                     colorHover={"#769b6a"}
                     cor={"#48793c"}
-                    onClick={() => {
+                    onClick={async () => {
+                      const token = localStorage.getItem("token");
+                      const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}/motoristas`,{
+                        method:"POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                          Authorization: `Bearer ${token}`
+                        },
+                        body: JSON.stringify(novoMotorista)
+                      });
+                      const motoristaCadastrado = await response.json();
+                      setMotoristas((prev) => [...prev, motoristaCadastrado]);
+
                       handleOpenModal();
                       handleConfirmacaoIsOpen();
                       setConfirmacao("cadastrado");
+                      
+                      setNovoMotorista({
+                        cpf: "",
+                        nome: "",
+                        telefone: "",
+                        email: ""
+                      })
+
+
                     }}
                   >
                     Cadastrar Motoristas
