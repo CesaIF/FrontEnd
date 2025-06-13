@@ -51,12 +51,37 @@ export default function Dashboard() {
   const [placaSelecionada, setPlacaSelecionada] = useState("");
   const [motoristaSelecionado, setMotoristaSelecionado] = useState("");
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    fetch("https://localhost/locacoes", {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    })
+    .then(async (res) => {
+      const data = await res.json();
+
+      if (res.ok) {
+        setLocacoes(data);
+      } else {
+        setErro(data.message || "Erro ao buscar dados");
+      }
+    })
+    .catch((err) => {
+      setErro("Erro de conexão")
+      console.error(err);
+    })
+  }, []);
+
 
   // fetch dados de locação iniciada.
   useEffect(() => {
-    const token = localStorage.getItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU3NjE4NDM1MDE0Iiwicm9sZSI6Imdlc3RvciIsImlhdCI6MTc0OTgzMTc4MywiZXhwIjoxNzQ5ODM4OTgzfQ.hVVYLOVaSsaN1sMpT72ZrdfXiVx4ndTzeDmLatvxDb8");
+    const token = localStorage.getItem("token");
 
-    fetch("https://localhost/locacoes/all", {
+    fetch("https://localhost/locacoes/ativos", {
         method: "GET",
         headers: {
             "Authorization": `Bearer ${token}`,
@@ -116,7 +141,7 @@ export default function Dashboard() {
       if (res.ok) {
         setMotorista(data);
       } else {
-        alert("Erro ao encontrar veículos");
+        alert("Erro ao encontrar motoristas");
       }
     })
     .catch((err) => {
@@ -150,8 +175,9 @@ export default function Dashboard() {
       setPlacaSelecionada("");
       setItinerario("");
       setMotivo("");
+      alert("Locação criada com sucesso!");
     } else {
-      alert(data.message || "Erro ao cadastrar.");
+      alert("Erro ao cadastrar!");
     }
   } 
 
@@ -370,14 +396,36 @@ export default function Dashboard() {
             <div className={styles.containerModal}>
               <div className={styles.containerInternoModal}>
                 <h1 className="text-3xl">Cadastro de Locação</h1>
-                <form className={styles.formAdd}>
+                <form onSubmit={handleSubmit} className={styles.formAdd}>
                   <div className={styles.input}>
-                    <ChoiceBox onChange={(e) => setPlacaSelecionada(e.target.value)} key={veiculo.placa} value={veiculo.modelo} valueSelect={placaSelecionada} label={"Veículo"}>Escolha o Veículo!</ChoiceBox>
+
+                    <div className={styles.choiceboxContainer}>
+                      <select
+                      value={placaSelecionada}
+                      onChange={(e) => setPlacaSelecionada(e.target.value)}
+                      >
+                        <option className={styles.choicebox}>Escolha o Veículo</option>
+                        {veiculo.map((veiculos) => (
+                          <option key={veiculos.placa} value={veiculos.placa}>{veiculos.modelo}</option>
+                        ))}
+                      </select>
+                    </div>
+
                   </div>
                   <div className={styles.input}>
-                    <ChoiceBox onChange={(e) => setMotoristaSelecionado(e.target.value)} valueSelect={motoristaSelecionado} key={motorista.cpf} value={motorista.nome} label={"Motorista"}>
-                      Escolha o Motorista!
-                    </ChoiceBox>
+
+                    <div className={styles.choiceboxContainer}>
+                      <select
+                      value={motoristaSelecionado}
+                      onChange={(e) => setMotoristaSelecionado(e.target.value)}
+                      >
+                        <option className={styles.choicebox}>Escolha o Motorista</option>
+                        {motorista.map((motoristas) => (
+                          <option key={motoristas.cpf} value={motoristas.cpf}>{motoristas.nome}</option>
+                        ))}
+                      </select>
+                    </div>
+
                   </div>
                   <div className={styles.input}>
                     <Textarea
