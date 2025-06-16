@@ -51,7 +51,6 @@ export default function Motoristas() {
   const handleEditarMotorista = (motorista) => {
     setMotoristaEditando(motorista);
     handleExpandModal();
-    //handleUpdateModal(); // abre o modal
   };
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -123,7 +122,6 @@ export default function Motoristas() {
           <>
             <div className={styles.containerInMini}>
               <h1 className="mb-3">Tem certeza que deseja deletar?</h1>
-             
             </div>
             <div className={styles.butaoForm}>
               <BadButton
@@ -377,7 +375,7 @@ export default function Motoristas() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={'""'}
+                      placeholder={''}
                       maxLength={200}
                       label={"Nome"}
                       value={motoristaEditando.nome}
@@ -392,7 +390,7 @@ export default function Motoristas() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={'""'}
+                      placeholder={''}
                       maxLength={200}
                       label={"Telefone"}
                       value={motoristaEditando.telefone}
@@ -407,7 +405,7 @@ export default function Motoristas() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={'""'}
+                      placeholder={''}
                       maxLength={200}
                       label={"Email"}
                       value={motoristaEditando.email}
