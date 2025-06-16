@@ -68,7 +68,7 @@ export default function Veiculos() {
           <>
             <div className={styles.containerInMini}>
               <h1 className="mb-3">Motorista cadastrado com sucesso!</h1>
-              <h1>Data!</h1>
+              
             </div>
             <div className={styles.butaoForm}>
               <BadButton
@@ -123,7 +123,7 @@ export default function Veiculos() {
           <>
             <div className={styles.containerInMini}>
               <h1 className="mb-3">Tem certeza que deseja deletar?</h1>
-              <h1>Data!</h1>
+             
             </div>
             <div className={styles.butaoForm}>
               <BadButton

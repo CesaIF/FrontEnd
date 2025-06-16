@@ -28,7 +28,7 @@ export default function Veiculos(){
                     <>
                     <div className={styles.containerInMini}>
                         <h1 className="mb-3">Veículo cadastrado com sucesso!</h1>
-                        <h1>Data!</h1>
+                       
                     </div>
                     <div className={styles.butaoForm}>
                         <BadButton colorHover={"#769b6a"} cor={"#48793c"} onClick={handleConfirmacaoIsOpen}>Ok</BadButton>
@@ -65,7 +65,6 @@ export default function Veiculos(){
                     <>
                     <div className={styles.containerInMini}>
                         <h1 className="mb-3">Tem certeza que deseja deletar?</h1>
-                        <h1>Data!</h1>
                     </div>
                     <div className={styles.butaoForm}>
                         <BadButton textColor={"#48793c"} colorHover={"#a3bc98"} cor={"#d1dec7"} onClick={handleConfirmacaoIsOpen}>Cancelar</BadButton>
