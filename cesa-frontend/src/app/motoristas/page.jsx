@@ -11,7 +11,7 @@ import styles from "./Motoristas.module.css";
 import Ginput from "../components/gInput";
 import { useAuth } from "../hooks/useAuth";
 
-export default function Veiculos() {
+export default function Motoristas() {
   useAuth();
 
   const [motoristas, setMotoristas] = useState([]);
