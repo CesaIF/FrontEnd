@@ -137,8 +137,27 @@ export default function Veiculos() {
               <BadButton
                 colorHover={"#769b6a"}
                 cor={"#48793c"}
-                onClick={() => {
-                  setConfirmacao("deletado");
+                onClick={async () => {
+                  const token = localStorage.getItem("token");
+                  const response = await fetch(
+                    `${process.env.NEXT_PUBLIC_LOCAL}/motoristas/${motoristaEditando.cpf}`,
+                    {
+                      method: "DELETE",
+                      headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                      },
+                    }
+                  );
+                  if (response.ok) {
+                    setMotoristas((prev) =>
+                      prev.filter((m) => m.cpf !== motoristaEditando.cpf)
+                    );
+                    setConfirmacao("deletado");
+                  } else {
+                    const erro = await response.json();
+                    alert(erro.message || "Erro ao deletar motorista. ");
+                  }
                 }}
               >
                 Deletar
@@ -243,7 +262,10 @@ export default function Veiculos() {
                       label={"CPF"}
                       value={novoMotorista.cpf}
                       onChange={(e) =>
-                        setNovoMotorista({ ...novoMotorista, cpf: e.target.value })
+                        setNovoMotorista({
+                          ...novoMotorista,
+                          cpf: e.target.value,
+                        })
                       }
                     ></Ginput>
                   </div>
@@ -307,29 +329,36 @@ export default function Veiculos() {
                     cor={"#48793c"}
                     onClick={async () => {
                       const token = localStorage.getItem("token");
-                      const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}/motoristas`,{
-                        method:"POST",
-                        headers: {
-                          "Content-Type": "application/json",
-                          Authorization: `Bearer ${token}`
-                        },
-                        body: JSON.stringify(novoMotorista)
-                      });
-                      const motoristaCadastrado = await response.json();
-                      setMotoristas((prev) => [...prev, motoristaCadastrado]);
+                      const response = await fetch(
+                        `${process.env.NEXT_PUBLIC_LOCAL}/motoristas`,
+                        {
+                          method: "POST",
+                          headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`,
+                          },
+                          body: JSON.stringify(novoMotorista),
+                        }
+                      );
 
-                      handleOpenModal();
-                      handleConfirmacaoIsOpen();
-                      setConfirmacao("cadastrado");
-                      
-                      setNovoMotorista({
-                        cpf: "",
-                        nome: "",
-                        telefone: "",
-                        email: ""
-                      })
+                      if (response.ok) {
+                        const motoristaCadastrado = await response.json();
+                        setMotoristas((prev) => [...prev, motoristaCadastrado]);
 
+                        handleOpenModal();
+                        handleConfirmacaoIsOpen();
+                        setConfirmacao("cadastrado");
 
+                        setNovoMotorista({
+                          cpf: "",
+                          nome: "",
+                          telefone: "",
+                          email: "",
+                        });
+                      } else {
+                        const erro = await response.json();
+                        alert(erro.message || "Erro ao cadastrar motorista");
+                      }
                     }}
                   >
                     Cadastrar Motoristas
@@ -340,7 +369,6 @@ export default function Veiculos() {
           </Modal>
 
           {/*Modal para a atualizar motorista*/}
-
           <Modal isOpen={updateModal} onClose={handleUpdateModal}>
             <div className={styles.containerModal}>
               <div className={styles.containerInternoModal}>
@@ -424,7 +452,13 @@ export default function Veiculos() {
                       );
                       const data = await response.json();
                       if (response.ok) {
-                        alert("Motorista atualizado com sucesso! ");
+                        setMotoristas((prevMotoristas) =>
+                          prevMotoristas.map((m) =>
+                            m.cpf === motoristaEditando.cpf
+                              ? motoristaEditando
+                              : m
+                          )
+                        );
                         handleUpdateModal();
                         handleConfirmacaoIsOpen();
                         setConfirmacao("editado");
@@ -440,6 +474,7 @@ export default function Veiculos() {
             </div>
           </Modal>
 
+          {/*Modal para o painel */}
           <Modal isOpen={expandModal} onClose={handleExpandModal}>
             <div className={styles.containerExpand}>
               <span className={styles.titleCardQuatro}>

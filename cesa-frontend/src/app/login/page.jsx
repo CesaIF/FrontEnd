@@ -6,7 +6,6 @@ import styles from "./Login.module.css";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-
 function formatarCPF(cpf) {
   cpf = cpf.replace(/\D/g, "");
   if (cpf.length > 3) cpf = cpf.slice(0, 3) + "." + cpf.slice(3);
@@ -26,7 +25,6 @@ export default function Login() {
   };
 
   const handleLogin = async () => {
-    
     const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}/login`, {
       method: "POST",
       headers: {
@@ -41,6 +39,7 @@ export default function Login() {
     const data = await response.json();
     if (response.ok) {
       localStorage.setItem("token", data.token);
+      localStorage.setItem("cpf", data.cpf);
       alert("Login realizado ");
       router.push("/");
     } else {
