@@ -67,7 +67,6 @@ export default function Motoristas() {
           <>
             <div className={styles.containerInMini}>
               <h1 className="mb-3">Motorista cadastrado com sucesso!</h1>
-              
             </div>
             <div className={styles.butaoForm}>
               <BadButton
@@ -116,37 +115,6 @@ export default function Motoristas() {
             </div>
           </>
         );
-      
-      case "ativar":
-              return (
-                <>
-                <div className={styles.containerInMini}>
-                    <Ginput
-                      type={"text"}
-                      placeholder={"UAI9999"}
-                      maxLength={30}
-                      label={"Digite a placa do veículo a ser ativado!"}
-                    ></Ginput>
-                  </div>
-                  <div className={styles.butaoForm}>
-                    <BadButton
-                      colorHover={"#769b6a"}
-                      cor={"#48793c"}
-                      onClick={handleConfirmacaoIsOpen}
-                    >
-                      Cancelar
-                    </BadButton>
-                    <BadButton
-                      colorHover={"#769b6a"}
-                      cor={"#48793c"}
-                      onClick={handleConfirmacaoIsOpen}
-                    >
-                      Ativar
-                    </BadButton>
-                  </div>
-                </>
-              );
-
       case "deletar":
         return (
           <>
@@ -285,7 +253,7 @@ export default function Motoristas() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={'"123.456.789-89"'}
+                      placeholder={'123.456.789-89'}
                       maxLength={200}
                       label={"CPF"}
                       value={novoMotorista.cpf}
@@ -300,7 +268,7 @@ export default function Motoristas() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={'"Admael Santos"'}
+                      placeholder={'Admael Santos'}
                       maxLength={200}
                       label={"Nome"}
                       value={novoMotorista.nome}
@@ -315,7 +283,7 @@ export default function Motoristas() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={'"(77) 9 9988-8155"'}
+                      placeholder={'(77) 9 9988-8155'}
                       maxLength={200}
                       label={"telefone"}
                       value={novoMotorista.telefone}
@@ -330,7 +298,7 @@ export default function Motoristas() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={'"user@hotmail.com"'}
+                      placeholder={'user@hotmail.com'}
                       maxLength={200}
                       label={"Email"}
                       value={novoMotorista.email}
