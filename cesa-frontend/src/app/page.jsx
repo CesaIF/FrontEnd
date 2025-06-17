@@ -57,6 +57,10 @@ export default function Dashboard() {
   const [motoristaSelecionado, setMotoristaSelecionado] = useState("");
   const [dataSaida, setDataSaida] = useState("");
   const [dataChegada, setDataChegada] = useState("");
+  const [observacaoSaida, setObservacaoSaida] = useState("");
+  const [locacaoSelecionada, setLocacaoSelecionada] = useState("");
+  const [observacaoEntrada, setObservacaoEntrada] = useState("");
+  const [kmChegada, setKmChegada] = useState("");
 
   // fetch dados de locação iniciada.
   useEffect(() => {
@@ -191,11 +195,64 @@ export default function Dashboard() {
   } 
 
   // função que inicia uma locação.
-  const handleUpdateLocacao = async (id) => {
+  const handleIniciarLocacao = async (id) => {
     try {
-      const res = await fetch(`https://localhost/locacoes/`)
-    } catch (error) {
-      
+      const token = localStorage.getItem("token");
+      const cpfPorteiro = localStorage.getItem("cpf");
+
+      const res = await fetch(`https://localhost/locacoes/saida/${id}`, {
+        method: "PUT",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          porteiro_saida_fk: cpfPorteiro,
+          observacao_saida: observacaoSaida,
+        })
+      })
+
+      const data = await res.json();
+
+      if(res.ok){
+        alert("Locação iniciada com sucesso!");
+      } else {
+        alert(data.message);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  // função que finaliza uma locação.
+  const handleFinalizarLocacao = async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+      const cpfPorteiro = localStorage.getItem("cpf");
+
+      const res = await fetch(`https://localhost/locacoes/entrada/${id}`, {
+        method: "PUT",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          km_chegada: kmChegada,
+          porteiro_chegada_fk: cpfPorteiro,
+          observacao_entrada: observacaoEntrada,
+        })
+      })
+
+      const data = await res.json();
+
+      if(res.ok){
+        alert("Locação finalizada com sucesso!");
+      } else {
+        alert(data.message);
+      }
+
+    } catch (err) {
+      console.error(err);
     }
   }
 
@@ -361,19 +418,27 @@ export default function Dashboard() {
         return (
           <>
             <div className={styles.containerModal}>
-              <h1 className="mb-3">
-                Você tem certeza que quer iniciar a locação?
-              </h1>
-            </div>
-            <div className={styles.butaoForm}>
-              <BadButton onClick={handleConfirmacaoIsOpen}>Ok</BadButton>
-              <BadButton
-                onClick={() => {
-                  handleConfirmacaoIsOpen();
-                }}
-              >
-                Deletar
-              </BadButton>
+              <form onSubmit={(e) => {
+                e.preventDefault();
+                handleIniciarLocacao(locacaoSelecionada.id);
+              }}>
+                <Ginput
+                  label={"Observações:"}
+                  type={"text"}
+                  maxLength={300}
+                  value={observacaoSaida}
+                  placeholder={"\"O carro retornou com um problema.\""}
+                  onChange={(e) => setObservacaoSaida(e.target.value)}
+                ></Ginput>
+                <div className={styles.butaoForm}>
+                  <BadButton onClick={handleConfirmacaoIsOpen}>Fechar</BadButton>
+                  <BadButton
+                    type={"submit"}
+                  >
+                    Iniciar
+                  </BadButton>
+                </div>
+              </form>
             </div>
           </>
         );
@@ -382,19 +447,35 @@ export default function Dashboard() {
         return (
           <>
             <div className={styles.containerModal}>
-              <h1 className="mb-3">
-                Você tem certeza que quer finalizar a locação?
-              </h1>
-            </div>
-            <div className={styles.butaoForm}>
-              <BadButton onClick={handleConfirmacaoIsOpen}>Ok</BadButton>
-              <BadButton
-                onClick={() => {
-                  handleConfirmacaoIsOpen();
-                }}
-              >
-                Deletar
-              </BadButton>
+              <form onSubmit={(e) => {
+                e.preventDefault();
+                handleFinalizarLocacao(locacaoSelecionada.id);
+              }}>
+                <Ginput
+                  label={"Observações:"}
+                  type={"text"}
+                  maxLength={300}
+                  value={observacaoEntrada}
+                  placeholder={"\"O carro retornou com um problema.\""}
+                  onChange={(e) => setObservacaoEntrada(e.target.value)}
+                ></Ginput>
+                <Ginput
+                  label={"Kilometragem:"}
+                  type={"number"}
+                  maxLength={300}
+                  value={kmChegada}
+                  placeholder={"\"100000\""}
+                  onChange={(e) => setKmChegada(e.target.value)}
+                ></Ginput>
+                <div className={styles.butaoForm}>
+                  <BadButton onClick={handleConfirmacaoIsOpen}>Fechar</BadButton>
+                  <BadButton
+                    type={"submit"}
+                  >
+                    Finalizar
+                  </BadButton>
+                </div>
+              </form>
             </div>
           </>
         );
@@ -571,74 +652,151 @@ export default function Dashboard() {
       case "expand":
         return (
           <>
+          {locacaoSelecionada && (
             <div className={styles.containerModalGeral}>
               <div className={styles.modalExpand}>
-                <div className={styles.partUm}>
-                  <div className={styles.itemPartUm}>
-                    <h1 className="h1">Placa:</h1>
-                    <h1 className="h1">Data!</h1>
+                
+                <div className={styles.tabelaLinha}>
+                  <div>
+                    <h1>Id:</h1>
                   </div>
-
-                  <div className={styles.itemPartUm}>
-                    <h1 className="h1">Km Saída:</h1>
-                    <h1 className="h1">Data!</h1>
-                  </div>
-
-                  <div className={styles.itemPartUm}>
-                    <h1 className="h1">Km Chegada:</h1>
-                    <h1 className="h1">Data!</h1>
+                  <div>
+                    <h1>{locacaoSelecionada.id}</h1>
                   </div>
                 </div>
 
-                <div className={styles.itemUm}>
-                  <div className={styles.itemInternoUm}>
+                <div>
+                  <div>
+                    <h1>Data de Saída</h1>
+                  </div>
+                  <div>
+                    <h1>{locacaoSelecionada.data_saida}</h1>
+                  </div>
+                </div>
+
+                <div>
+                  <div>
+                    <h1>Data de Chegada</h1>
+                  </div>
+                  <div>
+                    <h1>{locacaoSelecionada.data_chegada}</h1>
+                  </div>
+                </div>
+
+                <div>
+                  <div>
+                    <h1>Quilometragem do veículo:</h1>
+                  </div>
+                  <div>
+                    <h1>{locacaoSelecionada.km_saida}</h1>
+                  </div>
+                </div>
+
+                <div>
+                  <div>
+                    <h1>Quilometragem ao chegar</h1>
+                  </div>
+                  <div>
+                    <h1>{locacaoSelecionada.km_chegada}</h1>
+                  </div>
+                </div>
+
+                <div>
+                  <div>
                     <h1>Itinerário:</h1>
-                    <h1>Data!</h1>
+                  </div>
+                  <div>
+                    <h1>{locacaoSelecionada.itinerario}</h1>
                   </div>
                 </div>
 
-                <div className={styles.itemUm}>
-                  <div className={styles.itemInternoUm}>
-                    <h1>Motivo da Saída:</h1>
-                    <h1>Data!</h1>
+                <div>
+                  <div>
+                    <h1>Motivo de Saída:</h1>
+                  </div>
+                  <div><h1>{locacaoSelecionada.motivo_saida}</h1></div>
+                </div>
+
+                <div>
+                  <div>
+                    <h1>Autorização:</h1>
+                  </div>
+                  <div>
+                    <h1>{locacaoSelecionada.autorizacao}</h1>
                   </div>
                 </div>
 
-                <div className={styles.partDois}>
-                  <div className={styles.itemPartUm}>
-                    <h1>Data e Hora de Saída:</h1>
-                    <h1>Data!</h1>
-                  </div>
-                  <div className={styles.itemPartUm}>
-                    <h1>Data e Hora de Chegada:</h1>
-                    <h1>Data!</h1>
-                  </div>
-                </div>
-
-                <div className={styles.partDois}>
-                  <div className={styles.itemPartUm}>
-                    <h1>Gestor:</h1>
-                    <h1>Data!</h1>
-                  </div>
-                  <div className={styles.itemPartUm}>
+                <div>
+                  <div>
                     <h1>Motorista:</h1>
-                    <h1>Data!</h1>
+                  </div>
+                  <div>
+                    {motorista.map((motoristasNome, index) => (
+                      motoristasNome.cpf === locacaoSelecionada.motorista_cpf_fk ? (
+                        <h1 key={index}>{motoristasNome.nome}</h1>
+                      ) : null
+                    ))}
                   </div>
                 </div>
 
-                <div className={styles.partDois}>
-                  <div className={styles.itemPartUm}>
-                    <h1>Porteiro Saída</h1>
-                    <h1>Data!</h1>
+                <div>
+                  <div>
+                    <h1>Veículo:</h1>
                   </div>
-                  <div className={styles.itemPartUm}>
-                    <h1>Porteiro Chegada</h1>
-                    <h1>Data!</h1>
+                  <div>
+                    <h1>{locacaoSelecionada.veiculo_placa_fk}</h1>
                   </div>
                 </div>
+
+                <div>
+                  <div>
+                    <h1>Gestor</h1>
+                  </div>
+                  <div>
+                    <h1>{locacaoSelecionada.gestor_cpf_fk}</h1>
+                  </div>
+                </div>
+
+                <div>
+                  <div>
+                    <h1>Porteiro Saída:</h1>
+                  </div>
+                  <div>
+                    <h1>{locacaoSelecionada.porteiro_saida_fk}</h1>
+                  </div>
+                </div>
+
+                <div>
+                  <div>
+                    <h1>Porteiro Chegada:</h1>
+                  </div>
+                  <div>
+                    <h1>{locacaoSelecionada.porteiro_chegada_fk}</h1>
+                  </div>
+                </div>
+
+                <div>
+                  <div>
+                    <h1>Observação Saída</h1>
+                  </div>
+                  <div>
+                    <h1>{locacaoSelecionada.observacao_saida}</h1>
+                  </div>
+                </div>
+
+                <div>
+                  <div>
+                    <h1>Observação Chegada</h1>
+                  </div>
+                  <div>
+                    <h1>{locacaoSelecionada.observacao_entrada}</h1>
+                  </div>
+                </div>
+
               </div>
               <div className={styles.butaoForm}>{renderExpandType()}</div>
             </div>
+          )}
           </>
         );
 
@@ -699,6 +857,7 @@ export default function Dashboard() {
                   handleOpenModal();
                   setModalContent("expand");
                   setExpandType(1);
+                  setLocacaoSelecionada(locacaoAgendada);
                 }}
                 className={styles.cardLocacao}
                 key={index}
@@ -746,6 +905,7 @@ export default function Dashboard() {
                     handleOpenModal();
                     setModalContent("expand");
                     setExpandType(2);
+                    setLocacaoSelecionada(locacao);
                     }}
                     className={styles.cardLocacao}
                     key={index}
