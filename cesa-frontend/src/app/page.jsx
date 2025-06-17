@@ -21,6 +21,9 @@ import { useAuth } from "./hooks/useAuth";
 
 // exportação da página principal a ser chamada nas rotas.
 export default function Dashboard() {
+
+  // constantes de funcionamento geral da página.
+
   // constante de abrem e fecham os modais.
   const [modalIsOpen, setModalIsOpen] = useState(false);
   // constante que abre e fecha os modais de confirmação.
@@ -42,6 +45,8 @@ export default function Dashboard() {
 
   useAuth();
 
+  // constantes que inicializa dados do cadastro de locação.
+  const [locacoesAgendadas, setLocacoesAgendadas] = useState([]);
   const [locacoes, setLocacoes] = useState([]);
   const [erro, setErro] = useState('');
   const [veiculo, setVeiculo] = useState([]);
@@ -50,32 +55,8 @@ export default function Dashboard() {
   const [motivo, setMotivo] = useState("");
   const [placaSelecionada, setPlacaSelecionada] = useState("");
   const [motoristaSelecionado, setMotoristaSelecionado] = useState("");
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    fetch("https://localhost/locacoes", {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json"
-      }
-    })
-    .then(async (res) => {
-      const data = await res.json();
-
-      if (res.ok) {
-        setLocacoes(data);
-      } else {
-        setErro(data.message || "Erro ao buscar dados");
-      }
-    })
-    .catch((err) => {
-      setErro("Erro de conexão")
-      console.error(err);
-    })
-  }, []);
-
+  const [dataSaida, setDataSaida] = useState("");
+  const [dataChegada, setDataChegada] = useState("");
 
   // fetch dados de locação iniciada.
   useEffect(() => {
@@ -149,10 +130,34 @@ export default function Dashboard() {
     })
   }, []);
 
+  useEffect(() => {
+
+    const token = localStorage.getItem("token")
+
+    fetch("https://localhost/locacoes", {
+      headers:{
+        "Authorization": `Bearer ${token}`,
+      },
+    })
+    .then(async(res) => {
+      const data = await res.json();
+
+      if(res.ok){
+        setLocacoesAgendadas(data);
+      } else {
+        alert(data.message);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const token = localStorage.getItem("token");
+    const cpfGestor = localStorage.getItem("cpf");
 
     const response = await fetch("https://localhost/locacoes", {
       method: "POST",
@@ -161,10 +166,14 @@ export default function Dashboard() {
         "Authorization": `Bearer ${token}`
       },
       body: JSON.stringify({
-        motorista_cpf_fk: motoristaSelecionado,
-        veiculo_placa_fk: placaSelecionada,
+        data_saida: dataSaida,
+        data_chegada: dataChegada,
         itinerario: itinerario,
         motivo_saida: motivo,
+        autorizacao: cpfGestor,
+        motorista_cpf_fk: motoristaSelecionado,
+        gestor_cpf_fk: cpfGestor,
+        veiculo_placa_fk: placaSelecionada,
       }),
     });
 
@@ -177,7 +186,7 @@ export default function Dashboard() {
       setMotivo("");
       alert("Locação criada com sucesso!");
     } else {
-      alert("Erro ao cadastrar!");
+      alert(data.message);
     }
   } 
 
@@ -447,8 +456,19 @@ export default function Dashboard() {
                       onChange={(e) => setMotivo(e.target.value)}
                     ></Textarea>
                   </div>
-                </form>
-                <div className={styles.butaoForm}>
+                  <div className={styles.input}>
+                    <Ginput
+                      label={"Data Prevista de Saída"}
+                      type={"datetime-local"}
+                      maxLength={300}
+                      value={dataSaida}
+                      onChange={(e) => setDataSaida(e.target.value)}
+                    ></Ginput>
+                  </div>
+                  <div className={styles.input}>
+                    <Ginput label={"Data Prevista de Chegada"} type={"datetime-local"} maxLength={300} value={dataChegada} onChange={(e) => setDataChegada(e.target.value)}></Ginput>
+                  </div>
+                  <div className={styles.butaoForm}>
                   <BadButton
                     textColor={"#48793c"}
                     colorHover={"#a3bc98"}
@@ -465,6 +485,7 @@ export default function Dashboard() {
                     Criar Locação
                   </BadButton>
                 </div>
+                </form>
               </div>
             </div>
           </>
@@ -503,10 +524,13 @@ export default function Dashboard() {
                   </div>
                   <div className={styles.input}>
                     <Ginput
-                      label={"Data Prevista"}
-                      placeholder={"10/02/2020"}
+                      label={"Data Prevista de Saída"}
                       maxLength={300}
+                      type={"datetime-local"}
                     ></Ginput>
+                  </div>
+                  <div className={styles.input}>
+                    <Ginput label={"Data Prevista de Chegada"} maxLength={300} type={"datetime-local"}></Ginput>
                   </div>
                 </form>
                 <div className={styles.butaoForm}>
@@ -655,7 +679,9 @@ export default function Dashboard() {
               <div className={styles.line}></div>
             </div>
             <div className={styles.containerCard}>
-              <div
+              {locacoesAgendadas.map((locacaoAgendada, index) => (
+
+                <div
                 onContextMenu={(e) => {
                   e.preventDefault();
                   handlePopUp(e);
@@ -666,29 +692,34 @@ export default function Dashboard() {
                   setExpandType(1);
                 }}
                 className={styles.cardLocacao}
+                key={index}
               >
                 <div className={styles.img}>
                   <img src="https://i.postimg.cc/Fs7ZnVTn/20250603-1649-Cute-Black-Car-simple-compose-01jwvnew1ef6xa5kp9jpyq56mk.png"></img>
                 </div>
                 <div>
                   <div className={styles.containerTitles}>
-                    <span className={styles.titleCard}>#2</span>
+                    <span className={styles.titleCard}>#{locacaoAgendada.id}</span>
+                  </div>
+                  <div className={styles.containerTitles}>
+                    <span className={styles.titleCard}>{locacaoAgendada.veiculo_placa_fk}</span>
                   </div>
                   <div>
-                    <span className={styles.titleCard}>Fiat - Siena</span>
-                  </div>
-                  <div>
-                    <span className={styles.titleCardDois}>
-                      Natal - Rio Grande do Norte
-                    </span>
+                    {motorista.map((motoristaLocacao, index) => (
+                      locacaoAgendada.motorista_cpf_fk === motoristaLocacao.cpf ? (
+                        <span className={styles.titleCardDois} key={index}>{motoristaLocacao.nome}</span>
+                      ) : null
+                    ))}
                   </div>
                 </div>
-                <div>
+                <div className={styles.threeDotsContainer}>
                   <button onClick={handlePopUp} className={styles.threeDots}>
                     <BsThreeDotsVertical />
                   </button>
                 </div>
               </div>
+
+              ))}
             </div>
           </div>
           <div className={styles.containerInternoUm}>

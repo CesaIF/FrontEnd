@@ -72,6 +72,7 @@
     border-radius: 10px;
     box-shadow: 6px 6px 10px #e0dee0;
     gap: 1rem;
+    align-items: center;
 }
 
 .containerTitles {
@@ -88,9 +89,18 @@
     box-shadow: 8px 8px 20px #e0dee0;
 }
 
+.titleCard {
+    font-size: 16px
+}
+
 .titleCardDois {
     color: #769b6a;
     font-size: 14px;
+}
+
+.titleCardTres {
+    color: #FF7601;
+    font-size: 18px;
 }
 
 .containerModal {
@@ -165,8 +175,8 @@
 .formAdd {
     width: 100%;
     margin-top: 2.5rem;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.5rem;
 }
 
@@ -195,6 +205,10 @@
     border-radius: 100%;
     transition: background-color 0.3s ease;
     cursor: pointer;
+}
+
+.threeDotsContainer {
+    height: 100%;
 }
 
 .threeDots:hover {
