@@ -190,6 +190,15 @@ export default function Dashboard() {
     }
   } 
 
+  // função que inicia uma locação.
+  const handleUpdateLocacao = async (id) => {
+    try {
+      const res = await fetch(`https://localhost/locacoes/`)
+    } catch (error) {
+      
+    }
+  }
+
   // função que fecha o pop-up modal ao clicar na tela fora dele.
   useEffect(() => {
     const handleClickOutside = (event) => {

@@ -72,6 +72,36 @@ export default function Porteiros(){
                     </div>
                     </>
                 )
+            
+            case "ativar":
+                    return (
+                      <>
+                      <div className={styles.containerInMini}>
+                          <Ginput
+                            type={"text"}
+                            placeholder={"UAI9999"}
+                            maxLength={30}
+                            label={"Digite a placa do veículo a ser ativado!"}
+                          ></Ginput>
+                        </div>
+                        <div className={styles.butaoForm}>
+                          <BadButton
+                            colorHover={"#769b6a"}
+                            cor={"#48793c"}
+                            onClick={handleConfirmacaoIsOpen}
+                          >
+                            Cancelar
+                          </BadButton>
+                          <BadButton
+                            colorHover={"#769b6a"}
+                            cor={"#48793c"}
+                            onClick={handleConfirmacaoIsOpen}
+                          >
+                            Ativar
+                          </BadButton>
+                        </div>
+                      </>
+                    );
         
             default:
                 return null;
@@ -171,6 +201,18 @@ export default function Porteiros(){
                             <span className={styles.titleCardQuatro}>Painel de Porteiros</span>
                             <BadButton onClick={() => {handleExpandModal(); handleConfirmacaoIsOpen(); setConfirmacao('deletar')}} textColor={"#48793c"} colorHover={"#a3bc98"} cor={"#d1dec7"} buttonWidth={"400px"}>Deletar</BadButton>
                             <BadButton onClick={() => {handleExpandModal(); handleUpdateModal();}} colorHover={"#769b6a"} cor={"#48793c"} buttonWidth={"400px"}>Atualizar</BadButton>
+                            <BadButton
+                                            onClick={() => {
+                                              handleExpandModal();
+                                              handleConfirmacaoIsOpen();
+                                              setConfirmacao("ativar");
+                                            }}
+                                            colorHover={"#fdbc4d"}
+                                            cor={"#fca61d"}
+                                            buttonWidth={"400px"}
+                                          >
+                                          Ativar
+                                          </BadButton>
                             <BadButton onClick={handleExpandModal} colorHover={"#fdbc4d"} cor={"#fca61d"} buttonWidth={"400px"}>Fechar</BadButton>
                         </div>
                     </Modal>

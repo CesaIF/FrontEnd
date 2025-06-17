@@ -116,6 +116,36 @@ export default function Motoristas() {
             </div>
           </>
         );
+      
+      case "ativar":
+              return (
+                <>
+                <div className={styles.containerInMini}>
+                    <Ginput
+                      type={"text"}
+                      placeholder={"UAI9999"}
+                      maxLength={30}
+                      label={"Digite a placa do veículo a ser ativado!"}
+                    ></Ginput>
+                  </div>
+                  <div className={styles.butaoForm}>
+                    <BadButton
+                      colorHover={"#769b6a"}
+                      cor={"#48793c"}
+                      onClick={handleConfirmacaoIsOpen}
+                    >
+                      Cancelar
+                    </BadButton>
+                    <BadButton
+                      colorHover={"#769b6a"}
+                      cor={"#48793c"}
+                      onClick={handleConfirmacaoIsOpen}
+                    >
+                      Ativar
+                    </BadButton>
+                  </div>
+                </>
+              );
 
       case "deletar":
         return (
@@ -501,6 +531,18 @@ export default function Motoristas() {
                 buttonWidth={"400px"}
               >
                 Atualizar
+              </BadButton>
+              <BadButton
+                onClick={() => {
+                  handleExpandModal();
+                  handleConfirmacaoIsOpen();
+                  setConfirmacao("ativar");
+                }}
+                colorHover={"#fdbc4d"}
+                cor={"#fca61d"}
+                buttonWidth={"400px"}
+              >
+                Ativar
               </BadButton>
               <BadButton
                 onClick={handleExpandModal}
