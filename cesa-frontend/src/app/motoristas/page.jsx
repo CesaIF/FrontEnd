@@ -42,7 +42,7 @@ export default function Motoristas() {
         const data = await receberAPI.json();
         setMotoristas(data);
       } catch (error) {
-        console.error("Erro ao buscar motorista".error);
+        console.error("Erro ao buscar motorista", error);
       }
     };
     fetchMotoristas();
