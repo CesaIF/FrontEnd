@@ -16,7 +16,6 @@ import BadButton from "./components/badButton";
 import styles from "./Dashboard.module.css";
 import Ginput from "./components/gInput";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { useRouter } from "next/navigation";
 import { useAuth } from "./hooks/useAuth";
 
 // exportação da página principal a ser chamada nas rotas.
@@ -40,8 +39,10 @@ export default function Dashboard() {
   const [popUp, setPopUp] = useState(false);
   // constante que informa a localização do popUp.
   const [popUpPosition, setPopUpPosition] = useState({ x: 0, y: 0 });
+  // constante que altera largura do modal.
+  const [widthModal, setWidthModal] = useState("1000px");
   // constante que inicializa o useRef do popUp.
-  const popupRef = useRef(null);
+  const popUpRef = useRef(null);
 
   useAuth();
 
@@ -61,6 +62,17 @@ export default function Dashboard() {
   const [locacaoSelecionada, setLocacaoSelecionada] = useState("");
   const [observacaoEntrada, setObservacaoEntrada] = useState("");
   const [kmChegada, setKmChegada] = useState("");
+  const [indexSelecionado, setIndexSelecionado] = useState(null);
+
+  useEffect(() => {
+    if(modalContent === "edicao" && locacaoSelecionada){
+      console.log("A locação:", locacaoSelecionada);
+      setPlacaSelecionada(locacaoSelecionada.veiculo_placa_fk || "");
+      setMotoristaSelecionado(locacaoSelecionada.motorista_cpf_fk || "");
+      setItinerario(locacaoSelecionada.itinerario || "");
+      setMotivo(locacaoSelecionada.motivo_saida || "");
+    }
+  }, [modalContent, locacaoSelecionada]);
 
   // fetch dados de locação iniciada.
   useEffect(() => {
@@ -88,6 +100,7 @@ export default function Dashboard() {
     })
   }, []);
 
+  // fetch que pega dados dos veículos.
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -111,6 +124,7 @@ export default function Dashboard() {
     })
   }, []);
 
+  // fetch que pega dados dos motoristas.
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -134,6 +148,7 @@ export default function Dashboard() {
     })
   }, []);
 
+  // fetch que mostra as locações não iniciadas.
   useEffect(() => {
 
     const token = localStorage.getItem("token")
@@ -157,6 +172,7 @@ export default function Dashboard() {
     })
   }, []);
 
+  // fetch que cria locação.
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -189,10 +205,11 @@ export default function Dashboard() {
       setItinerario("");
       setMotivo("");
       alert("Locação criada com sucesso!");
+      window.location.reload();
     } else {
       alert(data.message);
     }
-  } 
+  }
 
   // função que inicia uma locação.
   const handleIniciarLocacao = async (id) => {
@@ -216,6 +233,7 @@ export default function Dashboard() {
 
       if(res.ok){
         alert("Locação iniciada com sucesso!");
+        window.location.reload();
       } else {
         alert(data.message);
       }
@@ -247,6 +265,7 @@ export default function Dashboard() {
 
       if(res.ok){
         alert("Locação finalizada com sucesso!");
+        window.location.reload();
       } else {
         alert(data.message);
       }
@@ -256,10 +275,44 @@ export default function Dashboard() {
     }
   }
 
+  const handleEditarLocacao = async (id) => {
+    const token = localStorage.getItem("token");
+    const cpfGestor = localStorage.getItem("cpf");
+
+    try {
+      const res = await fetch(`https://localhost/locacoes/atualizar/${id}`, {
+      method: "PUT",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        data_saida: dataSaida,
+        data_chegada: dataChegada,
+        itinerario: itinerario,
+        motivo_saida: motivo,
+        autorizacao: cpfGestor,
+        motorista_cpf_fk: motoristaSelecionado,
+        veiculo_cpf_fk: placaSelecionada,
+      })
+    });
+
+    const data = await res.json();
+
+    if (res.ok){
+      alert("Locação atualizada com sucesso!");
+    } else {
+      alert(data.message)
+    }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   // função que fecha o pop-up modal ao clicar na tela fora dele.
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (popupRef.current && !popupRef.current.contains(event.target)) {
+      if (popUpRef.current && !popUpRef.current.contains(event.target)) {
         setPopUp(!popUp);
       }
     };
@@ -274,12 +327,13 @@ export default function Dashboard() {
   }, [popUp]);
 
   // função que lida com a abertura do pop up de locação.
-  function handlePopUp(e) {
+  function handlePopUp(e, index) {
     e.stopPropagation();
     setPopUp(!popUp);
     const x = e.pageX;
     const y = e.pageY;
     setPopUpPosition({ x, y });
+    setIndexSelecionado(index);
   }
 
   // função que renderiza os botões que dependerão do tipo do modal de expansão.
@@ -586,22 +640,46 @@ export default function Dashboard() {
           <>
             <div className={styles.containerModal}>
               <div className={styles.containerInternoModal}>
-                <h1 className="text-3xl">Editar Locação</h1>
-                <form className={styles.formAdd}>
+                <h1 className="text-3xl">Cadastro de Locação</h1>
+                <form onSubmit={handleEditarLocacao} className={styles.formAdd}>
                   <div className={styles.input}>
-                    <ChoiceBox label={"Veículo"}>Escolha o Veículo!</ChoiceBox>
+
+                    <div className={styles.choiceboxContainer}>
+                      <select
+                      value={placaSelecionada}
+                      onChange={(e) => setPlacaSelecionada(e.target.value)}
+                      >
+                        <option className={styles.choicebox}>Escolha o Veículo</option>
+                        {veiculo.map((veiculos) => (
+                          <option key={veiculos.placa} value={veiculos.placa}>{veiculos.modelo}</option>
+                        ))}
+                      </select>
+                    </div>
+
                   </div>
                   <div className={styles.input}>
-                    <ChoiceBox label={"Motorista"}>
-                      Escolha o Motorista!
-                    </ChoiceBox>
+
+                    <div className={styles.choiceboxContainer}>
+                      <select
+                      value={motoristaSelecionado}
+                      onChange={(e) => setMotoristaSelecionado(e.target.value)}
+                      >
+                        <option className={styles.choicebox}>Escolha o Motorista</option>
+                        {motorista.map((motoristas) => (
+                          <option key={motoristas.cpf} value={motoristas.cpf}>{motoristas.nome}</option>
+                        ))}
+                      </select>
+                    </div>
+
                   </div>
                   <div className={styles.input}>
                     <Textarea
                       label={"Itinerário"}
                       placeholder={"Descreva o Itinerário"}
                       maxLength={300}
-                      rows={3}
+                      rows={2}
+                      value={itinerario}
+                      onChange={(e) => setItinerario(e.target.value)}
                     ></Textarea>
                   </div>
                   <div className={styles.input}>
@@ -609,21 +687,24 @@ export default function Dashboard() {
                       label={"Motivo da Saída"}
                       placeholder={"Descreva o motivo da Saída"}
                       maxLength={300}
-                      rows={3}
+                      rows={2}
+                      value={motivo}
+                      onChange={(e) => setMotivo(e.target.value)}
                     ></Textarea>
                   </div>
                   <div className={styles.input}>
                     <Ginput
                       label={"Data Prevista de Saída"}
-                      maxLength={300}
                       type={"datetime-local"}
+                      maxLength={300}
+                      value={dataSaida}
+                      onChange={(e) => setDataSaida(e.target.value)}
                     ></Ginput>
                   </div>
                   <div className={styles.input}>
-                    <Ginput label={"Data Prevista de Chegada"} maxLength={300} type={"datetime-local"}></Ginput>
+                    <Ginput label={"Data Prevista de Chegada"} type={"datetime-local"} maxLength={300} value={dataChegada} onChange={(e) => setDataChegada(e.target.value)}></Ginput>
                   </div>
-                </form>
-                <div className={styles.butaoForm}>
+                  <div className={styles.butaoForm}>
                   <BadButton
                     textColor={"#48793c"}
                     colorHover={"#a3bc98"}
@@ -635,15 +716,12 @@ export default function Dashboard() {
                   <BadButton
                     colorHover={"#769b6a"}
                     cor={"#48793c"}
-                    onClick={() => {
-                      setConfirmacao("editado");
-                      handleConfirmacaoIsOpen();
-                      handleOpenModal();
-                    }}
+                    type={"submit"}
                   >
-                    Editar
+                    Criar Locação
                   </BadButton>
                 </div>
+                </form>
               </div>
             </div>
           </>
@@ -657,80 +735,55 @@ export default function Dashboard() {
               <div className={styles.modalExpand}>
                 
                 <div className={styles.tabelaLinha}>
-                  <div>
+                  <div className={styles.colunaUm}>
                     <h1>Id:</h1>
                   </div>
-                  <div>
+                  <div className={styles.colunaDois}>
                     <h1>{locacaoSelecionada.id}</h1>
                   </div>
                 </div>
 
-                <div>
-                  <div>
-                    <h1>Data de Saída</h1>
+                <div className={styles.tabelaLinha}>
+                  <div className={styles.colunaUm}>
+                    <h1>Quilometragem ao sair:</h1>
                   </div>
-                  <div>
-                    <h1>{locacaoSelecionada.data_saida}</h1>
-                  </div>
-                </div>
-
-                <div>
-                  <div>
-                    <h1>Data de Chegada</h1>
-                  </div>
-                  <div>
-                    <h1>{locacaoSelecionada.data_chegada}</h1>
-                  </div>
-                </div>
-
-                <div>
-                  <div>
-                    <h1>Quilometragem do veículo:</h1>
-                  </div>
-                  <div>
+                  <div className={styles.colunaDois}>
                     <h1>{locacaoSelecionada.km_saida}</h1>
                   </div>
                 </div>
 
-                <div>
-                  <div>
-                    <h1>Quilometragem ao chegar</h1>
-                  </div>
-                  <div>
-                    <h1>{locacaoSelecionada.km_chegada}</h1>
-                  </div>
-                </div>
-
-                <div>
-                  <div>
+                <div className={styles.tabelaLinha}>
+                  <div className={styles.colunaUm}>
                     <h1>Itinerário:</h1>
                   </div>
-                  <div>
+                  <div className={styles.colunaDois}>
                     <h1>{locacaoSelecionada.itinerario}</h1>
                   </div>
                 </div>
 
-                <div>
-                  <div>
+                <div className={styles.tabelaLinha}>
+                  <div className={styles.colunaUm}>
                     <h1>Motivo de Saída:</h1>
                   </div>
-                  <div><h1>{locacaoSelecionada.motivo_saida}</h1></div>
+                  <div className={styles.colunaDois}>
+                    <h1>{locacaoSelecionada.motivo_saida}</h1>
+                  </div>
                 </div>
 
-                <div>
-                  <div>
+                <div className={styles.tabelaLinha}>
+                  <div className={styles.colunaUm}>
                     <h1>Autorização:</h1>
                   </div>
-                  <div>
+                  <div className={styles.colunaDois}>
                     <h1>{locacaoSelecionada.autorizacao}</h1>
                   </div>
                 </div>
 
-                <div>
-                  <div>
+                <div className={styles.tabelaLinha}>
+                  <div className={styles.colunaUm}>
                     <h1>Motorista:</h1>
                   </div>
-                  <div>
+                  <div className={styles.colunaDois}>
                     {motorista.map((motoristasNome, index) => (
                       motoristasNome.cpf === locacaoSelecionada.motorista_cpf_fk ? (
                         <h1 key={index}>{motoristasNome.nome}</h1>
@@ -739,57 +792,30 @@ export default function Dashboard() {
                   </div>
                 </div>
 
-                <div>
-                  <div>
+                <div className={styles.tabelaLinha}>
+                  <div className={styles.colunaUm}>
                     <h1>Veículo:</h1>
                   </div>
-                  <div>
+                  <div className={styles.colunaDois}>
                     <h1>{locacaoSelecionada.veiculo_placa_fk}</h1>
                   </div>
                 </div>
 
-                <div>
-                  <div>
+                <div className={styles.tabelaLinha}>
+                  <div className={styles.colunaUm}>
                     <h1>Gestor</h1>
                   </div>
-                  <div>
+                  <div className={styles.colunaDois}>
                     <h1>{locacaoSelecionada.gestor_cpf_fk}</h1>
                   </div>
                 </div>
 
-                <div>
-                  <div>
-                    <h1>Porteiro Saída:</h1>
-                  </div>
-                  <div>
-                    <h1>{locacaoSelecionada.porteiro_saida_fk}</h1>
-                  </div>
-                </div>
-
-                <div>
-                  <div>
-                    <h1>Porteiro Chegada:</h1>
-                  </div>
-                  <div>
-                    <h1>{locacaoSelecionada.porteiro_chegada_fk}</h1>
-                  </div>
-                </div>
-
-                <div>
-                  <div>
+                <div className={styles.tabelaUltimaLinha}>
+                  <div className={styles.colunaUm}>
                     <h1>Observação Saída</h1>
                   </div>
-                  <div>
+                  <div className={styles.colunaDois}>
                     <h1>{locacaoSelecionada.observacao_saida}</h1>
-                  </div>
-                </div>
-
-                <div>
-                  <div>
-                    <h1>Observação Chegada</h1>
-                  </div>
-                  <div>
-                    <h1>{locacaoSelecionada.observacao_entrada}</h1>
                   </div>
                 </div>
 
@@ -838,6 +864,7 @@ export default function Dashboard() {
                   onClick={() => {
                     handleOpenModal();
                     setModalContent("cadastro");
+                    setWidthModal("1000px");
                   }}
                 >
                   <CiCirclePlus size={35}></CiCirclePlus>
@@ -851,13 +878,14 @@ export default function Dashboard() {
                 <div
                 onContextMenu={(e) => {
                   e.preventDefault();
-                  handlePopUp(e);
+                  handlePopUp(e, index);
                 }}
                 onClick={() => {
                   handleOpenModal();
                   setModalContent("expand");
                   setExpandType(1);
                   setLocacaoSelecionada(locacaoAgendada);
+                  setWidthModal("700px");
                 }}
                 className={styles.cardLocacao}
                 key={index}
@@ -881,7 +909,7 @@ export default function Dashboard() {
                   </div>
                 </div>
                 <div className={styles.threeDotsContainer}>
-                  <button onClick={handlePopUp} className={styles.threeDots}>
+                  <button onClick={(e) => handlePopUp(e, index)} className={styles.threeDots}>
                     <BsThreeDotsVertical />
                   </button>
                 </div>
@@ -906,6 +934,7 @@ export default function Dashboard() {
                     setModalContent("expand");
                     setExpandType(2);
                     setLocacaoSelecionada(locacao);
+                    setWidthModal("700px");
                     }}
                     className={styles.cardLocacao}
                     key={index}
@@ -931,7 +960,7 @@ export default function Dashboard() {
           </div>
 
           <Modal
-            width={"1000px"}
+            width={widthModal}
             isOpen={modalIsOpen}
             onClose={handleOpenModal}
           >
@@ -946,7 +975,7 @@ export default function Dashboard() {
 
           {popUp && (
             <div
-              ref={popupRef}
+              ref={popUpRef}
               style={{ top: popUpPosition.y, left: popUpPosition.x }}
               className={styles.popUp}
             >
@@ -955,8 +984,11 @@ export default function Dashboard() {
                   colorHover={"#769b6a"}
                   cor={"#48793c"}
                   onClick={() => {
+                    const locacaoEditavel = locacoesAgendadas[indexSelecionado];
+                    setLocacaoSelecionada(locacaoEditavel);
                     handleOpenModal();
                     setModalContent("edicao");
+                    setWidthModal("1000px");
                   }}
                 >
                   Editar
