@@ -3,7 +3,6 @@
 import dynamic from "next/dynamic";
 import Header from "../components/header";
 import Footer from "../components/footer";
-import { CiCirclePlus } from "react-icons/ci";
 import { useState } from "react";
 const Modal = dynamic(() => import("../components/modal"), { ssr: false });
 import BadButton from "../components/badButton";
@@ -17,9 +16,105 @@ export default function Perfil() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [confirmacaoIsOpen, setConfirmacaoIsOpen] = useState(false);
   const [confirmacao, setConfirmacao] = useState("cadastrado");
-  const [expandModal, setExpandModal] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
   const [updateModal, setUpdateModal] = useState(false);
+  const [cpf, setCpf] = useState("");
+  const [email, setEmail] = useState("");
+  const [nome, setNome] = useState("");
+  const [senha, setSenha] = useState("");
+  const [telefone, setTelefone] = useState("");
+  const cargo = "gestor";
+
+  const handleSubmit = async(e) => {
+
+    e.preventDefault();
+
+    const token = localStorage.getItem("token");
+
+    const res = await fetch("https://localhost/usuario", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        cpf: cpf,
+        email: email,
+        nome: nome,
+        senha: senha,
+        telefone: telefone,
+        role: cargo
+      }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok){
+      alert("Gestor cadastrado com sucesso!");
+    } else {
+      alert(data.error);
+    }
+  }
+
+  const handleEditarGestor = async(e) => {
+    e.preventDefault();
+
+    const token = localStorage.getItem("token");
+
+    const cpfGestor = localStorage.getItem("cpf");
+
+    const res = await fetch(`https://localhost/usuario/${cpfGestor}`, {
+      method: "PUT",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        cpf: cpfGestor,
+        email: email,
+        nome: nome,
+        telefone: telefone,
+        role: cargo
+      })
+    });
+
+    const data = await res.json();
+
+    if(res.ok){
+      alert("Dados editados com sucesso!");
+    } else {
+      alert(data.error);
+    }
+  }
+
+  const preencherForm = async () => {
+    const token = localStorage.getItem("token");
+
+    const cpfGestor = localStorage.getItem("cpf");
+
+    try {
+      const res = await fetch(`https://localhost/usuario/${cpfGestor}`, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      });
+
+      const data = await res.json();
+
+      if (res.ok){
+        setNome(data.nome);
+        setEmail(data.email);
+        setTelefone(data.telefone);
+      } else {
+        alert("Erro ao encontrar usuários!");
+      }
+
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   function renderConfirmacao() {
     switch (confirmacao) {
@@ -75,6 +170,7 @@ export default function Perfil() {
 
   function handleUpdateModal() {
     setUpdateModal(!updateModal);
+    preencherForm();
   }
 
   return (
@@ -148,13 +244,15 @@ export default function Perfil() {
             <div className={styles.containerModal}>
               <div className={styles.containerInternoModal}>
                 <h1 className="text-3xl">Cadastrar Gestor</h1>
-                <form className={styles.formAdd}>
+                <form onSubmit={handleSubmit} className={styles.formAdd}>
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
                       placeholder={'"João Barreto Hünnerbein"'}
                       maxLength={200}
                       label={"Nome"}
+                      value={nome}
+                      onChange={(e) => setNome(e.target.value)}
                     ></Ginput>
                   </div>
                   <div className={styles.input}>
@@ -163,6 +261,8 @@ export default function Perfil() {
                       placeholder={'"joaobarreto@email.com"'}
                       maxLength={200}
                       label={"Email"}
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                     ></Ginput>
                   </div>
                   <div className={styles.input}>
@@ -171,6 +271,8 @@ export default function Perfil() {
                       placeholder={'"123.456.789-10"'}
                       maxLength={14}
                       label={"CPF"}
+                      value={cpf}
+                      onChange={(e) => setCpf(e.target.value)}
                     ></Ginput>
                   </div>
                   <div className={styles.input}>
@@ -179,18 +281,21 @@ export default function Perfil() {
                       placeholder={'"(77) 12345-6789"'}
                       maxLength={15}
                       label={"Telefone"}
+                      value={telefone}
+                      onChange={(e) => setTelefone(e.target.value)}
                     ></Ginput>
                   </div>
                   <div className={styles.input}>
                     <Ginput
-                      type={"text"}
+                      type={"password"}
                       placeholder={'"Digite sua senha"'}
                       maxLength={30}
                       label={"Senha"}
+                      value={senha}
+                      onChange={(e) => setSenha(e.target.value)}
                     ></Ginput>
                   </div>
-                </form>
-                <div className={styles.butaoForm}>
+                  <div className={styles.butaoForm}>
                   <BadButton
                     textColor={"#48793c"}
                     colorHover={"#a3bc98"}
@@ -202,15 +307,12 @@ export default function Perfil() {
                   <BadButton
                     colorHover={"#769b6a"}
                     cor={"#48793c"}
-                    onClick={() => {
-                      handleConfirmacaoIsOpen();
-                      handleOpenModal();
-                      setConfirmacao("cadastrado");
-                    }}
+                    type={"submit"}
                   >
-                    Cadastrar Gestor
+                    Cadastrar
                   </BadButton>
                 </div>
+                </form>
               </div>
             </div>
           </Modal>
@@ -219,41 +321,35 @@ export default function Perfil() {
             <div className={styles.containerModal}>
               <div className={styles.containerInternoModal}>
                 <h1 className="text-3xl">Atualizar Dados</h1>
-                <form className={styles.formAdd}>
+                <form onSubmit={handleEditarGestor} className={styles.formAdd}>
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={'"João Barreto Hünnerbein"'}
                       maxLength={200}
                       label={"Nome"}
+                      value={nome}
+                      onChange={(e) => setNome(e.target.value)}
                     ></Ginput>
                   </div>
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={'"joaohunner@email.com"'}
                       maxLength={200}
                       label={"Email"}
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                     ></Ginput>
                   </div>
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={'"(77) 12345-6789"'}
                       maxLength={15}
                       label={"Telefone"}
+                      value={telefone}
+                      onChange={(e) => setTelefone(e.target.value)}
                     ></Ginput>
                   </div>
-                  <div className={styles.input}>
-                    <Ginput
-                      type={"text"}
-                      placeholder={'"Digite sua senha"'}
-                      maxLength={30}
-                      label={"Senha"}
-                    ></Ginput>
-                  </div>
-                </form>
-                <div className={styles.butaoForm}>
+                  <div className={styles.butaoForm}>
                   <BadButton
                     textColor={"#48793c"}
                     colorHover={"#a3bc98"}
@@ -265,15 +361,12 @@ export default function Perfil() {
                   <BadButton
                     colorHover={"#769b6a"}
                     cor={"#48793c"}
-                    onClick={() => {
-                      handleUpdateModal();
-                      handleConfirmacaoIsOpen();
-                      setConfirmacao("editado");
-                    }}
+                    type={"submit"}
                   >
                     Atualizar Dados
                   </BadButton>
                 </div>
+                </form>
               </div>
             </div>
           </Modal>

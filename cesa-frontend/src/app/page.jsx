@@ -11,7 +11,6 @@ import { CiCirclePlus } from "react-icons/ci";
 import { useEffect, useRef, useState } from "react";
 const Modal = dynamic(() => import("./components/modal"), { ssr: false });
 import Textarea from "./components/textarea";
-import ChoiceBox from "./components/choicebox";
 import BadButton from "./components/badButton";
 import styles from "./Dashboard.module.css";
 import Ginput from "./components/gInput";
@@ -91,7 +90,7 @@ export default function Dashboard() {
         if (res.ok) {
             setLocacoes(data);
         } else {
-            setErro(data.message || "Erro ao buscar dados");
+            setErro(data.error || "Erro ao buscar dados");
         }
     })
     .catch((err) => {
@@ -164,7 +163,7 @@ export default function Dashboard() {
       if(res.ok){
         setLocacoesAgendadas(data);
       } else {
-        alert(data.message);
+        alert(data.error);
       }
     })
     .catch((err) => {
@@ -207,7 +206,7 @@ export default function Dashboard() {
       alert("Locação criada com sucesso!");
       window.location.reload();
     } else {
-      alert(data.message);
+      alert(data.error);
     }
   }
 
@@ -235,7 +234,7 @@ export default function Dashboard() {
         alert("Locação iniciada com sucesso!");
         window.location.reload();
       } else {
-        alert(data.message);
+        alert(data.error);
       }
     } catch (err) {
       console.error(err);
@@ -267,7 +266,7 @@ export default function Dashboard() {
         alert("Locação finalizada com sucesso!");
         window.location.reload();
       } else {
-        alert(data.message);
+        alert(data.error);
       }
 
     } catch (err) {
@@ -275,6 +274,7 @@ export default function Dashboard() {
     }
   }
 
+  // função que edita uma locação.
   const handleEditarLocacao = async (id) => {
     const token = localStorage.getItem("token");
     const cpfGestor = localStorage.getItem("cpf");
@@ -287,13 +287,14 @@ export default function Dashboard() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        id: id,
         data_saida: dataSaida,
         data_chegada: dataChegada,
         itinerario: itinerario,
         motivo_saida: motivo,
         autorizacao: cpfGestor,
         motorista_cpf_fk: motoristaSelecionado,
-        veiculo_cpf_fk: placaSelecionada,
+        veiculo_placa_fk: placaSelecionada,
       })
     });
 
@@ -301,8 +302,9 @@ export default function Dashboard() {
 
     if (res.ok){
       alert("Locação atualizada com sucesso!");
+      window.location.reload();
     } else {
-      alert(data.message)
+      alert(data.error);
     }
     } catch (error) {
       console.error(error);
@@ -641,7 +643,11 @@ export default function Dashboard() {
             <div className={styles.containerModal}>
               <div className={styles.containerInternoModal}>
                 <h1 className="text-3xl">Cadastro de Locação</h1>
-                <form onSubmit={handleEditarLocacao} className={styles.formAdd}>
+                <form onSubmit={(e) => {
+                  e.preventDefault();
+                  handleEditarLocacao(locacaoSelecionada.id);
+                }} 
+                className={styles.formAdd}>
                   <div className={styles.input}>
 
                     <div className={styles.choiceboxContainer}>
@@ -718,7 +724,7 @@ export default function Dashboard() {
                     cor={"#48793c"}
                     type={"submit"}
                   >
-                    Criar Locação
+                    Editar Locação
                   </BadButton>
                 </div>
                 </form>

@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "dotenv": "^16.5.0",
+    "env": "^0.0.2",
     "flowbite-react": "^0.11.8",
     "jquery": "^3.7.1",
     "jquery-mask-plugin": "^1.14.16",
