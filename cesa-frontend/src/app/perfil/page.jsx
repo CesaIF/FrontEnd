@@ -9,8 +9,10 @@ import BadButton from "../components/badButton";
 import styles from "./Perfil.module.css";
 import Ginput from "../components/gInput";
 import { useAuth } from "../hooks/useAuth";
+import Head from "next/head";
 
 export default function Perfil() {
+
   useAuth();
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -20,15 +22,17 @@ export default function Perfil() {
   const [updateModal, setUpdateModal] = useState(false);
   const [cpf, setCpf] = useState("");
   const [email, setEmail] = useState("");
-  const [emailEditar, setEmailEditar] = useState("");
+  const [editarEmail, setEditarEmail] = useState("");
   const [nome, setNome] = useState("");
-  const [nomeEditar, setNomeEditar] = useState("");
+  const [editarNome, setEditarNome] = useState("");
   const [senha, setSenha] = useState("");
+  const [editarSenha, setEditarSenha] = useState("");
   const [telefone, setTelefone] = useState("");
-  const [telefoneEditar, setTelefoneEditar] = useState("");
+  const [editarTelefone, setEditarTelefone] = useState("");
   const cargo = "gestor";
   const [conteudo, setConteudo] = useState("");
-  const [gestor, setGestor] = useState([]);
+  const [gestor, setGestor] = useState("");
+  const [passIsOpen, setPassIsOpen] = useState(false);
 
   const handleSubmit = async(e) => {
 
@@ -78,9 +82,9 @@ export default function Perfil() {
       },
       body: JSON.stringify({
         cpf: cpfGestor,
-        email: email,
-        nome: nome,
-        telefone: telefone,
+        email: editarEmail,
+        nome: editarNome,
+        telefone: editarTelefone,
         role: cargo
       })
     });
@@ -88,36 +92,74 @@ export default function Perfil() {
     const data = await res.json();
 
     if(res.ok){
-      alert("Dados editados com sucesso!");
+      handleConfirmacaoIsOpen();
+      setConteudo("Dados editados com sucesso!");
     } else {
-      alert(data.error);
+      handleConfirmacaoIsOpen();
+      setConteudo(data.error);
     }
   }
 
-  useEffect(async () => {
+  const handleEditarSenha = async(e) => {
+    e.preventDefault();
+
     const token = localStorage.getItem("token");
 
     const cpfGestor = localStorage.getItem("cpf");
 
     try {
-      const res = await fetch(`https://localhost/usuario/${cpfGestor}`, {
-        method: "GET",
+      const res = await fetch(`https://localhost/usuario/alter/${cpfGestor}`, {
+        method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          senha: editarSenha
+        })
       });
 
       const data = await res.json();
 
-      if (res.ok){
-        setGestor(data);
+      if (res.ok) {
+        handleConfirmacaoIsOpen();
+        setConteudo("Senha alterada com sucesso!");
+      } else {
+        handleConfirmacaoIsOpen();
+        setConteudo(data.error);
       }
-
+      
     } catch (err) {
       console.error(err);
-      alert(data.error);
     }
+  }
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    const cpfGestor = localStorage.getItem("cpf");
+
+    fetch(`https://localhost/usuario/${cpfGestor}`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    })
+    .then(async (res) => {
+      const data = await res.json();
+      console.log("Dados", data);
+
+      if (res.ok){
+        setGestor(data);
+      } else {
+        alert("Erro ao identificar usuário!");
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+
   }, []);
 
   const preencherForm = async () => {
@@ -137,9 +179,9 @@ export default function Perfil() {
       const data = await res.json();
 
       if (res.ok){
-        setNomeEditar(data.nome);
-        setEmailEditar(data.email);
-        setTelefoneEditar(data.telefone);
+        setEditarNome(data.nome);
+        setEditarEmail(data.email);
+        setEditarTelefone(data.telefone);
       } else {
         alert("Erro ao encontrar usuários!");
       }
@@ -197,6 +239,10 @@ export default function Perfil() {
     setModalIsOpen(!modalIsOpen);
   }
 
+  function handlePassModal() {
+    setPassIsOpen(!passIsOpen);
+  }
+
   function handleConfirmacaoIsOpen() {
     setConfirmacaoIsOpen(!confirmacaoIsOpen);
   }
@@ -208,6 +254,10 @@ export default function Perfil() {
 
   return (
     <>
+    <Head>
+      <title>Perfil do Gestor</title>
+      <link rel="icon" href="/cesaicon.ico"></link>
+    </Head>
       <div
         className={`${styles.containerGeral} ${isOpen ? styles.asideOpen : ""}`}
       >
@@ -221,16 +271,38 @@ export default function Perfil() {
           <div className={styles.containerInternoUm}>
             <div>
               <div className={styles.containerTitle}>
-              {gestor.map((titulo, index) => (
-                <h1 key={index} className={styles.titleLocacao}>
-                  Bem-vindo, {titulo.nome}
-                </h1>
-              ))}
+                {gestor && gestor.nome && (
+                  <h1 key={gestor.cpf} className={styles.titleLocacao}>
+                    Bem-vindo, {gestor.nome}
+                  </h1>
+                )}
               </div>
               <div className={styles.line}></div>
             </div>
 
             <div className={styles.containerCard}>
+            
+              <div className={styles.card}>
+                <div>
+                  <h1 className={styles.titleCardTres}>Editar Senha</h1>
+                </div>
+                <div>
+                  <h1 className={styles.titleCard}>
+                    Edite sua senha clicando abaixo:
+                  </h1>
+                </div>
+                <div>
+                  <BadButton
+                    buttonWidth={"15rem"}
+                    onClick={handlePassModal}
+                    colorHover="#a3bc98"
+                    cor="#769b6a"
+                  >
+                    Editar Senha
+                  </BadButton>
+                </div>
+              </div>
+
               <div className={styles.card}>
                 <div>
                   <h1 className={styles.titleCardTres}>Editar Dados</h1>
@@ -362,8 +434,8 @@ export default function Perfil() {
                       type={"text"}
                       maxLength={200}
                       label={"Nome"}
-                      value={nomeEditar}
-                      onChange={(e) => setNomeEditar(e.target.value)}
+                      value={editarNome}
+                      onChange={(e) => setEditarNome(e.target.value)}
                     ></Ginput>
                   </div>
                   <div className={styles.input}>
@@ -371,8 +443,8 @@ export default function Perfil() {
                       type={"text"}
                       maxLength={200}
                       label={"Email"}
-                      value={emailEditar}
-                      onChange={(e) => setEmailEditar(e.target.value)}
+                      value={editarEmail}
+                      onChange={(e) => setEditarEmail(e.target.value)}
                     ></Ginput>
                   </div>
                   <div className={styles.input}>
@@ -380,8 +452,8 @@ export default function Perfil() {
                       type={"text"}
                       maxLength={15}
                       label={"Telefone"}
-                      value={telefoneEditar}
-                      onChange={(e) => setTelefoneEditar(e.target.value)}
+                      value={editarTelefone}
+                      onChange={(e) => setEditarTelefone(e.target.value)}
                     ></Ginput>
                   </div>
                   <div className={styles.butaoForm}>
@@ -406,20 +478,57 @@ export default function Perfil() {
             </div>
           </Modal>
 
-          <Modal isOpen={confirmacaoIsOpen} onClose={handleConfirmacaoIsOpen}>
+          <Modal isOpen={passIsOpen} onClose={handlePassModal}>
+            <div className={styles.containerModal}>
+              <div className={styles.containerInternoModal}>
+                <h1 className="text-3xl">Cadastrar Gestor</h1>
+                <form onSubmit={handleEditarSenha} className={styles.formAdd}>
+                  <div className={styles.input}>
+                    <Ginput
+                      type={"password"}
+                      placeholder={'"Digite sua senha"'}
+                      maxLength={30}
+                      label={"Senha"}
+                      value={editarSenha}
+                      onChange={(e) => setEditarSenha(e.target.value)}
+                    ></Ginput>
+                  </div>
+                  <div className={styles.butaoForm}>
+                  <BadButton
+                    textColor={"#48793c"}
+                    colorHover={"#a3bc98"}
+                    cor={"#d1dec7"}
+                    onClick={handlePassModal}
+                  >
+                    Cancelar
+                  </BadButton>
+                  <BadButton
+                    colorHover={"#769b6a"}
+                    cor={"#48793c"}
+                    type={"submit"}
+                  >
+                    Editar
+                  </BadButton>
+                </div>
+                </form>
+              </div>
+            </div>
+          </Modal>
+
+          <Modal width={"400px"} isOpen={confirmacaoIsOpen} onClose={handleConfirmacaoIsOpen}>
             <div className={styles.containerModal}>
               <div className={styles.containerInMini}>
-              <h1 className="mb-3">{conteudo}</h1>
-            </div>
-            <div className={styles.butaoForm}>
-              <BadButton
+                <h1 className="mb-3">{conteudo}</h1>
+              </div>
+              <div className={styles.butaoMini}>
+                <BadButton
                 colorHover={"#769b6a"}
                 cor={"#48793c"}
                 onClick={handleConfirmacaoIsOpen}
-              >
-                Ok
-              </BadButton>
-            </div>
+                >
+                  Ok
+                </BadButton>
+              </div>
             </div>
           </Modal>
         </main>
