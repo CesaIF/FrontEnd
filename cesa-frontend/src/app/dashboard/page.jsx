@@ -110,7 +110,7 @@ export default function Dashboard() {
     fetch("https://localhost/veiculos", {
       method: "GET",
       headers: {
-        "Authorization": `Bearer ${token}`, 
+        "Authorization": `Bearer ${token}`,
       },
     })
     .then(async (res) => {
