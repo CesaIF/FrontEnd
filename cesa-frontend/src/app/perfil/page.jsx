@@ -24,6 +24,7 @@ export default function Perfil() {
   const [senha, setSenha] = useState("");
   const [telefone, setTelefone] = useState("");
   const cargo = "gestor";
+  const [conteudo, setConteudo] = useState("");
 
   const handleSubmit = async(e) => {
 
@@ -372,7 +373,20 @@ export default function Perfil() {
           </Modal>
 
           <Modal isOpen={confirmacaoIsOpen} onClose={handleConfirmacaoIsOpen}>
-            <div className={styles.containerModal}>{renderConfirmacao()}</div>
+            <div className={styles.containerModal}>
+              <div className={styles.containerInMini}>
+              <h1 className="mb-3">{conteudo}</h1>
+            </div>
+            <div className={styles.butaoForm}>
+              <BadButton
+                colorHover={"#769b6a"}
+                cor={"#48793c"}
+                onClick={handleConfirmacaoIsOpen}
+              >
+                Ok
+              </BadButton>
+            </div>
+            </div>
           </Modal>
         </main>
         <div className={styles.footer}>
