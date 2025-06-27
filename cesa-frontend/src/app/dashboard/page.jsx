@@ -16,7 +16,6 @@ import styles from "./Dashboard.module.css";
 import Ginput from "../components/gInput";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { useAuth } from "../hooks/useAuth";
-import Head from "next/head";
 
 // exportação da página principal a ser chamada nas rotas.
 export default function Dashboard() {
