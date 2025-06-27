@@ -41,7 +41,7 @@ export default function Login() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("cpf", data.cpf);
       alert("Login realizado ");
-      router.push("/");
+      router.push("/dashboard");
     } else {
       alert(data.message || "Erro ao fazer login");
     }
