@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import Header from "../components/header";
 import Footer from "../components/footer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 const Modal = dynamic(() => import("../components/modal"), { ssr: false });
 import BadButton from "../components/badButton";
 import styles from "./Perfil.module.css";
@@ -20,11 +20,15 @@ export default function Perfil() {
   const [updateModal, setUpdateModal] = useState(false);
   const [cpf, setCpf] = useState("");
   const [email, setEmail] = useState("");
+  const [emailEditar, setEmailEditar] = useState("");
   const [nome, setNome] = useState("");
+  const [nomeEditar, setNomeEditar] = useState("");
   const [senha, setSenha] = useState("");
   const [telefone, setTelefone] = useState("");
+  const [telefoneEditar, setTelefoneEditar] = useState("");
   const cargo = "gestor";
   const [conteudo, setConteudo] = useState("");
+  const [gestor, setGestor] = useState([]);
 
   const handleSubmit = async(e) => {
 
@@ -51,9 +55,11 @@ export default function Perfil() {
     const data = await res.json();
 
     if (res.ok){
-      alert("Gestor cadastrado com sucesso!");
+      handleConfirmacaoIsOpen();
+      setConteudo("Gestor cadastrado com sucesso!");
     } else {
-      alert(data.error);
+      handleConfirmacaoIsOpen();
+      setConteudo(data.error);
     }
   }
 
@@ -88,6 +94,32 @@ export default function Perfil() {
     }
   }
 
+  useEffect(async () => {
+    const token = localStorage.getItem("token");
+
+    const cpfGestor = localStorage.getItem("cpf");
+
+    try {
+      const res = await fetch(`https://localhost/usuario/${cpfGestor}`, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      });
+
+      const data = await res.json();
+
+      if (res.ok){
+        setGestor(data);
+      }
+
+    } catch (err) {
+      console.error(err);
+      alert(data.error);
+    }
+  }, []);
+
   const preencherForm = async () => {
     const token = localStorage.getItem("token");
 
@@ -105,9 +137,9 @@ export default function Perfil() {
       const data = await res.json();
 
       if (res.ok){
-        setNome(data.nome);
-        setEmail(data.email);
-        setTelefone(data.telefone);
+        setNomeEditar(data.nome);
+        setEmailEditar(data.email);
+        setTelefoneEditar(data.telefone);
       } else {
         alert("Erro ao encontrar usuários!");
       }
@@ -189,9 +221,11 @@ export default function Perfil() {
           <div className={styles.containerInternoUm}>
             <div>
               <div className={styles.containerTitle}>
-                <h1 className={styles.titleLocacao}>
-                  Bem-vindo, João Gonçalves de Almeida
+              {gestor.map((titulo, index) => (
+                <h1 key={index} className={styles.titleLocacao}>
+                  Bem-vindo, {titulo.nome}
                 </h1>
+              ))}
               </div>
               <div className={styles.line}></div>
             </div>
@@ -328,8 +362,8 @@ export default function Perfil() {
                       type={"text"}
                       maxLength={200}
                       label={"Nome"}
-                      value={nome}
-                      onChange={(e) => setNome(e.target.value)}
+                      value={nomeEditar}
+                      onChange={(e) => setNomeEditar(e.target.value)}
                     ></Ginput>
                   </div>
                   <div className={styles.input}>
@@ -337,8 +371,8 @@ export default function Perfil() {
                       type={"text"}
                       maxLength={200}
                       label={"Email"}
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      value={emailEditar}
+                      onChange={(e) => setEmailEditar(e.target.value)}
                     ></Ginput>
                   </div>
                   <div className={styles.input}>
@@ -346,8 +380,8 @@ export default function Perfil() {
                       type={"text"}
                       maxLength={15}
                       label={"Telefone"}
-                      value={telefone}
-                      onChange={(e) => setTelefone(e.target.value)}
+                      value={telefoneEditar}
+                      onChange={(e) => setTelefoneEditar(e.target.value)}
                     ></Ginput>
                   </div>
                   <div className={styles.butaoForm}>
