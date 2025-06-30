@@ -9,10 +9,16 @@ const Modal = dynamic(() => import("../components/modal"), { ssr: false });
 import BadButton from "../components/badButton";
 import styles from "./History.module.css";
 import { useAuth } from "../hooks/useAuth";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 export default function History() {
   useAuth();
   const [locacoes, setLocacoes] = useState([]);
+  const [isOpen, setIsOpen] = useState(true);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [selectedLocacao, setSelectedLocacao] = useState(null);
 
   useEffect(() => {
     const fetchLocacoes = async () => {
@@ -35,15 +41,29 @@ export default function History() {
     fetchLocacoes();
   }, []);
 
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [expandModal, setExpandModal] = useState(false);
-  const [isOpen, setIsOpen] = useState(true);
-
   function handleOpenModal() {
     setModalIsOpen(!modalIsOpen);
   }
-  function handleExpandModal(locacoes) {
-    setExpandModal(locacoes);
+
+  function handleExpandModal(locacao) {
+    setSelectedLocacao(locacao);
+    setIsDetailModalOpen(true);
+  }
+
+  function handleCloseExpandModal() {
+    setSelectedLocacao(null);
+    setIsDetailModalOpen(false);
+  }
+//Formata a data que vem do back end
+  function formatarData(dataISO) {
+    if (!dataISO) return "—";
+    try {
+      return format(new Date(dataISO), "dd 'de' MMMM 'de' yyyy 'às' HH:mm", {
+        locale: ptBR,
+      });
+    } catch {
+      return "Data inválida";
+    }
   }
 
   return (
@@ -51,55 +71,49 @@ export default function History() {
       <div
         className={`${styles.containerGeral} ${isOpen ? styles.asideOpen : ""}`}
       >
-        <Header
-          onClick={() => {
-            setIsOpen(!isOpen);
-          }}
-          isOpen={isOpen}
-        ></Header>
+        <Header onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
+
         <main className={styles.containerMain}>
           <div className={styles.containerInternoUm}>
             <div>
               <div className={styles.containerTitle}>
                 <h1 className={styles.titleLocacao}>Locações Finalizadas</h1>
                 <button className={styles.butaoAdd} onClick={handleOpenModal}>
-                  <CiCirclePlus size={35}></CiCirclePlus>
+                  <CiCirclePlus size={35} />
                 </button>
               </div>
               <div className={styles.line}></div>
             </div>
+
             <div className={styles.containerCard}>
               {locacoes.length === 0 ? (
                 <p>Nenhuma locação cadastrada.</p>
               ) : (
-                locacoes.map((locacoes) => (
+                locacoes.map((locacao) => (
                   <div
-                    key={locacoes.id}
-                    onClick={() => {
-                      handleExpandModal(locacoes);
-                    }}
+                    key={locacao.id}
+                    onClick={() => handleExpandModal(locacao)}
                     className={styles.cardLocacao}
                   >
                     <div>
                       <div className={styles.containerTitles}>
                         <span className={styles.titleCard}>
-                          {`#ID: ` + locacoes.id}
+                          {`#ID: ` + locacao.id}
                         </span>
                       </div>
                       <div>
                         <span className={styles.titleCard}>
-                          {`Itinerario: ` + locacoes.itinerario}
+                          {`Itinerario: ` + locacao.itinerario}
                         </span>
                       </div>
                       <div>
                         <span className={styles.titleCardDois}>
-                          {`Veiculo: ` + locacoes.veiculo_placa_fk}
+                          {`Veiculo: ` + locacao.veiculo_placa_fk}
                         </span>
                       </div>
-
                       <div>
                         <span className={styles.titleCardDois}>
-                          {`Motorista: ` + locacoes.motorista_cpf_fk}
+                          {`Motorista: ` + locacao.motorista_cpf_fk}
                         </span>
                       </div>
                     </div>
@@ -110,131 +124,85 @@ export default function History() {
           </div>
 
           <Modal
-            width={"1000px"}
-            isOpen={expandModal}
-            onClose={handleExpandModal}
+            width={"700px"}
+            isOpen={isDetailModalOpen}
+            onClose={handleCloseExpandModal}
           >
-            <div className={styles.containerModalGeral}>
-              {locacoes.map((locacoes) => (
-                <div key={locacoes.id} className={styles.modalExpand}>
-                  <div className={styles.itemUm}>
-                    <div className={styles.itemInternoUm}>
-                      <h1>ID:</h1>
-                      <h1> {locacoes.id} </h1>
-                    </div>
-                  </div>
-                  <div className={styles.itemUm}>
-                    <div className={styles.itemInternoUm}>
-                      <h1>Saída:</h1>
-                      <h1> {locacoes.data_saida} </h1>
-                    </div>
-                  </div>
-                  <div className={styles.itemUm}>
-                    <div className={styles.itemInternoUm}>
-                      <h1>Chegada:</h1>
-                      <h1> {locacoes.data_chegada} </h1>
-                    </div>
-                  </div>
-                  <div className={styles.itemUm}>
-                    <div className={styles.itemInternoUm}>
-                      <h1>Quilometragem de Saida:</h1>
-                      <h1> {locacoes.km_saida} </h1>
-                    </div>
-                  </div>
-                  <div className={styles.itemUm}>
-                    <div className={styles.itemInternoUm}>
-                      <h1>Quilometragem de Chegada:</h1>
-                      <h1> {locacoes.km_chegada} </h1>
-                    </div>
-                  </div>
+            {selectedLocacao && (
+              <div className={styles.containerModalGeral}>
+                <div className={styles.modalExpand}>
+                  {[
+                    { label: "ID", value: selectedLocacao.id },
+                    { label: "Itinerário", value: selectedLocacao.itinerario },
+                    {
+                      label: "Veículo",
+                      value: selectedLocacao.veiculo_placa_fk,
+                    },
+                    {
+                      label: "Motorista",
+                      value: selectedLocacao.motorista_cpf_fk,
+                    },
+                    {
+                      label: "Saída",
+                      value: formatarData(selectedLocacao.data_saida),
+                    },
+                    {
+                      label: "Chegada",
+                      value: formatarData(selectedLocacao.data_chegada),
+                    },
 
-                  <div className={styles.partDois}>
-                    <div className={styles.itemPartUm}>
-                      <h1>Itinerario:</h1>
-                      <h1> {locacoes.itinerario} </h1>
+                    { label: "KM Saída", value: selectedLocacao.km_saida },
+                    { label: "KM Chegada", value: selectedLocacao.km_chegada },
+                    {
+                      label: "Observação Saída",
+                      value: selectedLocacao.observacao_saida,
+                    },
+                    {
+                      label: "Observação Chegada",
+                      value: selectedLocacao.observacao_entrada,
+                    },
+                    {
+                      label: "Porteiro Saída",
+                      value: selectedLocacao.porteiro_saida_fk,
+                    },
+                    {
+                      label: "Porteiro Chegada",
+                      value: selectedLocacao.porteiro_chegada_fk,
+                    },
+                    {
+                      label: "Motivo da saída",
+                      value: selectedLocacao.motivo_saida,
+                    },
+                    { label: "Gestor", value: selectedLocacao.gestor_cpf_fk },
+                    {
+                      label: "Autorização",
+                      value: selectedLocacao.autorizacao,
+                    },
+                  ].map((item, index) => (
+                    <div key={index} className={styles.itemPartUm}>
+                      <h1>{item.label}:</h1>
+                      <h1>{item.value || "—"}</h1>
                     </div>
-                  </div>
-
-                  <div className={styles.partDois}>
-                    <div className={styles.itemPartUm}>
-                      <h1>Motivo da saida:</h1>
-                      <h1>{locacoes.motivo_saida}</h1>
-                    </div>
-                  </div>
-
-                  <div className={styles.partDois}>
-                    <div className={styles.itemPartUm}>
-                      <h1>Autorização:</h1>
-                      <h1>{locacoes.autorizacao}</h1>
-                    </div>
-                  </div>
-
-                  <div className={styles.partDois}>
-                    <div className={styles.itemPartUm}>
-                      <h1>Motorista:</h1>
-                      <h1>{locacoes.motorista_cpf_fk}</h1>
-                    </div>
-                  </div>
-
-                  <div className={styles.partDois}>
-                    <div className={styles.itemPartUm}>
-                      <h1>Veiculo:</h1>
-                      <h1>{locacoes.veiculo_placa_fk}</h1>
-                    </div>
-                  </div>
-
-                  <div className={styles.partDois}>
-                    <div className={styles.itemPartUm}>
-                      <h1>Gestor:</h1>
-                      <h1>{locacoes.gestor_cpf_fk}</h1>
-                    </div>
-                  </div>
-
-                  <div className={styles.partDois}>
-                    <div className={styles.itemPartUm}>
-                      <h1>Porteiro Saida:</h1>
-                      <h1>{locacoes.porteiro_saida_fk}</h1>
-                    </div>
-                  </div>
-
-                  <div className={styles.partDois}>
-                    <div className={styles.itemPartUm}>
-                      <h1>Porteiro Chegada:</h1>
-                      <h1>{locacoes.porteiro_chegada_fk}</h1>
-                    </div>
-                  </div>
-
-                  <div className={styles.partDois}>
-                    <div className={styles.itemPartUm}>
-                      <h1>Observação saida:</h1>
-                      <h1>{locacoes.observacao_saida}</h1>
-                    </div>
-                  </div>
-
-                  <div className={styles.partDois}>
-                    <div className={styles.itemPartUm}>
-                      <h1>Observação chegada:</h1>
-                      <h1>{locacoes.observacao_chegada}</h1>
-                    </div>
-                  </div>
+                  ))}
                 </div>
-              ))}
 
-              <div className={styles.butaoForm}>
-                <BadButton
-                  colorHover={"#a3bc98"}
-                  textColor={"#48793c"}
-                  cor={"#d1dec7"}
-                  onClick={handleExpandModal}
-                >
-                  Fechar
-                </BadButton>
+                <div className={styles.butaoForm}>
+                  <BadButton
+                    colorHover={"#a3bc98"}
+                    textColor={"#48793c"}
+                    cor={"#d1dec7"}
+                    onClick={handleCloseExpandModal}
+                  >
+                    Fechar
+                  </BadButton>
+                </div>
               </div>
-            </div>
+            )}
           </Modal>
         </main>
+
         <div className={styles.footer}>
-          <Footer></Footer>
+          <Footer />
         </div>
       </div>
     </>

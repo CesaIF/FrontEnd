@@ -43,7 +43,7 @@ export default function Login() {
       alert("Login realizado ");
       router.push("/dashboard");
     } else {
-      alert(data.message || "Erro ao fazer login");
+      alert(data.error || "Erro ao fazer login");
     }
   };
 

@@ -28,7 +28,7 @@ export default function Header({ isOpen, onClick }) {
             </li>
 
             <li className={styles.liDois}>
-              <Link className={styles.link} href={"/"}>
+              <Link className={styles.link} href={"/dashboard"}>
                 <span>
                   <FaHome />
                 </span>
