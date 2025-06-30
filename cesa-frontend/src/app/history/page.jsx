@@ -55,7 +55,7 @@ export default function History() {
     setIsDetailModalOpen(false);
   }
 //Formata a data que vem do back end
-  function formatarDataBonita(dataISO) {
+  function formatarData(dataISO) {
     if (!dataISO) return "—";
     try {
       return format(new Date(dataISO), "dd 'de' MMMM 'de' yyyy 'às' HH:mm", {
@@ -144,11 +144,11 @@ export default function History() {
                     },
                     {
                       label: "Saída",
-                      value: formatarDataBonita(selectedLocacao.data_saida),
+                      value: formatarData(selectedLocacao.data_saida),
                     },
                     {
                       label: "Chegada",
-                      value: formatarDataBonita(selectedLocacao.data_chegada),
+                      value: formatarData(selectedLocacao.data_chegada),
                     },
 
                     { label: "KM Saída", value: selectedLocacao.km_saida },
