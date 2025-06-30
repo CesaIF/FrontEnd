@@ -14,7 +14,7 @@ export default function Header({ isOpen, onClick }) {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    router.push("/login");
+    router.push("/");
   };
   return (
     <>

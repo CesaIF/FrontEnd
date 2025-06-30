@@ -207,10 +207,14 @@ export default function Dashboard() {
       setPlacaSelecionada("");
       setItinerario("");
       setMotivo("");
-      alert("Locação criada com sucesso!");
-      window.location.reload();
+      handleNoticeIsOpen();
+      setConteudo("Locação criada com sucesso!");
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     } else {
-      alert(data.error);
+      handleNoticeIsOpen();
+      setConteudo(data.error);
     }
   }
 
@@ -235,10 +239,16 @@ export default function Dashboard() {
       const data = await res.json();
 
       if(res.ok){
-        alert("Locação iniciada com sucesso!");
-        window.location.reload();
+        handleNoticeIsOpen();
+        handleConfirmacaoIsOpen();
+        setConteudo("Locação iniciada com sucesso!");
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       } else {
-        alert(data.error);
+        handleConfirmacaoIsOpen();
+        handleNoticeIsOpen();
+        setConteudo(data.error);
       }
     } catch (err) {
       console.error(err);
@@ -267,10 +277,16 @@ export default function Dashboard() {
       const data = await res.json();
 
       if(res.ok){
-        alert("Locação finalizada com sucesso!");
-        window.location.reload();
+        handleConfirmacaoIsOpen();
+        handleNoticeIsOpen();
+        setConteudo("Locação finalizada com sucesso!");
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       } else {
-        alert(data.error);
+        handleConfirmacaoIsOpen();
+        handleNoticeIsOpen();
+        setConteudo(data.error);
       }
 
     } catch (err) {
@@ -305,13 +321,36 @@ export default function Dashboard() {
     const data = await res.json();
 
     if (res.ok){
-      alert("Locação atualizada com sucesso!");
-      window.location.reload();
+      handleNoticeIsOpen();
+      setConteudo("Locação atualizada com sucesso!");
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     } else {
-      alert(data.error);
+      handleNoticeIsOpen();
+      setConteudo(data.error);
     }
     } catch (error) {
       console.error(error);
+    }
+  }
+
+  // função que deletar uma locação.
+  const handleDeletarLocacao = async (id) => {
+    const token = localStorage.getItem("token");
+
+    const res = await fetch(`https://localhost/locacoes/deletar/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    });
+
+    if (res.ok) {
+      handleNoticeIsOpen();
+      setConteudo("Locação deletada com sucesso!");
+      handleConfirmacaoIsOpen();
     }
   }
 
@@ -429,22 +468,30 @@ export default function Dashboard() {
       case "iniciar":
         return (
           <>
-            <div className={styles.containerModal}>
+            <div className={styles.containerConfirm}>
               <form onSubmit={(e) => {
                 e.preventDefault();
                 handleIniciarLocacao(locacaoSelecionada.id);
               }}>
-                <Ginput
-                  label={"Observações:"}
-                  type={"text"}
-                  maxLength={300}
-                  value={observacaoSaida}
-                  placeholder={"\"O carro retornou com um problema.\""}
-                  onChange={(e) => setObservacaoSaida(e.target.value)}
-                ></Ginput>
-                <div className={styles.butaoForm}>
-                  <BadButton onClick={handleConfirmacaoIsOpen}>Fechar</BadButton>
+                <div className={styles.containerInMini}>
+                  <Ginput
+                    label={"Observações:"}
+                    type={"text"}
+                    maxLength={300}
+                    value={observacaoSaida}
+                    placeholder={"\"O carro retornou com um problema.\""}
+                    onChange={(e) => setObservacaoSaida(e.target.value)}
+                  ></Ginput>
+                </div>
+                <div className={styles.butaoMini}>
+                  <BadButton 
+                    textColor={"#48793c"}
+                    colorHover={"#a3bc98"}
+                    cor={"#d1dec7"} 
+                    onClick={handleConfirmacaoIsOpen}>Fechar</BadButton>
                   <BadButton
+                    colorHover={"#769b6a"}
+                    cor={"#48793c"}
                     type={"submit"}
                   >
                     Iniciar
@@ -458,30 +505,38 @@ export default function Dashboard() {
       case "finalizar":
         return (
           <>
-            <div className={styles.containerModal}>
+            <div className={styles.containerConfirm}>
               <form onSubmit={(e) => {
                 e.preventDefault();
                 handleFinalizarLocacao(locacaoSelecionada.id);
               }}>
-                <Ginput
-                  label={"Observações:"}
-                  type={"text"}
-                  maxLength={300}
-                  value={observacaoEntrada}
-                  placeholder={"\"O carro retornou com um problema.\""}
-                  onChange={(e) => setObservacaoEntrada(e.target.value)}
-                ></Ginput>
-                <Ginput
-                  label={"Kilometragem:"}
-                  type={"number"}
-                  maxLength={300}
-                  value={kmChegada}
-                  placeholder={"\"100000\""}
-                  onChange={(e) => setKmChegada(e.target.value)}
-                ></Ginput>
-                <div className={styles.butaoForm}>
-                  <BadButton onClick={handleConfirmacaoIsOpen}>Fechar</BadButton>
+                <div className={styles.containerInMini}>
+                  <Ginput
+                    label={"Observações:"}
+                    type={"text"}
+                    maxLength={300}
+                    value={observacaoEntrada}
+                    placeholder={"\"O carro retornou com um problema.\""}
+                    onChange={(e) => setObservacaoEntrada(e.target.value)}
+                  ></Ginput>
+                  <Ginput
+                    label={"Quilometragem:"}
+                    type={"number"}
+                    maxLength={300}
+                    value={kmChegada}
+                    placeholder={"\"100000\""}
+                    onChange={(e) => setKmChegada(e.target.value)}
+                  ></Ginput>
+                </div>
+                <div className={styles.butaoMini}>
+                  <BadButton 
+                    onClick={handleConfirmacaoIsOpen} 
+                    textColor={"#48793c"}
+                    colorHover={"#a3bc98"}
+                    cor={"#d1dec7"} >Fechar</BadButton>
                   <BadButton
+                    colorHover={"#769b6a"}
+                    cor={"#48793c"}
                     type={"submit"}
                   >
                     Finalizar
@@ -952,7 +1007,6 @@ export default function Dashboard() {
           </Modal>
 
           <Modal
-            width={"400px"}
             isOpen={noticeIsOpen}
             onClose={handleNoticeIsOpen}
           >
@@ -961,13 +1015,13 @@ export default function Dashboard() {
                 <h1 className="mb-3">{conteudo}</h1>
               </div>
               <div className={styles.butaoMini}>
-                <BadButton onClick={handleNoticeIsOpen}>OK</BadButton>
+                <BadButton onClick={handleNoticeIsOpen} colorHover={"#769b6a"} cor={"#48793c"} >OK</BadButton>
               </div>
             </div>
           </Modal>
 
           <Modal isOpen={confirmacaoIsOpen} onClose={handleConfirmacaoIsOpen}>
-            <div className={styles.containerInternoUm}>
+            <div className={styles.containerInternoConfirm}>
               {renderContentConfirmacao()}
             </div>
           </Modal>
