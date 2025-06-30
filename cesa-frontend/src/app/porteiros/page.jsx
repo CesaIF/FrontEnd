@@ -155,7 +155,7 @@ export default function Porteiros() {
                     setConfirmacao("deletado");
                   } else {
                     const erro = await response.json();
-                    alert(erro.message || "Erro ao deletar porteiro");
+                    alert(erro.error || "Erro ao deletar porteiro");
                   }
                 }}
               >
@@ -304,7 +304,7 @@ export default function Porteiros() {
                   </div>
                   <div className={styles.input}>
                     <Ginput
-                      type={"text"}
+                      type={"password"}
                       placeholder={"Digite sua senha"}
                       maxLength={250}
                       label={"Senha"}
@@ -373,8 +373,8 @@ export default function Porteiros() {
                           body: JSON.stringify(novoPorteiro),
                         }
                       );
+                      const porteiroCadastrado = await response.json();
                       if (response.ok) {
-                        const porteiroCadastrado = await response.json();
                         setPorteiro((prev) => [...prev, porteiroCadastrado]);
 
                         handleOpenModal();
@@ -389,6 +389,8 @@ export default function Porteiros() {
                           telefone: "",
                           role: "",
                         });
+                      } else {
+                        alert(porteiroCadastrado.error || "Erro ao cadastrar ");
                       }
                     }}
                   >
@@ -509,11 +511,11 @@ export default function Porteiros() {
                         handleConfirmacaoIsOpen();
                         setConfirmacao("editado");
                       } else {
-                        alert(data.message || "Erroa ao atualizar usuario");
+                        alert(data.error || "Erro ao atualizar usuario");
                       }
                     }}
                   >
-                    Atualizar 
+                    Atualizar
                   </BadButton>
                 </div>
               </div>
@@ -550,21 +552,8 @@ export default function Porteiros() {
                 Atualizar
               </BadButton>
               <BadButton
-                onClick={() => {
-                  handleExpandModal();
-                  handleConfirmacaoIsOpen();
-                  setConfirmacao("ativar");
-                }}
-                colorHover={"#fdbc4d"}
-                cor={"#fca61d"}
-                buttonWidth={"400px"}
-              >
-                Ativar
-              </BadButton>
-              <BadButton
                 onClick={handleExpandModal}
-                colorHover={"#fdbc4d"}
-                cor={"#fca61d"}
+                colorHover={"#181818"}
                 buttonWidth={"400px"}
               >
                 Fechar

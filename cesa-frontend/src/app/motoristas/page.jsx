@@ -352,8 +352,8 @@ export default function Motoristas() {
                           email: "",
                         });
                       } else {
-                        const erro = await response.json();
-                        alert(erro.message || "Erro ao cadastrar motorista");
+                        const mensage = await response.json();
+                        alert(mensage.error || "Erro ao cadastrar motorista");
                       }
                     }}
                   >
@@ -459,7 +459,7 @@ export default function Motoristas() {
                         handleConfirmacaoIsOpen();
                         setConfirmacao("editado");
                       } else {
-                        alert(data.message || "Erro ao atualizar motorista");
+                        alert(data.error || "Erro ao atualizar motorista");
                       }
                     }}
                   >
@@ -499,18 +499,6 @@ export default function Motoristas() {
                 buttonWidth={"400px"}
               >
                 Atualizar
-              </BadButton>
-              <BadButton
-                onClick={() => {
-                  handleExpandModal();
-                  handleConfirmacaoIsOpen();
-                  setConfirmacao("ativar");
-                }}
-                colorHover={"#fdbc4d"}
-                cor={"#fca61d"}
-                buttonWidth={"400px"}
-              >
-                Ativar
               </BadButton>
               <BadButton
                 onClick={handleExpandModal}

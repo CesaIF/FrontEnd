@@ -60,6 +60,7 @@ export default function Perfil() {
 
     if (res.ok){
       handleConfirmacaoIsOpen();
+      handleOpenModal();
       setConteudo("Gestor cadastrado com sucesso!");
     } else {
       handleConfirmacaoIsOpen();
@@ -93,6 +94,7 @@ export default function Perfil() {
 
     if(res.ok){
       handleConfirmacaoIsOpen();
+      handleUpdateModal();
       setConteudo("Dados editados com sucesso!");
     } else {
       handleConfirmacaoIsOpen();

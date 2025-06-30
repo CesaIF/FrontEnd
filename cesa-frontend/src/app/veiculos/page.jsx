@@ -155,7 +155,7 @@ export default function Veiculos() {
                     setConfirmacao("deletado");
                   } else {
                     const erro = await response.json();
-                    alert(erro.message || "Erro ao deletar veiculos");
+                    alert(erro.error || "Erro ao deletar veiculos");
                   }
                 }}
               >
@@ -393,7 +393,7 @@ export default function Veiculos() {
                         });
                       } else {
                         const erro = await response.json();
-                        alert(erro.message || "Erro ao cadastrar veiculo");
+                        alert(erro.error || "Erro ao cadastrar veiculo");
                       }
                     }}
                   >
@@ -527,7 +527,7 @@ export default function Veiculos() {
                         handleConfirmacaoIsOpen();
                         setConfirmacao("editado");
                       } else {
-                        alert(data.message || "Erro ao atualizar veiculo");
+                        alert(data.error || "Erro ao atualizar veiculo");
                       }
                     }}
                   >
@@ -566,21 +566,8 @@ export default function Veiculos() {
                 Atualizar
               </BadButton>
               <BadButton
-                onClick={() => {
-                  handleExpandModal();
-                  handleConfirmacaoIsOpen();
-                  setConfirmacao("ativar");
-                }}
-                colorHover={"#fdbc4d"}
-                cor={"#fca61d"}
-                buttonWidth={"400px"}
-              >
-              Ativar
-              </BadButton>
-              <BadButton
                 onClick={handleExpandModal}
-                colorHover={"#fdbc4d"}
-                cor={"#fca61d"}
+                colorHover={"#181818"}
                 buttonWidth={"400px"}
               >
                 Fechar
