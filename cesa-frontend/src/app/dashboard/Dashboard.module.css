@@ -120,6 +120,10 @@
     width: 100%;
 }
 
+.containerForm {
+    width: 100%;
+}
+
 .modalExpand {
     display: grid;
     grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -214,9 +218,9 @@
 .butaoForm {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     margin-top: 2.5rem;
-    width: 80%;
+    gap: 0px 40%;
 }
 
 .containerModalGeral {

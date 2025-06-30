@@ -65,6 +65,7 @@ export default function Dashboard() {
   const [indexSelecionado, setIndexSelecionado] = useState(null);
   const [conteudo, setConteudo] = useState("");
   const [noticeIsOpen, setNoticeIsOpen] = useState(false);
+  const [gestores, setGestores] = useState([]);
 
   useEffect(() => {
     if(modalContent === "edicao" && locacaoSelecionada){
@@ -173,6 +174,33 @@ export default function Dashboard() {
     .catch((err) => {
       console.error(err);
     })
+  }, []);
+
+  // fetch que mostra dados do gestor.
+  useEffect(() => {
+    
+    const token = localStorage.getItem("token");
+
+    fetch("https://localhost/usuario", {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    }).
+    then(async (res) => {
+      const data = await res.json();
+
+      if (res.ok){
+        setGestores(data);
+      } else {
+        console.log("Erro ao encontrar gestores");
+      }
+    }).
+    catch((err) => {
+      console.error(err);
+    });
+
   }, []);
 
   // fetch que cria locação.
@@ -335,23 +363,37 @@ export default function Dashboard() {
     }
   }
 
-  // função que deletar uma locação.
+  // função que deleta uma locação.
   const handleDeletarLocacao = async (id) => {
     const token = localStorage.getItem("token");
 
-    const res = await fetch(`https://localhost/locacoes/deletar/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json"
-      }
-    });
+    id = locacaoSelecionada.id;
 
-    if (res.ok) {
-      handleNoticeIsOpen();
-      setConteudo("Locação deletada com sucesso!");
-      handleConfirmacaoIsOpen();
+    try {
+
+      const res = await fetch(`https://localhost/locacoes/deletar/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        handleNoticeIsOpen();
+        setConteudo("Locação deletada com sucesso!");
+        handleConfirmacaoIsOpen();
+      } else {
+        handleNoticeIsOpen();
+        setConteudo(data.error);
+      }
+
+    } catch (err) {
+      console.error(err);
     }
+    
   }
 
   // função que fecha o pop-up modal ao clicar na tela fora dele.
@@ -446,21 +488,28 @@ export default function Dashboard() {
       case "deletar":
         return (
           <>
-            <div className={styles.containerModal}>
-              <h1 className="mb-3">
-                Você tem certeza que quer deletar a locação?
-              </h1>
-            </div>
-            <div className={styles.butaoForm}>
-              <BadButton onClick={handleConfirmacaoIsOpen}>Ok</BadButton>
-              <BadButton
-                onClick={() => {
-                  handleConfirmacaoIsOpen();
-                  setConfirmacao("deletado");
-                }}
-              >
-                Deletar
-              </BadButton>
+            <div>
+              <div className={styles.containerInMini}>
+                <h1 className="mb-3">
+                  Você tem certeza que quer deletar a locação?
+                </h1>
+              </div>
+              <div className={styles.butaoMini}>
+                <BadButton onClick={handleConfirmacaoIsOpen} 
+                  textColor={"#48793c"}
+                  colorHover={"#a3bc98"}
+                  cor={"#d1dec7"} >Fechar</BadButton>
+                <BadButton
+                  onClick={() => {
+                    handleDeletarLocacao();
+                    handleConfirmacaoIsOpen();
+                  }}
+                  colorHover={"#769b6a"}
+                  cor={"#48793c"}
+                >
+                  Deletar
+                </BadButton>
+              </div>
             </div>
           </>
         );
@@ -562,77 +611,80 @@ export default function Dashboard() {
             <div className={styles.containerModal}>
               <div className={styles.containerInternoModal}>
                 <h1 className="text-3xl">Cadastro de Locação</h1>
-                <form onSubmit={handleSubmit} className={styles.formAdd}>
-                  <div className={styles.input}>
+                <form onSubmit={handleSubmit} className={styles.containerForm}>
+                  <div className={styles.formAdd}>
+                    <div className={styles.input}>
 
-                    <div className={styles.choiceboxContainer}>
-                      <select
-                      value={placaSelecionada}
-                      onChange={(e) => setPlacaSelecionada(e.target.value)}
-                      >
-                        <option className={styles.choicebox}>Escolha o Veículo</option>
-                        {veiculo.map((veiculos) => (
-                          <option key={veiculos.placa} value={veiculos.placa}>{veiculos.modelo}</option>
-                        ))}
-                      </select>
+                      <div className={styles.choiceboxContainer}>
+                        <select
+                        value={placaSelecionada}
+                        onChange={(e) => setPlacaSelecionada(e.target.value)}
+                        >
+                          <option className={styles.choicebox}>Escolha o Veículo</option>
+                          {veiculo.map((veiculos) => (
+                            <option key={veiculos.placa} value={veiculos.placa}>{veiculos.modelo}</option>
+                          ))}
+                        </select>
+                      </div>
+
                     </div>
+                    <div className={styles.input}>
 
-                  </div>
-                  <div className={styles.input}>
+                      <div className={styles.choiceboxContainer}>
+                        <select
+                        value={motoristaSelecionado}
+                        onChange={(e) => setMotoristaSelecionado(e.target.value)}
+                        >
+                          <option className={styles.choicebox}>Escolha o Motorista</option>
+                          {motorista.map((motoristas) => (
+                            <option key={motoristas.cpf} value={motoristas.cpf}>{motoristas.nome}</option>
+                          ))}
+                        </select>
+                      </div>
 
-                    <div className={styles.choiceboxContainer}>
-                      <select
-                      value={motoristaSelecionado}
-                      onChange={(e) => setMotoristaSelecionado(e.target.value)}
-                      >
-                        <option className={styles.choicebox}>Escolha o Motorista</option>
-                        {motorista.map((motoristas) => (
-                          <option key={motoristas.cpf} value={motoristas.cpf}>{motoristas.nome}</option>
-                        ))}
-                      </select>
                     </div>
-
-                  </div>
-                  <div className={styles.input}>
-                    <Textarea
-                      label={"Itinerário"}
-                      placeholder={"Descreva o Itinerário"}
-                      maxLength={300}
-                      rows={2}
-                      value={itinerario}
-                      onChange={(e) => setItinerario(e.target.value)}
-                    ></Textarea>
-                  </div>
-                  <div className={styles.input}>
-                    <Textarea
-                      label={"Motivo da Saída"}
-                      placeholder={"Descreva o motivo da Saída"}
-                      maxLength={300}
-                      rows={2}
-                      value={motivo}
-                      onChange={(e) => setMotivo(e.target.value)}
-                    ></Textarea>
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput
-                      label={"Data Prevista de Saída"}
-                      type={"datetime-local"}
-                      maxLength={300}
-                      value={dataSaida}
-                      onChange={(e) => setDataSaida(e.target.value)}
-                    ></Ginput>
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput label={"Data Prevista de Chegada"} type={"datetime-local"} maxLength={300} value={dataChegada} onChange={(e) => setDataChegada(e.target.value)}></Ginput>
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput
-                      label={"Autorização"}
-                      type={"text"}
-                      maxLength={300}
-                      value={autorizacao}
-                      onChange={(e) => setAutorizacao(e.target.value)}
-                    ></Ginput>
+                    <div className={styles.input}>
+                      <Textarea
+                        label={"Itinerário"}
+                        placeholder={"Descreva o Itinerário"}
+                        maxLength={300}
+                        rows={2}
+                        value={itinerario}
+                        onChange={(e) => setItinerario(e.target.value)}
+                      ></Textarea>
+                    </div>
+                    <div className={styles.input}>
+                      <Textarea
+                        label={"Motivo da Saída"}
+                        placeholder={"Descreva o motivo da Saída"}
+                        maxLength={300}
+                        rows={2}
+                        value={motivo}
+                        onChange={(e) => setMotivo(e.target.value)}
+                      ></Textarea>
+                    </div>
+                    <div className={styles.input}>
+                      <Ginput
+                        label={"Data Prevista de Saída"}
+                        type={"datetime-local"}
+                        maxLength={300}
+                        value={dataSaida}
+                        onChange={(e) => setDataSaida(e.target.value)}
+                      ></Ginput>
+                    </div>
+                    <div className={styles.input}>
+                      <Ginput label={"Data Prevista de Chegada"} type={"datetime-local"} maxLength={300} value={dataChegada} onChange={(e) => setDataChegada(e.target.value)}></Ginput>
+                    </div>
+                    <div className={styles.input}>
+                      <Ginput
+                        label={"Autorização"}
+                        type={"text"}
+                        placeholder={"Rafael Almeida"}
+                        maxLength={300}
+                        value={autorizacao}
+                        onChange={(e) => setAutorizacao(e.target.value)}
+                      ></Ginput>
+                    </div>
                   </div>
                   <div className={styles.butaoForm}>
                   <BadButton
@@ -650,7 +702,7 @@ export default function Dashboard() {
                   >
                     Criar Locação
                   </BadButton>
-                </div>
+                  </div>
                 </form>
               </div>
             </div>
@@ -667,77 +719,79 @@ export default function Dashboard() {
                   e.preventDefault();
                   handleEditarLocacao(locacaoSelecionada.id);
                 }} 
-                className={styles.formAdd}>
-                  <div className={styles.input}>
+                className={styles.containerForm}>
+                  <div className={styles.formAdd}>
+                    <div className={styles.input}>
 
-                    <div className={styles.choiceboxContainer}>
-                      <select
-                      value={placaSelecionada}
-                      onChange={(e) => setPlacaSelecionada(e.target.value)}
-                      >
-                        <option className={styles.choicebox}>Escolha o Veículo</option>
-                        {veiculo.map((veiculos) => (
-                          <option key={veiculos.placa} value={veiculos.placa}>{veiculos.modelo}</option>
-                        ))}
-                      </select>
+                      <div className={styles.choiceboxContainer}>
+                        <select
+                        value={placaSelecionada}
+                        onChange={(e) => setPlacaSelecionada(e.target.value)}
+                        >
+                          <option className={styles.choicebox}>Escolha o Veículo</option>
+                          {veiculo.map((veiculos) => (
+                            <option key={veiculos.placa} value={veiculos.placa}>{veiculos.modelo}</option>
+                          ))}
+                        </select>
+                      </div>
+
                     </div>
+                    <div className={styles.input}>
 
-                  </div>
-                  <div className={styles.input}>
+                      <div className={styles.choiceboxContainer}>
+                        <select
+                        value={motoristaSelecionado}
+                        onChange={(e) => setMotoristaSelecionado(e.target.value)}
+                        >
+                          <option className={styles.choicebox}>Escolha o Motorista</option>
+                          {motorista.map((motoristas) => (
+                            <option key={motoristas.cpf} value={motoristas.cpf}>{motoristas.nome}</option>
+                          ))}
+                        </select>
+                      </div>
 
-                    <div className={styles.choiceboxContainer}>
-                      <select
-                      value={motoristaSelecionado}
-                      onChange={(e) => setMotoristaSelecionado(e.target.value)}
-                      >
-                        <option className={styles.choicebox}>Escolha o Motorista</option>
-                        {motorista.map((motoristas) => (
-                          <option key={motoristas.cpf} value={motoristas.cpf}>{motoristas.nome}</option>
-                        ))}
-                      </select>
                     </div>
-
-                  </div>
-                  <div className={styles.input}>
-                    <Textarea
-                      label={"Itinerário"}
-                      placeholder={"Descreva o Itinerário"}
-                      maxLength={300}
-                      rows={2}
-                      value={itinerario}
-                      onChange={(e) => setItinerario(e.target.value)}
-                    ></Textarea>
-                  </div>
-                  <div className={styles.input}>
-                    <Textarea
-                      label={"Motivo da Saída"}
-                      placeholder={"Descreva o motivo da Saída"}
-                      maxLength={300}
-                      rows={2}
-                      value={motivo}
-                      onChange={(e) => setMotivo(e.target.value)}
-                    ></Textarea>
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput
-                      label={"Data Prevista de Saída"}
-                      type={"datetime-local"}
-                      maxLength={300}
-                      value={dataSaida}
-                      onChange={(e) => setDataSaida(e.target.value)}
-                    ></Ginput>
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput label={"Data Prevista de Chegada"} type={"datetime-local"} maxLength={300} value={dataChegada} onChange={(e) => setDataChegada(e.target.value)}></Ginput>
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput
-                      label={"Autorização"}
-                      type={"text"}
-                      maxLength={300}
-                      value={autorizacao}
-                      onChange={(e) => setAutorizacao(e.target.value)}
-                    ></Ginput>
+                    <div className={styles.input}>
+                      <Textarea
+                        label={"Itinerário"}
+                        placeholder={"Descreva o Itinerário"}
+                        maxLength={300}
+                        rows={2}
+                        value={itinerario}
+                        onChange={(e) => setItinerario(e.target.value)}
+                      ></Textarea>
+                    </div>
+                    <div className={styles.input}>
+                      <Textarea
+                        label={"Motivo da Saída"}
+                        placeholder={"Descreva o motivo da Saída"}
+                        maxLength={300}
+                        rows={2}
+                        value={motivo}
+                        onChange={(e) => setMotivo(e.target.value)}
+                      ></Textarea>
+                    </div>
+                    <div className={styles.input}>
+                      <Ginput
+                        label={"Data Prevista de Saída"}
+                        type={"datetime-local"}
+                        maxLength={300}
+                        value={dataSaida}
+                        onChange={(e) => setDataSaida(e.target.value)}
+                      ></Ginput>
+                    </div>
+                    <div className={styles.input}>
+                      <Ginput label={"Data Prevista de Chegada"} type={"datetime-local"} maxLength={300} value={dataChegada} onChange={(e) => setDataChegada(e.target.value)}></Ginput>
+                    </div>
+                    <div className={styles.input}>
+                      <Ginput
+                        label={"Autorização"}
+                        type={"text"}
+                        maxLength={300}
+                        value={autorizacao}
+                        onChange={(e) => setAutorizacao(e.target.value)}
+                      ></Ginput>
+                    </div>
                   </div>
                   <div className={styles.butaoForm}>
                   <BadButton
@@ -838,10 +892,14 @@ export default function Dashboard() {
 
                 <div className={styles.tabelaLinha}>
                   <div className={styles.colunaUm}>
-                    <h1>Gestor</h1>
+                    <h1>Gestor:</h1>
                   </div>
                   <div className={styles.colunaDois}>
-                    <h1>{locacaoSelecionada.gestor_cpf_fk}</h1>
+                    {gestores.map((gestoresNome, index) => (
+                      gestoresNome.cpf === locacaoSelecionada.gestor_cpf_fk ? (
+                        <h1 key={index}>{gestoresNome.nome}</h1>
+                      ) : null
+                    ))}
                   </div>
                 </div>
 
@@ -912,7 +970,11 @@ export default function Dashboard() {
               <div className={styles.line}></div>
             </div>
             <div className={styles.containerCard}>
-              {locacoesAgendadas.map((locacaoAgendada, index) => (
+              {locacoesAgendadas.length === 0 ? (
+                <p>Nenhuma locação agendada</p>
+              ) : (
+              
+                locacoesAgendadas.map((locacaoAgendada, index) => (
 
                 <div
                 onContextMenu={(e) => {
@@ -954,7 +1016,7 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              ))}
+              )))}
             </div>
           </div>
           <div className={styles.containerInternoUm}>
@@ -966,7 +1028,11 @@ export default function Dashboard() {
             </div>
 
             <div className={styles.containerCard}>
-                {locacoes.map((locacao, index) => (
+                {locacoes.length === 0 ? (
+                  <p>Nenhuma locação iniciada</p>
+                ) : (
+                
+                locacoes.map((locacao, index) => (
                     <div
                     onClick={() => {
                     handleOpenModal();
@@ -993,7 +1059,7 @@ export default function Dashboard() {
                     </div>
                     </div>
                 </div>
-                ))}
+                )))}
               
             </div>
           </div>
@@ -1048,6 +1114,8 @@ export default function Dashboard() {
                 </BadButton>
                 <BadButton
                   onClick={() => {
+                    const locacaoToDelete = locacoesAgendadas[indexSelecionado];
+                    setLocacaoSelecionada(locacaoToDelete);
                     handleConfirmacaoIsOpen();
                     setConfirmacao("deletar");
                   }}
