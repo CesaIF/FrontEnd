@@ -259,18 +259,19 @@ export default function Porteiros() {
                 <form className={styles.formAdd}>
                   <div className={styles.input}>
                     <Ginput
-                      type={"text"}
-                      placeholder={"123.456.789-89"}
-                      maxLength={200}
-                      label={"Cpf"}
+                      type="text"
+                      placeholder="123.456.789-00"
+                      maxLength={14}
+                      label="Cpf"
                       value={novoPorteiro.cpf}
+                      mask="000.000.000-00"
                       onChange={(e) =>
                         setnovoPorteiro({
                           ...novoPorteiro,
                           cpf: e.target.value,
                         })
                       }
-                    ></Ginput>
+                    />
                   </div>
                   <div className={styles.input}>
                     <Ginput
@@ -319,18 +320,19 @@ export default function Porteiros() {
                   </div>
                   <div className={styles.input}>
                     <Ginput
-                      type={"text"}
-                      placeholder={"(77) 12345-6789"}
-                      maxLength={35}
-                      label={"Telefone"}
+                      type="text"
+                      placeholder="(99) 99999-9999"
+                      maxLength={15}
+                      label="Telefone"
                       value={novoPorteiro.telefone}
+                      mask="(00) 00000-0000"
                       onChange={(e) =>
                         setnovoPorteiro({
                           ...novoPorteiro,
                           telefone: e.target.value,
                         })
                       }
-                    ></Ginput>
+                    />
                   </div>
                   <div className={styles.input}>
                     <Ginput
