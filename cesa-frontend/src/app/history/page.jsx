@@ -9,6 +9,8 @@ const Modal = dynamic(() => import("../components/modal"), { ssr: false });
 import BadButton from "../components/badButton";
 import styles from "./History.module.css";
 import { useAuth } from "../hooks/useAuth";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 export default function History() {
   useAuth();
@@ -52,16 +54,24 @@ export default function History() {
     setSelectedLocacao(null);
     setIsDetailModalOpen(false);
   }
+//Formata a data que vem do back end
+  function formatarDataBonita(dataISO) {
+    if (!dataISO) return "—";
+    try {
+      return format(new Date(dataISO), "dd 'de' MMMM 'de' yyyy 'às' HH:mm", {
+        locale: ptBR,
+      });
+    } catch {
+      return "Data inválida";
+    }
+  }
 
   return (
     <>
       <div
         className={`${styles.containerGeral} ${isOpen ? styles.asideOpen : ""}`}
       >
-        <Header
-          onClick={() => setIsOpen(!isOpen)}
-          isOpen={isOpen}
-        />
+        <Header onClick={() => setIsOpen(!isOpen)} isOpen={isOpen} />
 
         <main className={styles.containerMain}>
           <div className={styles.containerInternoUm}>
@@ -123,20 +133,51 @@ export default function History() {
                 <div className={styles.modalExpand}>
                   {[
                     { label: "ID", value: selectedLocacao.id },
-                    { label: "Saída", value: selectedLocacao.data_saida },
-                    { label: "Chegada", value: selectedLocacao.data_chegada },
+                    { label: "Itinerário", value: selectedLocacao.itinerario },
+                    {
+                      label: "Veículo",
+                      value: selectedLocacao.veiculo_placa_fk,
+                    },
+                    {
+                      label: "Motorista",
+                      value: selectedLocacao.motorista_cpf_fk,
+                    },
+                    {
+                      label: "Saída",
+                      value: formatarDataBonita(selectedLocacao.data_saida),
+                    },
+                    {
+                      label: "Chegada",
+                      value: formatarDataBonita(selectedLocacao.data_chegada),
+                    },
+
                     { label: "KM Saída", value: selectedLocacao.km_saida },
                     { label: "KM Chegada", value: selectedLocacao.km_chegada },
-                    { label: "Itinerário", value: selectedLocacao.itinerario },
-                    { label: "Motivo da saída", value: selectedLocacao.motivo_saida },
-                    { label: "Autorização", value: selectedLocacao.autorizacao },
-                    { label: "Motorista", value: selectedLocacao.motorista_cpf_fk },
-                    { label: "Veículo", value: selectedLocacao.veiculo_placa_fk },
+                    {
+                      label: "Observação Saída",
+                      value: selectedLocacao.observacao_saida,
+                    },
+                    {
+                      label: "Observação Chegada",
+                      value: selectedLocacao.observacao_entrada,
+                    },
+                    {
+                      label: "Porteiro Saída",
+                      value: selectedLocacao.porteiro_saida_fk,
+                    },
+                    {
+                      label: "Porteiro Chegada",
+                      value: selectedLocacao.porteiro_chegada_fk,
+                    },
+                    {
+                      label: "Motivo da saída",
+                      value: selectedLocacao.motivo_saida,
+                    },
                     { label: "Gestor", value: selectedLocacao.gestor_cpf_fk },
-                    { label: "Porteiro Saída", value: selectedLocacao.porteiro_saida_fk },
-                    { label: "Porteiro Chegada", value: selectedLocacao.porteiro_chegada_fk },
-                    { label: "Observação Saída", value: selectedLocacao.observacao_saida },
-                    { label: "Observação Chegada", value: selectedLocacao.observacao_entrada },
+                    {
+                      label: "Autorização",
+                      value: selectedLocacao.autorizacao,
+                    },
                   ].map((item, index) => (
                     <div key={index} className={styles.itemPartUm}>
                       <h1>{item.label}:</h1>
