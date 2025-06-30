@@ -392,7 +392,7 @@ export default function Porteiros() {
                       }
                     }}
                   >
-                    Cadastrar Porteiro
+                    Cadastrar
                   </BadButton>
                 </div>
               </div>
@@ -513,7 +513,7 @@ export default function Porteiros() {
                       }
                     }}
                   >
-                    Atualizar Porteiro
+                    Atualizar 
                   </BadButton>
                 </div>
               </div>

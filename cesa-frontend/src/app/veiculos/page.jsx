@@ -397,7 +397,7 @@ export default function Veiculos() {
                       }
                     }}
                   >
-                    Cadastrar Veículo
+                    Cadastrar 
                   </BadButton>
                 </div>
               </div>
@@ -531,7 +531,7 @@ export default function Veiculos() {
                       }
                     }}
                   >
-                    Atualizar Veículo
+                    Atualizar
                   </BadButton>
                 </div>
               </div>

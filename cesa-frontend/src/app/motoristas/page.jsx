@@ -357,7 +357,7 @@ export default function Motoristas() {
                       }
                     }}
                   >
-                    Cadastrar Motoristas
+                    Cadastrar 
                   </BadButton>
                 </div>
               </div>
@@ -463,7 +463,7 @@ export default function Motoristas() {
                       }
                     }}
                   >
-                    Atualizar Motorista
+                    Atualizar 
                   </BadButton>
                 </div>
               </div>
