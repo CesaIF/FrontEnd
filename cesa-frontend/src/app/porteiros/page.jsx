@@ -13,6 +13,8 @@ import { useAuth } from "../hooks/useAuth";
 
 export default function Porteiros() {
   useAuth();
+
+  const [conteudo, setConteudo] = useState("");
   const [porteiro, setPorteiro] = useState([]);
   const [porteiroEditando, setPorteiroEditando] = useState({
     email: "",
@@ -26,7 +28,7 @@ export default function Porteiros() {
     nome: "",
     senha: "",
     telefone: "",
-    role: "",
+    role: "porteiro",
   });
 
   useEffect(() => {
@@ -201,7 +203,7 @@ export default function Porteiros() {
           <div className={styles.containerInternoUm}>
             <div>
               <div className={styles.containerTitle}>
-                <h1 className={styles.titleLocacao}>Porteiros Cadstrados</h1>
+                <h1 className={styles.titleLocacao}>Porteiros Cadastrados</h1>
                 <button className={styles.butaoAdd} onClick={handleOpenModal}>
                   <CiCirclePlus size={35}></CiCirclePlus>
                 </button>
@@ -322,10 +324,10 @@ export default function Porteiros() {
                     <Ginput
                       type="text"
                       placeholder="(99) 99999-9999"
-                      maxLength={15}
+                      maxLength={16}
                       label="Telefone"
                       value={novoPorteiro.telefone}
-                      mask="(00) 00000-0000"
+                      mask="(00) 0 0000-0000"
                       onChange={(e) =>
                         setnovoPorteiro({
                           ...novoPorteiro,
@@ -333,21 +335,6 @@ export default function Porteiros() {
                         })
                       }
                     />
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput
-                      type={"text"}
-                      placeholder={"Digite se porteiro ou gestor"}
-                      maxLength={250}
-                      label={"Role"}
-                      value={novoPorteiro.role}
-                      onChange={(e) =>
-                        setnovoPorteiro({
-                          ...novoPorteiro,
-                          role: e.target.value,
-                        })
-                      }
-                    ></Ginput>
                   </div>
                 </form>
                 <div className={styles.butaoForm}>
@@ -365,7 +352,7 @@ export default function Porteiros() {
                     onClick={async () => {
                       const token = localStorage.getItem("token");
                       const response = await fetch(
-                        `${process.env.NEXT_PUBLIC_LOCAL}/usuario`,
+                        `${process.env.NEXT_PUBLIC_LOCAL}/usuario/porteiro`,
                         {
                           method: "POST",
                           headers: {
@@ -381,7 +368,7 @@ export default function Porteiros() {
 
                         handleOpenModal();
                         handleConfirmacaoIsOpen();
-                        setConfirmacao("cadastrado");
+                        setConteudo("Cadastrado com sucesso");
 
                         setnovoPorteiro({
                           cpf: "",
@@ -389,10 +376,13 @@ export default function Porteiros() {
                           nome: "",
                           senha: "",
                           telefone: "",
-                          role: "",
+                          role: "porteiro",
                         });
                       } else {
-                        alert(porteiroCadastrado.error || "Erro ao cadastrar ");
+                        handleConfirmacaoIsOpen();
+                        setConteudo(
+                          porteiroCadastrado.error || "Erro ao cadastrar "
+                        );
                       }
                     }}
                   >
@@ -445,6 +435,7 @@ export default function Porteiros() {
                       maxLength={35}
                       label={"Telefone"}
                       value={porteiroEditando.telefone}
+                      mask="(00) 0 0000-0000"
                       onChange={(e) =>
                         setPorteiroEditando({
                           ...porteiroEditando,
@@ -511,9 +502,10 @@ export default function Porteiros() {
                         );
                         handleUpdateModal();
                         handleConfirmacaoIsOpen();
-                        setConfirmacao("editado");
+                        setConteudo(data.message);
                       } else {
-                        alert(data.error || "Erro ao atualizar usuario");
+                        handleConfirmacaoIsOpen();
+                        setConteudo(data.error || "Erro ao atualizar usuario");
                       }
                     }}
                   >
@@ -564,7 +556,20 @@ export default function Porteiros() {
           </Modal>
 
           <Modal isOpen={confirmacaoIsOpen} onClose={handleConfirmacaoIsOpen}>
-            <div className={styles.containerModal}>{renderConfirmacao()}</div>
+            <div className={styles.containerModal}>
+              <div className={styles.containerInMini}>
+                <h1 className="mb-3"> {conteudo} </h1>
+              </div>
+              <div className={styles.butaoForm}>
+                <BadButton
+                  colorHover={"#769b6a"}
+                  cor={"#48793c"}
+                  onClick={handleConfirmacaoIsOpen}
+                >
+                  Ok
+                </BadButton>
+              </div>
+            </div>
           </Modal>
         </main>
         <div className={styles.footer}>
