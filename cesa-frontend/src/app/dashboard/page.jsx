@@ -181,7 +181,7 @@ export default function Dashboard() {
     
     const token = localStorage.getItem("token");
 
-    fetch("https://localhost/usuario", {
+    fetch("https://localhost/usuario/gestor", {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${token}`,
