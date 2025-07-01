@@ -27,7 +27,7 @@ export default function Ginput({
           mask={mask}
           value={value}
           onAccept={handleAccept}
-          unmask={false}
+          unmask={true}
           id={id}
           type={type}
           maxLength={maxLength}

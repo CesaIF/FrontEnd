@@ -265,17 +265,17 @@ export default function Veiculos() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={'ABC-1234'}
-                      maxLength={200}
+                      placeholder={'ABC1234 ou ABC1D23'}
+                      maxLength={8}
                       label={"Placa"}
                       value={novoVeiculo.placa}
                       onChange={(e) =>
                         setNovoVeiculos({
                           ...novoVeiculo,
-                          placa: e.target.value,
+                          placa: e.target.value.toUpperCase(),
                         })
                       }
-                    ></Ginput>
+                    />
                   </div>
                   <div className={styles.input}>
                     <Ginput
