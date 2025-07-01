@@ -12,7 +12,6 @@ import { useAuth } from "../hooks/useAuth";
 import Head from "next/head";
 
 export default function Perfil() {
-
   useAuth();
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -34,8 +33,7 @@ export default function Perfil() {
   const [gestor, setGestor] = useState("");
   const [passIsOpen, setPassIsOpen] = useState(false);
 
-  const handleSubmit = async(e) => {
-
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const token = localStorage.getItem("token");
@@ -43,8 +41,8 @@ export default function Perfil() {
     const res = await fetch("https://localhost/usuario", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json"
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         cpf: cpf,
@@ -52,13 +50,13 @@ export default function Perfil() {
         nome: nome,
         senha: senha,
         telefone: telefone,
-        role: cargo
+        role: cargo,
       }),
     });
 
     const data = await res.json();
 
-    if (res.ok){
+    if (res.ok) {
       handleConfirmacaoIsOpen();
       handleOpenModal();
       setConteudo("Gestor cadastrado com sucesso!");
@@ -66,9 +64,9 @@ export default function Perfil() {
       handleConfirmacaoIsOpen();
       setConteudo(data.error);
     }
-  }
+  };
 
-  const handleEditarGestor = async(e) => {
+  const handleEditarGestor = async (e) => {
     e.preventDefault();
 
     const token = localStorage.getItem("token");
@@ -78,21 +76,21 @@ export default function Perfil() {
     const res = await fetch(`https://localhost/usuario/${cpfGestor}`, {
       method: "PUT",
       headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json"
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         cpf: cpfGestor,
         email: editarEmail,
         nome: editarNome,
         telefone: editarTelefone,
-        role: cargo
-      })
+        role: cargo,
+      }),
     });
 
     const data = await res.json();
 
-    if(res.ok){
+    if (res.ok) {
       handleConfirmacaoIsOpen();
       handleUpdateModal();
       setConteudo("Dados editados com sucesso!");
@@ -100,9 +98,9 @@ export default function Perfil() {
       handleConfirmacaoIsOpen();
       setConteudo(data.error);
     }
-  }
+  };
 
-  const handleEditarSenha = async(e) => {
+  const handleEditarSenha = async (e) => {
     e.preventDefault();
 
     const token = localStorage.getItem("token");
@@ -113,12 +111,12 @@ export default function Perfil() {
       const res = await fetch(`https://localhost/usuario/alter/${cpfGestor}`, {
         method: "PUT",
         headers: {
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          senha: editarSenha
-        })
+          senha: editarSenha,
+        }),
       });
 
       const data = await res.json();
@@ -130,11 +128,10 @@ export default function Perfil() {
         handleConfirmacaoIsOpen();
         setConteudo(data.error);
       }
-      
     } catch (err) {
       console.error(err);
     }
-  }
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -144,24 +141,23 @@ export default function Perfil() {
     fetch(`https://localhost/usuario/${cpfGestor}`, {
       method: "GET",
       headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json"
-      }
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
     })
-    .then(async (res) => {
-      const data = await res.json();
-      console.log("Dados", data);
+      .then(async (res) => {
+        const data = await res.json();
+        console.log("Dados", data);
 
-      if (res.ok){
-        setGestor(data);
-      } else {
-        alert("Erro ao identificar usuário!");
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-
+        if (res.ok) {
+          setGestor(data);
+        } else {
+          alert("Erro ao identificar usuário!");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }, []);
 
   const preencherForm = async () => {
@@ -173,25 +169,24 @@ export default function Perfil() {
       const res = await fetch(`https://localhost/usuario/${cpfGestor}`, {
         method: "GET",
         headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
-        }
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       });
 
       const data = await res.json();
 
-      if (res.ok){
+      if (res.ok) {
         setEditarNome(data.nome);
         setEditarEmail(data.email);
         setEditarTelefone(data.telefone);
       } else {
         alert("Erro ao encontrar usuários!");
       }
-
     } catch (err) {
       console.error(err);
     }
-  }
+  };
 
   function renderConfirmacao() {
     switch (confirmacao) {
@@ -256,10 +251,10 @@ export default function Perfil() {
 
   return (
     <>
-    <Head>
-      <title>Perfil do Gestor</title>
-      <link rel="icon" href="/cesaicon.ico"></link>
-    </Head>
+      <Head>
+        <title>Perfil do Gestor</title>
+        <link rel="icon" href="/cesaicon.ico"></link>
+      </Head>
       <div
         className={`${styles.containerGeral} ${isOpen ? styles.asideOpen : ""}`}
       >
@@ -283,7 +278,6 @@ export default function Perfil() {
             </div>
 
             <div className={styles.containerCard}>
-            
               <div className={styles.card}>
                 <div>
                   <h1 className={styles.titleCardTres}>Editar Senha</h1>
@@ -348,7 +342,7 @@ export default function Perfil() {
               </div>
             </div>
           </div>
-
+          {/* Modal para cadastrar Gestor */}
           <Modal isOpen={modalIsOpen} onClose={handleOpenModal}>
             <div className={styles.containerModal}>
               <div className={styles.containerInternoModal}>
@@ -357,7 +351,7 @@ export default function Perfil() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={'"João Barreto Hünnerbein"'}
+                      placeholder={"João Barreto Hünnerbein"}
                       maxLength={200}
                       label={"Nome"}
                       value={nome}
@@ -367,7 +361,7 @@ export default function Perfil() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={'"joaobarreto@email.com"'}
+                      placeholder={"joaobarreto@email.com"}
                       maxLength={200}
                       label={"Email"}
                       value={email}
@@ -377,27 +371,29 @@ export default function Perfil() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={'"123.456.789-10"'}
+                      placeholder={"123.456.789-10"}
                       maxLength={14}
                       label={"CPF"}
                       value={cpf}
+                      mask={"000.000.000-00"}
                       onChange={(e) => setCpf(e.target.value)}
                     ></Ginput>
                   </div>
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={'"(77) 12345-6789"'}
+                      placeholder={"(77) 12345-6789"}
                       maxLength={15}
                       label={"Telefone"}
                       value={telefone}
+                      mask={"(00) 0 0000-0000"}
                       onChange={(e) => setTelefone(e.target.value)}
                     ></Ginput>
                   </div>
                   <div className={styles.input}>
                     <Ginput
                       type={"password"}
-                      placeholder={'"Digite sua senha"'}
+                      placeholder={"Digite sua senha"}
                       maxLength={30}
                       label={"Senha"}
                       value={senha}
@@ -405,27 +401,27 @@ export default function Perfil() {
                     ></Ginput>
                   </div>
                   <div className={styles.butaoForm}>
-                  <BadButton
-                    textColor={"#48793c"}
-                    colorHover={"#a3bc98"}
-                    cor={"#d1dec7"}
-                    onClick={handleOpenModal}
-                  >
-                    Cancelar
-                  </BadButton>
-                  <BadButton
-                    colorHover={"#769b6a"}
-                    cor={"#48793c"}
-                    type={"submit"}
-                  >
-                    Cadastrar
-                  </BadButton>
-                </div>
+                    <BadButton
+                      textColor={"#48793c"}
+                      colorHover={"#a3bc98"}
+                      cor={"#d1dec7"}
+                      onClick={handleOpenModal}
+                    >
+                      Cancelar
+                    </BadButton>
+                    <BadButton
+                      colorHover={"#769b6a"}
+                      cor={"#48793c"}
+                      type={"submit"}
+                    >
+                      Cadastrar
+                    </BadButton>
+                  </div>
                 </form>
               </div>
             </div>
           </Modal>
-
+          {/* Modal para atualizar dados de gestor */}
           <Modal isOpen={updateModal} onClose={handleUpdateModal}>
             <div className={styles.containerModal}>
               <div className={styles.containerInternoModal}>
@@ -455,26 +451,27 @@ export default function Perfil() {
                       maxLength={15}
                       label={"Telefone"}
                       value={editarTelefone}
+                      mask={"(00) 0 0000-0000"}
                       onChange={(e) => setEditarTelefone(e.target.value)}
                     ></Ginput>
                   </div>
                   <div className={styles.butaoForm}>
-                  <BadButton
-                    textColor={"#48793c"}
-                    colorHover={"#a3bc98"}
-                    cor={"#d1dec7"}
-                    onClick={handleUpdateModal}
-                  >
-                    Cancelar
-                  </BadButton>
-                  <BadButton
-                    colorHover={"#769b6a"}
-                    cor={"#48793c"}
-                    type={"submit"}
-                  >
-                    Atualizar Dados
-                  </BadButton>
-                </div>
+                    <BadButton
+                      textColor={"#48793c"}
+                      colorHover={"#a3bc98"}
+                      cor={"#d1dec7"}
+                      onClick={handleUpdateModal}
+                    >
+                      Cancelar
+                    </BadButton>
+                    <BadButton
+                      colorHover={"#769b6a"}
+                      cor={"#48793c"}
+                      type={"submit"}
+                    >
+                      Atualizar Dados
+                    </BadButton>
+                  </div>
                 </form>
               </div>
             </div>
@@ -488,7 +485,7 @@ export default function Perfil() {
                   <div className={styles.input}>
                     <Ginput
                       type={"password"}
-                      placeholder={'"Digite sua senha"'}
+                      placeholder={"Digite sua senha"}
                       maxLength={30}
                       label={"Senha"}
                       value={editarSenha}
@@ -496,37 +493,41 @@ export default function Perfil() {
                     ></Ginput>
                   </div>
                   <div className={styles.butaoForm}>
-                  <BadButton
-                    textColor={"#48793c"}
-                    colorHover={"#a3bc98"}
-                    cor={"#d1dec7"}
-                    onClick={handlePassModal}
-                  >
-                    Cancelar
-                  </BadButton>
-                  <BadButton
-                    colorHover={"#769b6a"}
-                    cor={"#48793c"}
-                    type={"submit"}
-                  >
-                    Editar
-                  </BadButton>
-                </div>
+                    <BadButton
+                      textColor={"#48793c"}
+                      colorHover={"#a3bc98"}
+                      cor={"#d1dec7"}
+                      onClick={handlePassModal}
+                    >
+                      Cancelar
+                    </BadButton>
+                    <BadButton
+                      colorHover={"#769b6a"}
+                      cor={"#48793c"}
+                      type={"submit"}
+                    >
+                      Editar
+                    </BadButton>
+                  </div>
                 </form>
               </div>
             </div>
           </Modal>
 
-          <Modal width={"400px"} isOpen={confirmacaoIsOpen} onClose={handleConfirmacaoIsOpen}>
+          <Modal
+            width={"400px"}
+            isOpen={confirmacaoIsOpen}
+            onClose={handleConfirmacaoIsOpen}
+          >
             <div className={styles.containerModal}>
               <div className={styles.containerInMini}>
                 <h1 className="mb-3">{conteudo}</h1>
               </div>
               <div className={styles.butaoMini}>
                 <BadButton
-                colorHover={"#769b6a"}
-                cor={"#48793c"}
-                onClick={handleConfirmacaoIsOpen}
+                  colorHover={"#769b6a"}
+                  cor={"#48793c"}
+                  onClick={handleConfirmacaoIsOpen}
                 >
                   Ok
                 </BadButton>

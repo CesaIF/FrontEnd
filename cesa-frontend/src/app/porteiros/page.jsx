@@ -325,7 +325,7 @@ export default function Porteiros() {
                       maxLength={15}
                       label="Telefone"
                       value={novoPorteiro.telefone}
-                      mask="(00) 00000-0000"
+                      mask="(00) 0 0000-0000"
                       onChange={(e) =>
                         setnovoPorteiro({
                           ...novoPorteiro,
@@ -445,6 +445,7 @@ export default function Porteiros() {
                       maxLength={35}
                       label={"Telefone"}
                       value={porteiroEditando.telefone}
+                      mask="(00) 0 0000-0000"
                       onChange={(e) =>
                         setPorteiroEditando({
                           ...porteiroEditando,

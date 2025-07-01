@@ -528,7 +528,7 @@ export default function Dashboard() {
                     type={"text"}
                     maxLength={300}
                     value={observacaoSaida}
-                    placeholder={"\"O carro retornou com um problema.\""}
+                    placeholder={"\"O carro apresenta algum problema.\""}
                     onChange={(e) => setObservacaoSaida(e.target.value)}
                   ></Ginput>
                 </div>
@@ -565,7 +565,7 @@ export default function Dashboard() {
                     type={"text"}
                     maxLength={300}
                     value={observacaoEntrada}
-                    placeholder={"\"O carro retornou com um problema.\""}
+                    placeholder={"\"O carro apresenta algum problema.\""}
                     onChange={(e) => setObservacaoEntrada(e.target.value)}
                   ></Ginput>
                   <Ginput
