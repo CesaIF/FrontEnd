@@ -2,9 +2,12 @@
 
 import Input from "./components/input";
 import GoodButton from "./components/goodButton";
+import BadButton from "./components/badButton";
 import styles from "./Login.module.css";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
+const Modal = dynamic(() => import("./components/modal"), { ssr: false });
 
 function formatarCPF(cpf) {
   cpf = cpf.replace(/\D/g, "");
@@ -18,6 +21,12 @@ export default function Login() {
   const router = useRouter();
   const [cpf, setCpf] = useState("");
   const [senha, setSenha] = useState("");
+  const [conteudo, setConteudo] = useState("");
+  const [noticeIsOpen, setNoticeIsOpen] = useState(false);
+
+  function handleNoticeIsOpen() {
+    setNoticeIsOpen(!noticeIsOpen);
+  }
 
   const handleCPF = (e) => {
     const formatted = formatarCPF(e.target.value);
@@ -88,6 +97,28 @@ export default function Login() {
             <GoodButton onClick={handleLogin}>Entrar</GoodButton>
           </div>
         </div>
+
+          <Modal
+            width={"400px"}
+            isOpen={noticeIsOpen}
+            onClose={handleNoticeIsOpen}
+          >
+            <div className={styles.containerModal}>
+              <div className={styles.containerInMini}>
+                <h1 className="mb-3">{conteudo}</h1>
+              </div>
+              <div className={styles.butaoMini}>
+                <BadButton
+                  colorHover={"#769b6a"}
+                  cor={"#48793c"}
+                  onClick={handleNoticeIsOpen}
+                >
+                  Ok
+                </BadButton>
+              </div>
+            </div>
+          </Modal>
+
       </div>
     </>
   );

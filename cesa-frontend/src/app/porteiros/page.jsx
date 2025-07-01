@@ -58,126 +58,22 @@ export default function Porteiros() {
   };
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [confirmacaoIsOpen, setConfirmacaoIsOpen] = useState(false);
-  const [confirmacao, setConfirmacao] = useState("cadastrado");
+  const [deletarIsOpen, setConfirmacaoIsOpen] = useState(false);
   const [expandModal, setExpandModal] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
   const [updateModal, setUpdateModal] = useState(false);
+  const [noticeIsOpen, setNoticeIsOpen] = useState(false);
 
-  function renderConfirmacao() {
-    switch (confirmacao) {
-      case "cadastrado":
-        return (
-          <>
-            <div className={styles.containerInMini}>
-              <h1 className="mb-3">Porteiro cadastrado com sucesso!</h1>
-            </div>
-            <div className={styles.butaoForm}>
-              <BadButton
-                colorHover={"#769b6a"}
-                cor={"#48793c"}
-                onClick={handleConfirmacaoIsOpen}
-              >
-                Ok
-              </BadButton>
-            </div>
-          </>
-        );
-
-      case "deletado":
-        return (
-          <>
-            <div className={styles.containerInMini}>
-              <h1 className="mb-3">Porteiro deletado com sucesso!</h1>
-            </div>
-            <div className={styles.butaoForm}>
-              <BadButton
-                colorHover={"#769b6a"}
-                cor={"#48793c"}
-                onClick={handleConfirmacaoIsOpen}
-              >
-                Ok
-              </BadButton>
-            </div>
-          </>
-        );
-
-      case "editado":
-        return (
-          <>
-            <div className={styles.containerInMini}>
-              <h1 className="mb-3">Porteiro editado com sucesso!</h1>
-            </div>
-            <div className={styles.butaoForm}>
-              <BadButton
-                colorHover={"#769b6a"}
-                cor={"#48793c"}
-                onClick={handleConfirmacaoIsOpen}
-              >
-                Ok
-              </BadButton>
-            </div>
-          </>
-        );
-
-      case "deletar":
-        return (
-          <>
-            <div className={styles.containerInMini}>
-              <h1 className="mb-3">Tem certeza que deseja deletar?</h1>
-            </div>
-            <div className={styles.butaoForm}>
-              <BadButton
-                textColor={"#48793c"}
-                colorHover={"#a3bc98"}
-                cor={"#d1dec7"}
-                onClick={handleConfirmacaoIsOpen}
-              >
-                Cancelar
-              </BadButton>
-              <BadButton
-                colorHover={"#769b6a"}
-                cor={"#48793c"}
-                onClick={async () => {
-                  const token = localStorage.getItem("token");
-                  const response = await fetch(
-                    `${process.env.NEXT_PUBLIC_LOCAL}/usuario/${porteiroEditando.cpf}`,
-                    {
-                      method: "DELETE",
-                      headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                      },
-                    }
-                  );
-                  if (response.ok) {
-                    setPorteiro((prev) =>
-                      prev.filter((m) => m.cpf !== porteiroEditando.cpf)
-                    );
-                    setConfirmacao("deletado");
-                  } else {
-                    const erro = await response.json();
-                    alert(erro.error || "Erro ao deletar porteiro");
-                  }
-                }}
-              >
-                Deletar
-              </BadButton>
-            </div>
-          </>
-        );
-
-      default:
-        return null;
-    }
+  function handleNoticeIsOpen() {
+    setNoticeIsOpen(!noticeIsOpen);
   }
 
   function handleOpenModal() {
     setModalIsOpen(!modalIsOpen);
   }
 
-  function handleConfirmacaoIsOpen() {
-    setConfirmacaoIsOpen(!confirmacaoIsOpen);
+  function handleDeletarIsOpen() {
+    setConfirmacaoIsOpen(!deletarIsOpen);
   }
 
   function handleExpandModal() {
@@ -367,7 +263,7 @@ export default function Porteiros() {
                         setPorteiro((prev) => [...prev, porteiroCadastrado]);
 
                         handleOpenModal();
-                        handleConfirmacaoIsOpen();
+                        handleNoticeIsOpen();
                         setConteudo("Cadastrado com sucesso");
 
                         setnovoPorteiro({
@@ -379,7 +275,7 @@ export default function Porteiros() {
                           role: "porteiro",
                         });
                       } else {
-                        handleConfirmacaoIsOpen();
+                        handleNoticeIsOpen();
                         setConteudo(
                           porteiroCadastrado.error || "Erro ao cadastrar "
                         );
@@ -501,10 +397,10 @@ export default function Porteiros() {
                           )
                         );
                         handleUpdateModal();
-                        handleConfirmacaoIsOpen();
+                        handleNoticeIsOpen();
                         setConteudo(data.message);
                       } else {
-                        handleConfirmacaoIsOpen();
+                        handleNoticeIsOpen();
                         setConteudo(data.error || "Erro ao atualizar usuario");
                       }
                     }}
@@ -524,8 +420,7 @@ export default function Porteiros() {
               <BadButton
                 onClick={() => {
                   handleExpandModal();
-                  handleConfirmacaoIsOpen();
-                  setConfirmacao("deletar");
+                  handleDeletarIsOpen();
                 }}
                 textColor={"#48793c"}
                 colorHover={"#a3bc98"}
@@ -555,21 +450,71 @@ export default function Porteiros() {
             </div>
           </Modal>
 
-          <Modal isOpen={confirmacaoIsOpen} onClose={handleConfirmacaoIsOpen}>
+          <Modal isOpen={noticeIsOpen} onClose={handleNoticeIsOpen}>
             <div className={styles.containerModal}>
               <div className={styles.containerInMini}>
                 <h1 className="mb-3"> {conteudo} </h1>
               </div>
-              <div className={styles.butaoForm}>
+              <div className={styles.butaoMini}>
                 <BadButton
                   colorHover={"#769b6a"}
                   cor={"#48793c"}
-                  onClick={handleConfirmacaoIsOpen}
+                  onClick={handleNoticeIsOpen}
                 >
                   Ok
                 </BadButton>
               </div>
             </div>
+          </Modal>
+
+          <Modal isOpen={deletarIsOpen} onClose={handleDeletarIsOpen}>
+            <div className={styles.containerModal}>
+
+              <div className={styles.containerInMini}>
+                <h1 className="mb-3">Tem certeza que deseja deletar?</h1>
+              </div>
+              <div className={styles.butaoForm}>
+                <BadButton
+                  textColor={"#48793c"}
+                  colorHover={"#a3bc98"}
+                  cor={"#d1dec7"}
+                  onClick={handleDeletarIsOpen}
+                >
+                  Cancelar
+                </BadButton>
+                <BadButton
+                  colorHover={"#769b6a"}
+                  cor={"#48793c"}
+                  onClick={async () => {
+                    const token = localStorage.getItem("token");
+                    const response = await fetch(
+                      `${process.env.NEXT_PUBLIC_LOCAL}/usuario/${porteiroEditando.cpf}`,
+                      {
+                        method: "DELETE",
+                        headers: {
+                          "Content-Type": "application/json",
+                          Authorization: `Bearer ${token}`,
+                        },
+                      }
+                    );
+                    if (response.ok) {
+                      setPorteiro((prev) =>
+                        prev.filter((m) => m.cpf !== porteiroEditando.cpf)
+                      );
+                      handleNoticeIsOpen();
+                      setConteudo("Porteiro deletado com sucesso!");
+                    } else {
+                      const erro = await response.json();
+                      handleNoticeIsOpen();
+                      setConteudo(erro.error || "Erro ao deletar porteiro");
+                    }
+                  }}
+                >
+                  Deletar
+                </BadButton>
+              </div>
+
+              </div>
           </Modal>
         </main>
         <div className={styles.footer}>

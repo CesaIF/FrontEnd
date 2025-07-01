@@ -54,122 +54,19 @@ export default function Motoristas() {
   };
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [confirmacaoIsOpen, setConfirmacaoIsOpen] = useState(false);
-  const [confirmacao, setConfirmacao] = useState("cadastrado");
+  const [deletarIsOpen, setDeletarIsOpen] = useState(false);
   const [expandModal, setExpandModal] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
   const [updateModal, setUpdateModal] = useState(false);
   const [conteudo, setConteudo] = useState("");
+  const [noticeIsOpen, setNoticeIsOpen] = useState(false);
 
-  function renderConfirmacao() {
-    switch (confirmacao) {
-      case "cadastrado":
-        return (
-          <>
-            <div className={styles.containerInMini}>
-              <h1 className="mb-3">Motorista cadastrado com sucesso!</h1>
-            </div>
-            <div className={styles.butaoForm}>
-              <BadButton
-                colorHover={"#769b6a"}
-                cor={"#48793c"}
-                onClick={handleConfirmacaoIsOpen}
-              >
-                Ok
-              </BadButton>
-            </div>
-          </>
-        );
-
-      case "deletado":
-        return (
-          <>
-            <div className={styles.containerInMini}>
-              <h1 className="mb-3">Motorista deletado com sucesso!</h1>
-            </div>
-            <div className={styles.butaoForm}>
-              <BadButton
-                colorHover={"#769b6a"}
-                cor={"#48793c"}
-                onClick={handleConfirmacaoIsOpen}
-              >
-                Ok
-              </BadButton>
-            </div>
-          </>
-        );
-
-      case "editado":
-        return (
-          <>
-            <div className={styles.containerInMini}>
-              <h1 className="mb-3">Motorista editado com sucesso!</h1>
-            </div>
-            <div className={styles.butaoForm}>
-              <BadButton
-                colorHover={"#769b6a"}
-                cor={"#48793c"}
-                onClick={handleConfirmacaoIsOpen}
-              >
-                Ok
-              </BadButton>
-            </div>
-          </>
-        );
-      case "deletar":
-        return (
-          <>
-            <div className={styles.containerInMini}>
-              <h1 className="mb-3">Tem certeza que deseja deletar?</h1>
-            </div>
-            <div className={styles.butaoForm}>
-              <BadButton
-                textColor={"#48793c"}
-                colorHover={"#a3bc98"}
-                cor={"#d1dec7"}
-                onClick={handleConfirmacaoIsOpen}
-              >
-                Cancelar
-              </BadButton>
-              <BadButton
-                colorHover={"#769b6a"}
-                cor={"#48793c"}
-                onClick={async () => {
-                  const token = localStorage.getItem("token");
-                  const response = await fetch(
-                    `${process.env.NEXT_PUBLIC_LOCAL}/motoristas/${motoristaEditando.cpf}`,
-                    {
-                      method: "DELETE",
-                      headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                      },
-                    }
-                  );
-                  if (response.ok) {
-                    setMotoristas((prev) =>
-                      prev.filter((m) => m.cpf !== motoristaEditando.cpf)
-                    );
-                    setConfirmacao("deletado");
-                  } else {
-                    const erro = await response.json();
-                    alert(erro.message || "Erro ao deletar motorista. ");
-                  }
-                }}
-              >
-                Deletar
-              </BadButton>
-            </div>
-          </>
-        );
-
-      default:
-        return null;
-    }
+  function handleNoticeIsOpen() {
+    setNoticeIsOpen(!noticeIsOpen);
   }
 
-  function handleConfirmacaoIsOpen() {
-    setConfirmacaoIsOpen(!confirmacaoIsOpen);
+  function handleDeletarIsOpen() {
+    setDeletarIsOpen(!deletarIsOpen);
   }
 
   function handleOpenModal() {
@@ -345,8 +242,8 @@ export default function Motoristas() {
                         setMotoristas((prev) => [...prev, motoristaCadastrado]);
 
                         handleOpenModal();
-                        handleConfirmacaoIsOpen();
-                        setConfirmacao("cadastrado");
+                        handleNoticeIsOpen();
+                        setConteudo("Motorista cadastrado com sucesso!");
 
                         setNovoMotorista({
                           cpf: "",
@@ -356,7 +253,8 @@ export default function Motoristas() {
                         });
                       } else {
                         const mensage = await response.json();
-                        alert(mensage.error || "Erro ao cadastrar motorista");
+                        handleNoticeIsOpen();
+                        setConteudo(mensage.error || "Erro ao cadastrar motorista");
                       }
                     }}
                   >
@@ -460,10 +358,11 @@ export default function Motoristas() {
                           )
                         );
                         handleUpdateModal();
-                        handleConfirmacaoIsOpen();
-                        setConfirmacao("editado");
+                        handleNoticeIsOpen();
+                        setConteudo("Motorista editado com sucesso!");
                       } else {
-                        alert(data.error || "Erro ao atualizar motorista");
+                        handleNoticeIsOpen();
+                        setConteudo(data.error || "Erro ao atualizar motorista");
                       }
                     }}
                   >
@@ -483,8 +382,7 @@ export default function Motoristas() {
               <BadButton
                 onClick={() => {
                   handleExpandModal();
-                  handleConfirmacaoIsOpen();
-                  setConfirmacao("deletar");
+                  handleDeletarIsOpen();
                 }}
                 textColor={"#48793c"}
                 colorHover={"#a3bc98"}
@@ -514,20 +412,68 @@ export default function Motoristas() {
             </div>
           </Modal>
 
-          <Modal isOpen={confirmacaoIsOpen} onClose={handleConfirmacaoIsOpen}>
+          <Modal isOpen={deletarIsOpen} onClose={handleDeletarIsOpen}>
             <div className={styles.containerModal}>
               <div className={styles.containerInMini}>
-              <h1 className="mb-3">{conteudo}</h1>
+              <h1 className="mb-3">Tem certeza que deseja deletar?</h1>
             </div>
             <div className={styles.butaoForm}>
               <BadButton
+                textColor={"#48793c"}
+                colorHover={"#a3bc98"}
+                cor={"#d1dec7"}
+                onClick={handleDeletarIsOpen}
+              >
+                Cancelar
+              </BadButton>
+              <BadButton
                 colorHover={"#769b6a"}
                 cor={"#48793c"}
-                onClick={handleConfirmacaoIsOpen}
+                onClick={async () => {
+                  const token = localStorage.getItem("token");
+                  const response = await fetch(
+                    `${process.env.NEXT_PUBLIC_LOCAL}/motoristas/${motoristaEditando.cpf}`,
+                    {
+                      method: "DELETE",
+                      headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                      },
+                    }
+                  );
+                  if (response.ok) {
+                    setMotoristas((prev) =>
+                      prev.filter((m) => m.cpf !== motoristaEditando.cpf)
+                    );
+                    handleNoticeIsOpen();
+                    setConteudo("Motorista deletado com sucesso!");
+                  } else {
+                    const erro = await response.json();
+                    handleNoticeIsOpen();
+                    setConteudo(erro.message || "Erro ao deletar motorista. ");
+                  }
+                }}
               >
-                Ok
+                Deletar
               </BadButton>
             </div>
+            </div>
+          </Modal>
+
+          <Modal isOpen={noticeIsOpen} onClose={handleNoticeIsOpen}>
+            <div className={styles.containerModal}>
+              <div className={styles.containerInMini}>
+                <h1 className="mb-3">{conteudo}</h1>
+              </div>
+              <div className={styles.butaoMini}>
+                <BadButton
+                  colorHover={"#769b6a"}
+                  cor={"#48793c"}
+                  onClick={handleNoticeIsOpen}
+                >
+                  Ok
+                </BadButton>
+              </div>
             </div>
           </Modal>
         </main>

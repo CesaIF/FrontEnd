@@ -15,7 +15,7 @@ export default function Perfil() {
   useAuth();
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [confirmacaoIsOpen, setConfirmacaoIsOpen] = useState(false);
+  const [noticeIsOpen, setNoticeIsOpen] = useState(false);
   const [confirmacao, setConfirmacao] = useState("cadastrado");
   const [isOpen, setIsOpen] = useState(true);
   const [updateModal, setUpdateModal] = useState(false);
@@ -57,11 +57,11 @@ export default function Perfil() {
     const data = await res.json();
 
     if (res.ok) {
-      handleConfirmacaoIsOpen();
+      handleNoticeIsOpen();
       handleOpenModal();
       setConteudo("Gestor cadastrado com sucesso!");
     } else {
-      handleConfirmacaoIsOpen();
+      handleNoticeIsOpen();
       setConteudo(data.error);
     }
   };
@@ -91,11 +91,11 @@ export default function Perfil() {
     const data = await res.json();
 
     if (res.ok) {
-      handleConfirmacaoIsOpen();
+      handleNoticeIsOpen();
       handleUpdateModal();
       setConteudo("Dados editados com sucesso!");
     } else {
-      handleConfirmacaoIsOpen();
+      handleNoticeIsOpen();
       setConteudo(data.error);
     }
   };
@@ -122,10 +122,10 @@ export default function Perfil() {
       const data = await res.json();
 
       if (res.ok) {
-        handleConfirmacaoIsOpen();
+        handleNoticeIsOpen();
         setConteudo("Senha alterada com sucesso!");
       } else {
-        handleConfirmacaoIsOpen();
+        handleNoticeIsOpen();
         setConteudo(data.error);
       }
     } catch (err) {
@@ -188,50 +188,6 @@ export default function Perfil() {
     }
   };
 
-  function renderConfirmacao() {
-    switch (confirmacao) {
-      case "cadastrado":
-        return (
-          <>
-            <div className={styles.containerInMini}>
-              <h1 className="mb-3">Motorista cadastrado com sucesso!</h1>
-              <h1>Data!</h1>
-            </div>
-            <div className={styles.butaoForm}>
-              <BadButton
-                colorHover={"#769b6a"}
-                cor={"#48793c"}
-                onClick={handleConfirmacaoIsOpen}
-              >
-                Ok
-              </BadButton>
-            </div>
-          </>
-        );
-
-      case "editado":
-        return (
-          <>
-            <div className={styles.containerInMini}>
-              <h1 className="mb-3">Motorista editado com sucesso!</h1>
-            </div>
-            <div className={styles.butaoForm}>
-              <BadButton
-                colorHover={"#769b6a"}
-                cor={"#48793c"}
-                onClick={handleConfirmacaoIsOpen}
-              >
-                Ok
-              </BadButton>
-            </div>
-          </>
-        );
-
-      default:
-        return null;
-    }
-  }
-
   function handleOpenModal() {
     setModalIsOpen(!modalIsOpen);
   }
@@ -240,8 +196,8 @@ export default function Perfil() {
     setPassIsOpen(!passIsOpen);
   }
 
-  function handleConfirmacaoIsOpen() {
-    setConfirmacaoIsOpen(!confirmacaoIsOpen);
+  function handleNoticeIsOpen() {
+    setNoticeIsOpen(!noticeIsOpen);
   }
 
   function handleUpdateModal() {
@@ -516,8 +472,8 @@ export default function Perfil() {
 
           <Modal
             width={"400px"}
-            isOpen={confirmacaoIsOpen}
-            onClose={handleConfirmacaoIsOpen}
+            isOpen={noticeIsOpen}
+            onClose={handleNoticeIsOpen}
           >
             <div className={styles.containerModal}>
               <div className={styles.containerInMini}>
@@ -527,7 +483,7 @@ export default function Perfil() {
                 <BadButton
                   colorHover={"#769b6a"}
                   cor={"#48793c"}
-                  onClick={handleConfirmacaoIsOpen}
+                  onClick={handleNoticeIsOpen}
                 >
                   Ok
                 </BadButton>
