@@ -59,6 +59,7 @@ export default function Motoristas() {
   const [expandModal, setExpandModal] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
   const [updateModal, setUpdateModal] = useState(false);
+  const [conteudo, setConteudo] = useState("");
 
   function renderConfirmacao() {
     switch (confirmacao) {
@@ -511,7 +512,20 @@ export default function Motoristas() {
           </Modal>
 
           <Modal isOpen={confirmacaoIsOpen} onClose={handleConfirmacaoIsOpen}>
-            <div className={styles.containerModal}>{renderConfirmacao()}</div>
+            <div className={styles.containerModal}>
+              <div className={styles.containerInMini}>
+              <h1 className="mb-3">{conteudo}</h1>
+            </div>
+            <div className={styles.butaoForm}>
+              <BadButton
+                colorHover={"#769b6a"}
+                cor={"#48793c"}
+                onClick={handleConfirmacaoIsOpen}
+              >
+                Ok
+              </BadButton>
+            </div>
+            </div>
           </Modal>
         </main>
         <div className={styles.footer}>
