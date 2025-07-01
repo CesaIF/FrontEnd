@@ -450,7 +450,7 @@ export default function Porteiros() {
             </div>
           </Modal>
 
-          <Modal isOpen={noticeIsOpen} onClose={handleNoticeIsOpen}>
+          <Modal width={"400px"} isOpen={noticeIsOpen} onClose={handleNoticeIsOpen}>
             <div className={styles.containerModal}>
               <div className={styles.containerInMini}>
                 <h1 className="mb-3"> {conteudo} </h1>
@@ -502,6 +502,7 @@ export default function Porteiros() {
                         prev.filter((m) => m.cpf !== porteiroEditando.cpf)
                       );
                       handleNoticeIsOpen();
+                      handleDeletarIsOpen();
                       setConteudo("Porteiro deletado com sucesso!");
                     } else {
                       const erro = await response.json();

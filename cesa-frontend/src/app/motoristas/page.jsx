@@ -446,6 +446,7 @@ export default function Motoristas() {
                       prev.filter((m) => m.cpf !== motoristaEditando.cpf)
                     );
                     handleNoticeIsOpen();
+                    handleDeletarIsOpen();
                     setConteudo("Motorista deletado com sucesso!");
                   } else {
                     const erro = await response.json();
@@ -460,7 +461,7 @@ export default function Motoristas() {
             </div>
           </Modal>
 
-          <Modal isOpen={noticeIsOpen} onClose={handleNoticeIsOpen}>
+          <Modal width={"400px"} isOpen={noticeIsOpen} onClose={handleNoticeIsOpen}>
             <div className={styles.containerModal}>
               <div className={styles.containerInMini}>
                 <h1 className="mb-3">{conteudo}</h1>

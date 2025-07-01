@@ -11,6 +11,7 @@ import styles from "./History.module.css";
 import { useAuth } from "../hooks/useAuth";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { FaFileExport } from "react-icons/fa6";
 
 export default function History() {
   useAuth();
@@ -79,7 +80,7 @@ export default function History() {
               <div className={styles.containerTitle}>
                 <h1 className={styles.titleLocacao}>Locações Finalizadas</h1>
                 <button className={styles.butaoAdd} onClick={handleOpenModal}>
-                  <CiCirclePlus size={35} />
+                  <FaFileExport size={35} />
                 </button>
               </div>
               <div className={styles.line}></div>

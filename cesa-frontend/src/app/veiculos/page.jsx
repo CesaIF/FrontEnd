@@ -508,6 +508,7 @@ export default function Veiculos() {
                         prev.filter((m) => m.placa !== veiculosEditando.placa)
                       );
                       handleNoticeIsOpen();
+                      handleDeletarIsOpen();
                       setConteudo("Veículo deletado com sucesso!");
                     } else {
                       const erro = await response.json();
@@ -522,7 +523,7 @@ export default function Veiculos() {
             </div>
           </Modal>
 
-          <Modal isOpen={noticeIsOpen} onClose={handleNoticeIsOpen}>
+          <Modal width={"400px"} isOpen={noticeIsOpen} onClose={handleNoticeIsOpen}>
             <div className={styles.containerModal}>
               <div className={styles.containerInMini}>
               <h1 className="mb-3">{conteudo}</h1>
