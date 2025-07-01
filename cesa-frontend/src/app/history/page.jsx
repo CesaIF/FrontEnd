@@ -151,8 +151,8 @@ export default function History() {
                       value: formatarData(selectedLocacao.data_chegada),
                     },
 
-                    { label: "KM Saída", value: selectedLocacao.km_saida },
-                    { label: "KM Chegada", value: selectedLocacao.km_chegada },
+                    { label: "Quilometragem de Saída", value: selectedLocacao.km_saida },
+                    { label: "Quilometragem de Chegada", value: selectedLocacao.km_chegada },
                     {
                       label: "Observação Saída",
                       value: selectedLocacao.observacao_saida,
