@@ -258,6 +258,7 @@ export default function Motoristas() {
                       maxLength={200}
                       label={"CPF"}
                       value={novoMotorista.cpf}
+                      mask={"000.000.000-00"}
                       onChange={(e) =>
                         setNovoMotorista({
                           ...novoMotorista,
@@ -288,6 +289,7 @@ export default function Motoristas() {
                       maxLength={200}
                       label={"telefone"}
                       value={novoMotorista.telefone}
+                      mask={"(00) 0 0000-0000"}
                       onChange={(e) =>
                         setNovoMotorista({
                           ...novoMotorista,
@@ -393,6 +395,7 @@ export default function Motoristas() {
                       maxLength={200}
                       label={"Telefone"}
                       value={motoristaEditando.telefone}
+                      mask={"(00) 0 0000-0000"}
                       onChange={(e) =>
                         setMotoristaEditando({
                           ...motoristaEditando,
