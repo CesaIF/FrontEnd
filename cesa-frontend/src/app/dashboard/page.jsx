@@ -16,6 +16,7 @@ import styles from "./Dashboard.module.css";
 import Ginput from "../components/gInput";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { useAuth } from "../hooks/useAuth";
+import { FcShipped } from "react-icons/fc";
 
 // exportação da página principal a ser chamada nas rotas.
 export default function Dashboard() {
@@ -66,6 +67,7 @@ export default function Dashboard() {
   const [conteudo, setConteudo] = useState("");
   const [noticeIsOpen, setNoticeIsOpen] = useState(false);
   const [gestores, setGestores] = useState([]);
+  const [usuario, setUsuario] = useState(null);
 
   useEffect(() => {
     if(modalContent === "edicao" && locacaoSelecionada){
@@ -174,6 +176,32 @@ export default function Dashboard() {
     .catch((err) => {
       console.error(err);
     })
+  }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    const cpfUsuario = localStorage.getItem("cpf");
+
+    fetch(`${process.env.NEXT_PUBLIC_LOCAL}/usuario/${cpfUsuario}`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      }
+    }).
+    then(async (res) => {
+      const data = await res.json();
+
+      if(res.ok) {
+        setUsuario(data);
+      } else {
+        console.log(data.error);
+      }
+    }).
+    catch((err) => {
+      console.error(err);
+    });
+
   }, []);
 
   // fetch que mostra dados do gestor.
@@ -952,7 +980,12 @@ export default function Dashboard() {
           isOpen={isOpen}
         ></Header>
         <main className={styles.containerMain}>
+          
           <div className={styles.containerInternoUm}>
+            <div className={styles.containerWelcome}>
+              <h1 className={styles.titleWelcome}>Olá, {usuario?.nome || "Usuário"}</h1>
+              <FcShipped size={25}/>
+            </div>
             <div>
               <div className={styles.containerTitle}>
                 <h1 className={styles.titleLocacao}>Locações Agendadas</h1>

@@ -32,6 +32,22 @@
     align-items: center;
 }
 
+.containerWelcome {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1rem;
+    gap: 0rem 0.5rem;
+    color: #555555;
+}
+
+.titleWelcome {
+    font-size: 25px;
+    color: #48793c;
+}
+
 .titleLocacao {
     font-size: 24px;
 }
