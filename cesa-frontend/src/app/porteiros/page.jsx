@@ -484,7 +484,6 @@ export default function Porteiros() {
               >
                 Atualizar
               </BadButton>
-              <BadButton onClick={() => {handleExpandModal(); handleSenhaModal();}}>Atualizar Senha</BadButton>
               <BadButton
                 onClick={handleExpandModal}
                 colorHover={"#181818"}
