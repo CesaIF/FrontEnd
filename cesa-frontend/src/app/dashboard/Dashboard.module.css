@@ -32,6 +32,22 @@
     align-items: center;
 }
 
+.containerWelcome {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1rem;
+    gap: 0rem 0.5rem;
+    color: #555555;
+}
+
+.titleWelcome {
+    font-size: 25px;
+    color: #48793c;
+}
+
 .titleLocacao {
     font-size: 24px;
 }
@@ -72,6 +88,7 @@
     border-radius: 10px;
     box-shadow: 6px 6px 10px #e0dee0;
     gap: 1rem;
+    align-items: center;
 }
 
 .containerTitles {
@@ -88,9 +105,18 @@
     box-shadow: 8px 8px 20px #e0dee0;
 }
 
+.titleCard {
+    font-size: 16px
+}
+
 .titleCardDois {
     color: #769b6a;
     font-size: 14px;
+}
+
+.titleCardTres {
+    color: #FF7601;
+    font-size: 18px;
 }
 
 .containerModal {
@@ -110,11 +136,41 @@
     width: 100%;
 }
 
+.containerForm {
+    width: 100%;
+}
+
 .modalExpand {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    justify-items: center;
-    gap: 2rem;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    align-items: center;
+    gap: 0rem;
+    width: 90%;
+    border-width: 1px;
+    border-color: #a3bc98;
+    border-radius: 1rem;
+}
+
+.tabelaLinha {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    border-bottom-width: 1px;
+    border-color: #a3bc98;
+}
+
+.tabelaUltimaLinha {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+}
+
+.colunaUm {
+    padding: 0.3rem 0.5rem;
+    border-right-width: 1px;
+    border-color: #769b6a;
+}
+
+.colunaDois {
+    padding: 0.3rem 0.5rem;
 }
 
 .partUm {
@@ -165,8 +221,8 @@
 .formAdd {
     width: 100%;
     margin-top: 2.5rem;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.5rem;
 }
 
@@ -178,9 +234,9 @@
 .butaoForm {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     margin-top: 2.5rem;
-    width: 80%;
+    gap: 0px 40%;
 }
 
 .containerModalGeral {
@@ -195,6 +251,10 @@
     border-radius: 100%;
     transition: background-color 0.3s ease;
     cursor: pointer;
+}
+
+.threeDotsContainer {
+    height: 100%;
 }
 
 .threeDots:hover {
@@ -218,9 +278,8 @@
     position: absolute;
     background-color: white;
     box-shadow: 8px 8px 20px #808080;
-    padding: 1rem 1rem;
-    width: 20rem;
-    border-radius: 2rem;
+    padding: 1.5rem 3rem;
+    width: auto;
     display: grid;
     grid-template-columns: repeat(1, minmax(0, 1fr));
     justify-items: center;
@@ -230,4 +289,50 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
+}
+
+.choiceboxContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 0.125rem 2.5rem;
+    height: 45px;
+    width: 100%;
+    justify-content: center;
+    background-color: #efeeef;
+    border-color: #a3bc98;
+    border-bottom-width: 2px;
+}
+
+.choicebox {
+    color: black;
+    background-color: white;
+    width: 100%;
+}
+
+.containerInMini {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.containerConfirm {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.butaoMini {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.containerInternoConfirm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
