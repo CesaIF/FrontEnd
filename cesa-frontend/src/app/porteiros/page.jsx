@@ -562,7 +562,7 @@ export default function Porteiros() {
               <div className={styles.containerInternoModal}>
                 <h1 className="text-3xl">Atualizar Porteiros</h1>
                 <form className={styles.formAdd}>
-                  <div className={styles.input}>
+                  <div className={styles.choiceboxContainer}>
                     <select value={cpf} onChange={(e) => setCpf(e.target.value)}>
                       <label>Escolha o porteiro a editar a senha</label>
 
@@ -595,7 +595,7 @@ export default function Porteiros() {
                   <BadButton
                     colorHover={"#769b6a"}
                     cor={"#48793c"}
-                    onClick={handleEditarSenha(cpf)}
+                    onClick={() => handleEditarSenha(cpf)}
                   >
                     Atualizar
                   </BadButton>
