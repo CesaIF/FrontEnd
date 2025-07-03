@@ -21,6 +21,27 @@ export default function History() {
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedLocacao, setSelectedLocacao] = useState(null);
 
+  const handleBaixar = async () => {
+    const token = localStorage.getItem("token");
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_LOCAL}/relatorio/gerarcsv`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const blob = await response.blob();
+
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "Relatorio.csv"; // Nome padrão
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  };
+
   useEffect(() => {
     const fetchLocacoes = async () => {
       try {
@@ -55,7 +76,7 @@ export default function History() {
     setSelectedLocacao(null);
     setIsDetailModalOpen(false);
   }
-//Formata a data que vem do back end
+  //Formata a data que vem do back end
   function formatarData(dataISO) {
     if (!dataISO) return "—";
     try {
@@ -79,7 +100,7 @@ export default function History() {
             <div>
               <div className={styles.containerTitle}>
                 <h1 className={styles.titleLocacao}>Locações Finalizadas</h1>
-                <button className={styles.butaoAdd} onClick={handleOpenModal}>
+                <button className={styles.butaoAdd} onClick={handleBaixar}>
                   <FaFileExport size={35} />
                 </button>
               </div>
@@ -152,8 +173,14 @@ export default function History() {
                       value: formatarData(selectedLocacao.data_chegada),
                     },
 
-                    { label: "Quilometragem de Saída", value: selectedLocacao.km_saida },
-                    { label: "Quilometragem de Chegada", value: selectedLocacao.km_chegada },
+                    {
+                      label: "Quilometragem de Saída",
+                      value: selectedLocacao.km_saida,
+                    },
+                    {
+                      label: "Quilometragem de Chegada",
+                      value: selectedLocacao.km_chegada,
+                    },
                     {
                       label: "Observação Saída",
                       value: selectedLocacao.observacao_saida,
