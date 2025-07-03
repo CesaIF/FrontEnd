@@ -82,7 +82,7 @@ export default function Dashboard() {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch(`${process.env.NEXT_PUBLIC_LOCAL}locacoes/ativos`, {
+    fetch(`${process.env.NEXT_PUBLIC_LOCAL}/locacoes/ativos`, {
         method: "GET",
         headers: {
             "Authorization": `Bearer ${token}`,
@@ -108,7 +108,7 @@ export default function Dashboard() {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch(`${process.env.NEXT_PUBLIC_LOCAL}veiculos`, {
+    fetch(`${process.env.NEXT_PUBLIC_LOCAL}/veiculos`, {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -132,7 +132,7 @@ export default function Dashboard() {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch(`${process.env.NEXT_PUBLIC_LOCAL}motoristas`, {
+    fetch(`${process.env.NEXT_PUBLIC_LOCAL}/motoristas`, {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${token}`, 
@@ -157,7 +157,7 @@ export default function Dashboard() {
 
     const token = localStorage.getItem("token")
 
-    fetch(`${process.env.NEXT_PUBLIC_LOCAL}locacoes`, {
+    fetch(`${process.env.NEXT_PUBLIC_LOCAL}/locacoes`, {
       headers:{
         "Authorization": `Bearer ${token}`,
       },
@@ -181,7 +181,7 @@ export default function Dashboard() {
     
     const token = localStorage.getItem("token");
 
-    fetch(`${process.env.NEXT_PUBLIC_LOCAL}usuario/gestor`, {
+    fetch(`${process.env.NEXT_PUBLIC_LOCAL}/usuario/gestor`, {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -210,7 +210,7 @@ export default function Dashboard() {
     const token = localStorage.getItem("token");
     const cpfGestor = localStorage.getItem("cpf");
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}locacoes`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}/locacoes`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -252,7 +252,7 @@ export default function Dashboard() {
       const token = localStorage.getItem("token");
       const cpfPorteiro = localStorage.getItem("cpf");
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}locacoes/saida/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}/locacoes/saida/${id}`, {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -289,7 +289,7 @@ export default function Dashboard() {
       const token = localStorage.getItem("token");
       const cpfPorteiro = localStorage.getItem("cpf");
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}locacoes/entrada/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}/locacoes/entrada/${id}`, {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -328,7 +328,7 @@ export default function Dashboard() {
     const cpfGestor = localStorage.getItem("cpf");
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}locacoes/atualizar/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}/locacoes/atualizar/${id}`, {
       method: "PUT",
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -371,7 +371,7 @@ export default function Dashboard() {
 
     try {
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}locacoes/deletar/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}/locacoes/deletar/${id}`, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`,

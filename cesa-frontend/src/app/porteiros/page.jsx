@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import dynamic from "next/dynamic";
 import Header from "../components/header";
@@ -31,16 +31,17 @@ export default function Porteiros() {
     role: "porteiro",
   });
   const [senha, setSenha] = useState("");
+  const [cpf, setCpf] = useState("");
 
   useEffect(() => {
     const fetchPorteiros = async () => {
       try {
-        const toke = localStorage.getItem("token");
+        const token = localStorage.getItem("token");
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_LOCAL}/usuario`,
           {
             headers: {
-              Authorization: `Bearer ${toke}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -58,7 +59,8 @@ export default function Porteiros() {
     handleExpandModal();
   };
 
-  const handleEditarSenha = (cpf) => {
+  const handleEditarSenha = async (cpf) => {
+
     const token = localStorage.getItem("token");
 
     fetch(`${process.env.NEXT_PUBLIC_LOCAL}/usuario/alter/${cpf}`, {
@@ -561,6 +563,16 @@ export default function Porteiros() {
                 <h1 className="text-3xl">Atualizar Porteiros</h1>
                 <form className={styles.formAdd}>
                   <div className={styles.input}>
+                    <select value={cpf} onChange={(e) => setCpf(e.target.value)}>
+                      <label>Escolha o porteiro a editar a senha</label>
+
+                      <option className={styles.choicebox}></option>
+
+                      {porteiro.map((porteiro) => (
+                        <option key={porteiro.cpf} value={porteiro.cpf}>{porteiro.nome}</option>
+                      ))}
+                    </select>
+
                     <Ginput
                       type={"password"}
                       placeholder={""}
@@ -583,7 +595,7 @@ export default function Porteiros() {
                   <BadButton
                     colorHover={"#769b6a"}
                     cor={"#48793c"}
-                    onClick={""}
+                    onClick={handleEditarSenha(cpf)}
                   >
                     Atualizar
                   </BadButton>
