@@ -49,10 +49,14 @@ export default function Login() {
     if (response.ok) {
       localStorage.setItem("token", data.token);
       localStorage.setItem("cpf", data.cpf);
-      alert("Login realizado ");
-      router.push("/dashboard");
+      handleNoticeIsOpen();
+      setConteudo("Login realizado!");
+      setTimeout(() => {
+        router.push("/dashboard");
+      }, 2000);
     } else {
-      alert(data.error || "Erro ao fazer login");
+      handleNoticeIsOpen();
+      setConteudo(data.error || "Erro ao fazer login");
     }
   };
 
@@ -65,7 +69,7 @@ export default function Login() {
             <img className={styles.imgUm} src={"/logo/logo.png"}></img>
           </div>
           <h1 className={styles.tituloTres}>
-            Controle de Entrada e Saída de Veículo
+            Controle de Entrada e Saída de Automóveis
           </h1>
           <h1 className={styles.tituloTres}>
             IF BAIANO - <i>campus</i> Itapetinga
@@ -105,7 +109,7 @@ export default function Login() {
           >
             <div className={styles.containerModal}>
               <div className={styles.containerInMini}>
-                <h1 className="mb-3">{conteudo}</h1>
+                <h1 className="mb-3 text-black">{conteudo}</h1>
               </div>
               <div className={styles.butaoMini}>
                 <BadButton

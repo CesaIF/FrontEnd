@@ -30,6 +30,7 @@ export default function Porteiros() {
     telefone: "",
     role: "porteiro",
   });
+  const [senha, setSenha] = useState("");
 
   useEffect(() => {
     const fetchPorteiros = async () => {
@@ -57,12 +58,47 @@ export default function Porteiros() {
     handleExpandModal();
   };
 
+  const handleEditarSenha = (cpf) => {
+    const token = localStorage.getItem("token");
+
+    fetch(`${process.env.NEXT_PUBLIC_LOCAL}/usuario/alter/${cpf}`, {
+      method: "PUT",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        senha: senha
+      })
+    }).
+    then(async (res) => {
+      const data = await res.json();
+
+      if (res.ok) {
+        handleNoticeIsOpen();
+        setConteudo("Senha alterada com sucesso!");
+      } else {
+        handleNoticeIsOpen();
+        setConteudo(data.error || "Erro ao alterar senha");
+      }
+    }).
+    catch ((err) => {
+      console.error(err);
+    });
+
+  }
+
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [deletarIsOpen, setConfirmacaoIsOpen] = useState(false);
   const [expandModal, setExpandModal] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
   const [updateModal, setUpdateModal] = useState(false);
   const [noticeIsOpen, setNoticeIsOpen] = useState(false);
+  const [senhaModal, setSenhaModal] = useState(false);
+
+  function handleSenhaModal() {
+    setSenhaModal(!senhaModal);
+  }
 
   function handleNoticeIsOpen() {
     setNoticeIsOpen(!noticeIsOpen);
@@ -440,6 +476,7 @@ export default function Porteiros() {
               >
                 Atualizar
               </BadButton>
+              <BadButton onClick={() => {handleExpandModal(); handleSenhaModal();}}>Atualizar Senha</BadButton>
               <BadButton
                 onClick={handleExpandModal}
                 colorHover={"#181818"}
@@ -517,6 +554,44 @@ export default function Porteiros() {
 
               </div>
           </Modal>
+
+          <Modal isOpen={senhaModal} onClose={handleSenhaModal}>
+            <div className={styles.containerModal}>
+              <div className={styles.containerInternoModal}>
+                <h1 className="text-3xl">Atualizar Porteiros</h1>
+                <form className={styles.formAdd}>
+                  <div className={styles.input}>
+                    <Ginput
+                      type={"password"}
+                      placeholder={""}
+                      maxLength={50}
+                      label={"Senha"}
+                      value={senha}
+                      onChange={(e) => setSenha(e.target.value)}
+                    ></Ginput>
+                  </div>
+                </form>
+                <div className={styles.butaoForm}>
+                  <BadButton
+                    textColor={"#48793c"}
+                    colorHover={"#a3bc98"}
+                    cor={"#d1dec7"}
+                    onClick={handleUpdateModal}
+                  >
+                    Cancelar
+                  </BadButton>
+                  <BadButton
+                    colorHover={"#769b6a"}
+                    cor={"#48793c"}
+                    onClick={""}
+                  >
+                    Atualizar
+                  </BadButton>
+                </div>
+              </div>
+            </div>
+          </Modal>
+
         </main>
         <div className={styles.footer}>
           <Footer></Footer>
