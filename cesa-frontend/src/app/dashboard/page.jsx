@@ -523,14 +523,14 @@ export default function Dashboard() {
                 handleIniciarLocacao(locacaoSelecionada.id);
               }}>
                 <div className={styles.containerInMini}>
-                  <Ginput
+                  <Textarea
                     label={"Observações:"}
-                    type={"text"}
                     maxLength={300}
+                    rows={2}
                     value={observacaoSaida}
                     placeholder={"\"O carro apresenta algum problema.\""}
                     onChange={(e) => setObservacaoSaida(e.target.value)}
-                  ></Ginput>
+                  ></Textarea>
                 </div>
                 <div className={styles.butaoMini}>
                   <BadButton 
@@ -560,14 +560,14 @@ export default function Dashboard() {
                 handleFinalizarLocacao(locacaoSelecionada.id);
               }}>
                 <div className={styles.containerInMini}>
-                  <Ginput
+                  <Textarea
                     label={"Observações:"}
-                    type={"text"}
                     maxLength={300}
+                    rows={2}
                     value={observacaoEntrada}
                     placeholder={"\"O carro apresenta algum problema.\""}
                     onChange={(e) => setObservacaoEntrada(e.target.value)}
-                  ></Ginput>
+                  ></Textarea>
                   <Ginput
                     label={"Quilometragem:"}
                     type={"number"}
@@ -1075,6 +1075,7 @@ export default function Dashboard() {
           <Modal
             isOpen={noticeIsOpen}
             onClose={handleNoticeIsOpen}
+            width={"400px"}
           >
             <div className={styles.containerModal}>
               <div className={styles.containerInMini}>

@@ -110,6 +110,15 @@
     width: 100%;
 }
 
+.containerInMini {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: large;
+    flex-wrap: wrap;
+}
+
 .modalExpand {
   display: flex;
   flex-wrap: wrap;
@@ -188,6 +197,13 @@
     justify-content: end;
     margin-top: 2.5rem;
     width: 80%;
+}
+
+.butaoMini {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2.5rem;
 }
 
 .containerModalGeral {

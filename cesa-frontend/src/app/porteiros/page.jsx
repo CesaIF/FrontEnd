@@ -10,6 +10,7 @@ import BadButton from "../components/badButton";
 import styles from "./Porteiro.module.css";
 import Ginput from "../components/gInput";
 import { useAuth } from "../hooks/useAuth";
+import { TbPasswordUser } from "react-icons/tb";
 
 export default function Porteiros() {
   useAuth();
@@ -138,9 +139,14 @@ export default function Porteiros() {
             <div>
               <div className={styles.containerTitle}>
                 <h1 className={styles.titleLocacao}>Porteiros Cadastrados</h1>
-                <button className={styles.butaoAdd} onClick={handleOpenModal}>
-                  <CiCirclePlus size={35}></CiCirclePlus>
-                </button>
+                <div className={styles.buttons}>
+                  <div className={styles.butaoAdd} onClick={handleSenhaModal}>
+                    <TbPasswordUser size={35}/>
+                  </div>
+                  <div className={styles.butaoAdd} onClick={handleOpenModal}>
+                    <CiCirclePlus size={35} />
+                  </div>
+                </div>
               </div>
               <div className={styles.line}></div>
             </div>
@@ -489,19 +495,51 @@ export default function Porteiros() {
             </div>
           </Modal>
 
-          <Modal width={"400px"} isOpen={noticeIsOpen} onClose={handleNoticeIsOpen}>
+          <Modal isOpen={senhaModal} onClose={handleSenhaModal}>
             <div className={styles.containerModal}>
-              <div className={styles.containerInMini}>
-                <h1 className="mb-3"> {conteudo} </h1>
-              </div>
-              <div className={styles.butaoMini}>
-                <BadButton
-                  colorHover={"#769b6a"}
-                  cor={"#48793c"}
-                  onClick={handleNoticeIsOpen}
-                >
-                  Ok
-                </BadButton>
+              <div className={styles.containerInternoModal}>
+                <h1 className="text-3xl">Atualizar Senha de Porteiro</h1>
+                <form className={styles.formAdd}>
+                  <div className={styles.choiceboxContainer}>
+                    <select value={cpf} onChange={(e) => setCpf(e.target.value)}>
+                      <label>Escolha o porteiro a editar a senha</label>
+
+                      <option className={styles.choicebox}>Escolha um porteiro</option>
+
+                      {porteiro.map((porteiro) => (
+                        <option key={porteiro.cpf} value={porteiro.cpf}>{porteiro.nome}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className={styles.input}>
+                    <Ginput
+                      type={"password"}
+                      placeholder={""}
+                      maxLength={50}
+                      label={"Senha"}
+                      value={senha}
+                      onChange={(e) => setSenha(e.target.value)}
+                    ></Ginput>
+                  </div>
+                </form>
+                <div className={styles.butaoForm}>
+                  <BadButton
+                    textColor={"#48793c"}
+                    colorHover={"#a3bc98"}
+                    cor={"#d1dec7"}
+                    onClick={handleSenhaModal}
+                  >
+                    Cancelar
+                  </BadButton>
+                  <BadButton
+                    colorHover={"#769b6a"}
+                    cor={"#48793c"}
+                    onClick={() => {handleEditarSenha(cpf); handleSenhaModal();}}
+                  >
+                    Atualizar
+                  </BadButton>
+                </div>
               </div>
             </div>
           </Modal>
@@ -557,49 +595,19 @@ export default function Porteiros() {
               </div>
           </Modal>
 
-          <Modal isOpen={senhaModal} onClose={handleSenhaModal}>
+          <Modal width={"400px"} isOpen={noticeIsOpen} onClose={handleNoticeIsOpen}>
             <div className={styles.containerModal}>
-              <div className={styles.containerInternoModal}>
-                <h1 className="text-3xl">Atualizar Porteiros</h1>
-                <form className={styles.formAdd}>
-                  <div className={styles.choiceboxContainer}>
-                    <select value={cpf} onChange={(e) => setCpf(e.target.value)}>
-                      <label>Escolha o porteiro a editar a senha</label>
-
-                      <option className={styles.choicebox}></option>
-
-                      {porteiro.map((porteiro) => (
-                        <option key={porteiro.cpf} value={porteiro.cpf}>{porteiro.nome}</option>
-                      ))}
-                    </select>
-
-                    <Ginput
-                      type={"password"}
-                      placeholder={""}
-                      maxLength={50}
-                      label={"Senha"}
-                      value={senha}
-                      onChange={(e) => setSenha(e.target.value)}
-                    ></Ginput>
-                  </div>
-                </form>
-                <div className={styles.butaoForm}>
-                  <BadButton
-                    textColor={"#48793c"}
-                    colorHover={"#a3bc98"}
-                    cor={"#d1dec7"}
-                    onClick={handleUpdateModal}
-                  >
-                    Cancelar
-                  </BadButton>
-                  <BadButton
-                    colorHover={"#769b6a"}
-                    cor={"#48793c"}
-                    onClick={() => handleEditarSenha(cpf)}
-                  >
-                    Atualizar
-                  </BadButton>
-                </div>
+              <div className={styles.containerInMini}>
+                <h1> {conteudo} </h1>
+              </div>
+              <div className={styles.butaoMini}>
+                <BadButton
+                  colorHover={"#769b6a"}
+                  cor={"#48793c"}
+                  onClick={handleNoticeIsOpen}
+                >
+                  Ok
+                </BadButton>
               </div>
             </div>
           </Modal>

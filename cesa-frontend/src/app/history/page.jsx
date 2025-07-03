@@ -20,6 +20,12 @@ export default function History() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedLocacao, setSelectedLocacao] = useState(null);
+  const [conteudo, setConteudo] = useState("");
+  const [noticeIsOpen, setNoticeIsOpen] = useState(false);
+
+  function handleNoticeIsOpen() {
+    setNoticeIsOpen(!noticeIsOpen);
+  }
 
   const handleBaixar = async () => {
     const token = localStorage.getItem("token");
@@ -31,6 +37,17 @@ export default function History() {
         },
       }
     );
+
+    const data = await response.json();
+
+    if (response.ok) {
+      handleNoticeIsOpen();
+      setConteudo("Arquivo baixado com sucesso!");
+    } else {
+      handleNoticeIsOpen();
+      setConteudo(data.error);
+    }
+
     const blob = await response.blob();
 
     const url = window.URL.createObjectURL(blob);
@@ -226,6 +243,21 @@ export default function History() {
                 </div>
               </div>
             )}
+          </Modal>
+
+          <Modal
+            isOpen={noticeIsOpen}
+            onClose={handleNoticeIsOpen}
+            width={"400px"}
+          >
+            <div className={styles.containerModal}>
+              <div className={styles.containerInMini}>
+                <h1>{conteudo}</h1>
+              </div>
+              <div className={styles.butaoMini}>
+                <BadButton onClick={handleNoticeIsOpen} colorHover={"#769b6a"} cor={"#48793c"} >OK</BadButton>
+              </div>
+            </div>
           </Modal>
         </main>
 

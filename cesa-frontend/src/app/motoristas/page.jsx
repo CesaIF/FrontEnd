@@ -464,7 +464,7 @@ export default function Motoristas() {
           <Modal width={"400px"} isOpen={noticeIsOpen} onClose={handleNoticeIsOpen}>
             <div className={styles.containerModal}>
               <div className={styles.containerInMini}>
-                <h1 className="mb-3">{conteudo}</h1>
+                <h1>{conteudo}</h1>
               </div>
               <div className={styles.butaoMini}>
                 <BadButton

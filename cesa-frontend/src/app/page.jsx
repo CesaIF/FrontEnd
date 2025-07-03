@@ -109,7 +109,7 @@ export default function Login() {
           >
             <div className={styles.containerModal}>
               <div className={styles.containerInMini}>
-                <h1 className="mb-3 text-black">{conteudo}</h1>
+                <h1 className="text-black">{conteudo}</h1>
               </div>
               <div className={styles.butaoMini}>
                 <BadButton

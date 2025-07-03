@@ -151,6 +151,12 @@
     width: 100%;
 }
 
+.buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 0rem 1rem;
+}
+
 .butaoForm {
   display: flex;
   flex-direction: row;
