@@ -183,7 +183,7 @@ export default function Dashboard() {
 
     const cpfUsuario = localStorage.getItem("cpf");
 
-    fetch(`${process.env.NEXT_PUBLIC_LOCAL}/usuario/${cpfUsuario}`, {
+    fetch(`${process.env.NEXT_PUBLIC_LOCAL}/usuario/porteiro/${cpfUsuario}`, {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${token}`,
