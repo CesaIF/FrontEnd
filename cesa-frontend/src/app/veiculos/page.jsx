@@ -164,7 +164,7 @@ export default function Veiculos() {
                     <Ginput
                       type={"text"}
                       placeholder={'ABC1234 ou ABC1D23'}
-                      maxLength={8}
+                      maxLength={7}
                       label={"Placa"}
                       value={novoVeiculo.placa}
                       onChange={(e) =>
@@ -179,7 +179,7 @@ export default function Veiculos() {
                     <Ginput
                       type={"text"}
                       placeholder={'Corsa'}
-                      maxLength={200}
+                      maxLength={50}
                       label={"Modelo"}
                       value={novoVeiculo.modelo}
                       onChange={(e) =>
@@ -194,7 +194,7 @@ export default function Veiculos() {
                     <Ginput
                       type={"text"}
                       placeholder={'Branco'}
-                      maxLength={100}
+                      maxLength={50}
                       label={"Cor"}
                       value={novoVeiculo.cor}
                       onChange={(e) =>
@@ -206,7 +206,7 @@ export default function Veiculos() {
                     <Ginput
                       type={"text"}
                       placeholder={'Hatch'}
-                      maxLength={100}
+                      maxLength={50}
                       label={"Tipo"}
                       value={novoVeiculo.tipo}
                       onChange={(e) =>
