@@ -44,31 +44,53 @@ export default function Dashboard() {
   // constante que inicializa o useRef do popUp.
   const popUpRef = useRef(null);
 
+  // função que verifica se tem algum login feito.
   useAuth();
 
   // constantes que inicializa dados do cadastro de locação.
+
+  // constante que mapeia as locações agendadas do backend.
   const [locacoesAgendadas, setLocacoesAgendadas] = useState([]);
+  // constante que mapeia as locações iniciadas do backend.
   const [locacoes, setLocacoes] = useState([]);
-  const [erro, setErro] = useState('');
+  // consante que mapeia os veículos do backend.
   const [veiculo, setVeiculo] = useState([]);
+  // constante que mapeia motoristas
   const [motorista, setMotorista] = useState([]);
+  // constante que guarda itinerario do form de cadastro.
   const [itinerario, setItinerario] = useState("");
+  // constante que guarda motivo de saida.
   const [motivo, setMotivo] = useState("");
-  const [placaSelecionada, setPlacaSelecionada] = useState("");
-  const [motoristaSelecionado, setMotoristaSelecionado] = useState("");
+  // constante que recebe data de saída.
   const [dataSaida, setDataSaida] = useState("");
+  // constante que recebe data de chegada.
   const [dataChegada, setDataChegada] = useState("");
+  // constante que recebe a observação antes do carro sair.
   const [observacaoSaida, setObservacaoSaida] = useState("");
+  // constante que recebe a placa para edição.
+  const [placaSelecionada, setPlacaSelecionada] = useState("");
+  // constante que recebe o motorista para edição.
+  const [motoristaSelecionado, setMotoristaSelecionado] = useState("");
+  // constante que armazena uma locação quando for clicada.
   const [locacaoSelecionada, setLocacaoSelecionada] = useState("");
+  // constante que recebe a observação ao chegar.
   const [observacaoEntrada, setObservacaoEntrada] = useState("");
+  // constante que recebe a quilomeragem do carro ao chegar. Obs: a quilometragem ao sair é pega do próprio veículo.
   const [kmChegada, setKmChegada] = useState("");
+  // constante que descreve a autorização da locação.
   const [autorizacao, setAutorizacao] = useState("");
+  // constante que pega um indice de uma locação.
   const [indexSelecionado, setIndexSelecionado] = useState(null);
+  // constante que define o conteúdo ao ser exibido nas moldais de aviso.
   const [conteudo, setConteudo] = useState("");
+  // constante que abre o modal de aviso.
   const [noticeIsOpen, setNoticeIsOpen] = useState(false);
+  // constante que mapeia gestores.
   const [gestores, setGestores] = useState([]);
+  // constante que recebe um usuário.
   const [usuario, setUsuario] = useState(null);
 
+  // adiciona aos inputs da edição os dados da locação selecionada
   useEffect(() => {
     if(modalContent === "edicao" && locacaoSelecionada){
       console.log("A locação:", locacaoSelecionada);
@@ -97,11 +119,11 @@ export default function Dashboard() {
         if (res.ok) {
             setLocacoes(data);
         } else {
-            setErro(data.error || "Erro ao buscar dados");
+            console.log(data.error || "Erro ao buscar dados");
         }
     })
     .catch((err) => {
-        setErro("Erro de conexão");
+        console.log("Erro de conexão");
         console.error(err);
     })
   }, []);
@@ -178,6 +200,7 @@ export default function Dashboard() {
     })
   }, []);
 
+  // função que pega usuários por cpf.
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -962,6 +985,7 @@ export default function Dashboard() {
     setConfirmacaoIsOpen(!confirmacaoIsOpen);
   }
 
+  // função que abre o modal de aviso.
   function handleNoticeIsOpen() {
     setNoticeIsOpen(!noticeIsOpen);
   }
