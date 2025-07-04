@@ -90,6 +90,14 @@ export default function Dashboard() {
   // constante que recebe um usuário.
   const [usuario, setUsuario] = useState(null);
 
+  // função que cria data formatada pra ser utilizada no input de edição.
+  function formatarData(data) {
+    const d = new Date(data);
+    const offset = d.getTimezoneOffset();
+    const localDate = new Date(d.getTime() - offset * 60000);
+    return localDate.toISOString().slice(0, 16);
+  }
+
   // adiciona aos inputs da edição os dados da locação selecionada
   useEffect(() => {
     if(modalContent === "edicao" && locacaoSelecionada){
@@ -99,6 +107,15 @@ export default function Dashboard() {
       setItinerario(locacaoSelecionada.itinerario || "");
       setMotivo(locacaoSelecionada.motivo_saida || "");
       setAutorizacao(locacaoSelecionada.autorizacao || "");
+
+      if (locacaoSelecionada.data_saida) {
+        setDataSaida(formatarData(locacaoSelecionada.data_saida));
+      }
+
+      if (locacaoSelecionada.data_chegada) {
+        setDataChegada(formatarData(locacaoSelecionada.data_chegada));
+      }
+
     }
   }, [modalContent, locacaoSelecionada]);
 
