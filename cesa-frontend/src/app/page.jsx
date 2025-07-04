@@ -7,6 +7,7 @@ import styles from "./Login.module.css";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
+import Ginput from "./components/gInput";
 const Modal = dynamic(() => import("./components/modal"), { ssr: false });
 
 function formatarCPF(cpf) {
@@ -23,6 +24,12 @@ export default function Login() {
   const [senha, setSenha] = useState("");
   const [conteudo, setConteudo] = useState("");
   const [noticeIsOpen, setNoticeIsOpen] = useState(false);
+  const [email, setEmail] = useState("");
+  const [senhaIsOpen, setSenhaIsOpen] = useState("");
+
+  function handleSenhaIsOpen() {
+    setSenhaIsOpen(!senhaIsOpen);
+  }
 
   function handleNoticeIsOpen() {
     setNoticeIsOpen(!noticeIsOpen);
@@ -32,6 +39,34 @@ export default function Login() {
     const formatted = formatarCPF(e.target.value);
     setCpf(formatted);
   };
+
+  const handleRecuperarSenha = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          senha: senha
+        })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        handleNoticeIsOpen();
+        setConteudo("Um email foi enviado a um usuário cadastrado para recuperação de senha.");
+      } else {
+        console.log(data.error);
+      }
+      
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   const handleLogin = async () => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}/login`, {
@@ -99,6 +134,9 @@ export default function Login() {
               ></Input>
             </form>
             <GoodButton onClick={handleLogin}>Entrar</GoodButton>
+            <div className={styles.containerEsqueceuSenha}>
+              <p onClick={handleSenhaIsOpen} className={styles.esqueceuSenha}>Esqueceu a senha?</p>
+            </div>
           </div>
         </div>
 
@@ -119,6 +157,26 @@ export default function Login() {
                 >
                   Ok
                 </BadButton>
+              </div>
+            </div>
+          </Modal>
+
+          <Modal width={"550px"} isOpen={senhaIsOpen} onClose={handleSenhaIsOpen}>
+            <div className={styles.containerModal}>
+              <div className={styles.senhaContainer}>
+                <h1 className={styles.titleSenha}>Recuperar Senha</h1>
+                <form onSubmit={handleRecuperarSenha} className={styles.form}>
+                  <Ginput
+                  placeholder={"Digite o seu Email"}
+                  label={"Email"}
+                  maxLength={200}
+                  type={"text"}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  />
+
+                  <BadButton cor={"#48793c"} colorHover={"#769b6a"} buttonWidth={"100%"}>Enviar</BadButton>
+                </form>
               </div>
             </div>
           </Modal>
