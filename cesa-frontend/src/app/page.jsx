@@ -26,6 +26,17 @@ export default function Login() {
   const [noticeIsOpen, setNoticeIsOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [senhaIsOpen, setSenhaIsOpen] = useState("");
+  const [bloqueado, setBloqueado] = useState(false);
+
+  const handleClick = () => {
+    if(bloqueado) return;
+
+    setBloqueado(true);
+    
+    setTimeout(() => {
+      setBloqueado(false);
+    }, 5000);
+  }
 
   function handleSenhaIsOpen() {
     setSenhaIsOpen(!senhaIsOpen);
@@ -43,32 +54,51 @@ export default function Login() {
   const handleRecuperarSenha = async (e) => {
     e.preventDefault();
 
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}/forgot/forgot`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email
-        })
-      });
+    if(bloqueado) return;
 
-      const data = await res.json();
+    setBloqueado(true);
+    
+    setTimeout(() => {
+      setBloqueado(false);
+    }, 5000);
 
-      if (res.ok) {
-        handleNoticeIsOpen();
-        setConteudo("Um email foi enviado a um usuário cadastrado para recuperação de senha.");
-      } else {
-        handleNoticeIsOpen();
-        setConteudo("Um email foi enviado a um usuário cadastrado para recuperação de senha.");
-        console.error(data.error);
-      }
-      
-    } catch (err) {
+    if(!email) {
       handleNoticeIsOpen();
-      setConteudo("Erro de Conexão");
-      console.error(err);
+      setConteudo("Preencha o campo com o email!");
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      handleNoticeIsOpen();
+      setConteudo("Digite um email válido!");
+    } else {
+
+       try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}/forgot/forgot`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email
+          })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          handleSenhaIsOpen();
+          handleNoticeIsOpen();
+          setConteudo("Um email foi enviado a um usuário cadastrado para recuperação de senha.");
+        } else {
+          handleSenhaIsOpen();
+          handleNoticeIsOpen();
+          setConteudo("Um email foi enviado a um usuário cadastrado para recuperação de senha.");
+          console.error(data.error);
+        }
+        
+      } catch (err) {
+        handleNoticeIsOpen();
+        setConteudo("Erro de Conexão");
+        console.error(err);
+      }
     }
   }
 
@@ -144,6 +174,26 @@ export default function Login() {
           </div>
         </div>
 
+          <Modal width={"550px"} isOpen={senhaIsOpen} onClose={handleSenhaIsOpen}>
+            <div className={styles.containerModal}>
+              <div className={styles.senhaContainer}>
+                <h1 className={styles.titleSenha}>Recuperar Senha</h1>
+                <form onSubmit={handleRecuperarSenha} className={styles.form}>
+                  <Ginput
+                  placeholder={"Digite o seu Email"}
+                  label={"Email"}
+                  maxLength={200}
+                  type={"text"}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  />
+
+                  <BadButton cor={"#48793c"} colorHover={"#769b6a"} buttonWidth={"100%"}>{bloqueado ? "Aguarde..." : "Enviar"}</BadButton>
+                </form>
+              </div>
+            </div>
+          </Modal>
+
           <Modal
             width={"400px"}
             isOpen={noticeIsOpen}
@@ -161,26 +211,6 @@ export default function Login() {
                 >
                   Ok
                 </BadButton>
-              </div>
-            </div>
-          </Modal>
-
-          <Modal width={"550px"} isOpen={senhaIsOpen} onClose={handleSenhaIsOpen}>
-            <div className={styles.containerModal}>
-              <div className={styles.senhaContainer}>
-                <h1 className={styles.titleSenha}>Recuperar Senha</h1>
-                <form onSubmit={handleRecuperarSenha} className={styles.form}>
-                  <Ginput
-                  placeholder={"Digite o seu Email"}
-                  label={"Email"}
-                  maxLength={200}
-                  type={"text"}
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  />
-
-                  <BadButton cor={"#48793c"} colorHover={"#769b6a"} buttonWidth={"100%"}>Enviar</BadButton>
-                </form>
               </div>
             </div>
           </Modal>
