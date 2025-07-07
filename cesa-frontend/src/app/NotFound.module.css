@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit&display=swap');
+
+.notfound {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    color: #769b6a;
+    font-family: 'Outfit', sans-serif;
+}
+
+.erro {
+    font-size: 10rem;
+}
+
+.info {
+    font-size: 2rem;
+}
+
+.irparalogin {
+    margin-top: 2rem;
+    color: #181818;
+    border-bottom-width: 1px;
+    border-bottom-color: white;
+    transition: border-bottom-color 0.3s ease;
+}
+
+.irparalogin:hover {
+    border-bottom-color: #181818;
+}

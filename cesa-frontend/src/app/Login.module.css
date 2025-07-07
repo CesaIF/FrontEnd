@@ -101,3 +101,31 @@
     width: 100%;
     padding: 1rem 1.75rem;
 }
+
+.containerEsqueceuSenha {
+    display: flex;
+    justify-content: end;
+    width: 80%;
+}
+
+.esqueceuSenha {
+    cursor: pointer;
+}
+
+.esqueceuSenha:hover {
+    border-bottom-width: 1px;
+}
+
+.titleSenha {
+    font-size: 1.4rem;
+    color: black;
+}
+
+.senhaContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    gap: 1.8rem;
+}
