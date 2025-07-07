@@ -27,37 +27,39 @@ export default function History() {
     setNoticeIsOpen(!noticeIsOpen);
   }
 
-  const handleBaixar = async () => {
-    const token = localStorage.getItem("token");
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_LOCAL}/relatorio/gerarcsv`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+const handleBaixar = async () => {
+  const token = localStorage.getItem("token");
 
-    const data = await response.json();
-
-    if (response.ok) {
-      handleNoticeIsOpen();
-      setConteudo("Arquivo baixado com sucesso!");
-    } else {
-      handleNoticeIsOpen();
-      setConteudo(data.error);
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_LOCAL}/relatorio/gerarcsv`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     }
+  );
 
+  if (response.ok) {
     const blob = await response.blob();
 
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "Relatorio.csv"; // Nome padrão
+    a.download = "Relatorio.csv";
     document.body.appendChild(a);
     a.click();
     a.remove();
-  };
+
+    handleNoticeIsOpen();
+    setConteudo("Arquivo baixado com sucesso!");
+  } else {
+    // tenta ler erro como texto
+    const errorText = await response.text();
+    handleNoticeIsOpen();
+    setConteudo("Erro ao baixar: " + errorText);
+  }
+};
+
 
   useEffect(() => {
     const fetchLocacoes = async () => {
