@@ -44,13 +44,13 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}/`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}/forgot/forgot`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          senha: senha
+          email: email
         })
       });
 
@@ -60,10 +60,14 @@ export default function Login() {
         handleNoticeIsOpen();
         setConteudo("Um email foi enviado a um usuário cadastrado para recuperação de senha.");
       } else {
-        console.log(data.error);
+        handleNoticeIsOpen();
+        setConteudo("Um email foi enviado a um usuário cadastrado para recuperação de senha.");
+        console.error(data.error);
       }
       
     } catch (err) {
+      handleNoticeIsOpen();
+      setConteudo("Erro de Conexão");
       console.error(err);
     }
   }

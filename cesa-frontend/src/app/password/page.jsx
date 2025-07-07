@@ -4,8 +4,9 @@ import BadButton from "../components/badButton";
 import Ginput from "../components/gInput";
 import styles from "./Password.module.css";
 import { useSearchParams } from "next/navigation";
+import { useState, Suspense } from "react";
 
-export default function Password() {
+function ChangePassword() {
 
     const [senha, setSenha] = useState("");
     const searchParams = useSearchParams();
@@ -56,5 +57,13 @@ export default function Password() {
             </main>
         </div>
         </>
+    )
+}
+
+export default function Password() {
+    return (
+        <Suspense fallback={<p>Caregando</p>}>
+            <ChangePassword />
+        </Suspense>
     )
 }
