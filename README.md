@@ -26,7 +26,7 @@ npm run dev
 ## Acesse o app em: http://localhost:5173
 
 ## 🗀️ Estrutura de Pastas
-
+```plaintext
 📁 src
  ├ 📂components      # Componentes reutilizáveis
  ├ 📂pages           # Páginas principais do sistema
@@ -35,6 +35,7 @@ npm run dev
  ├ 📂assets          # Imagens, ícones e fontes
  ├ 📌App.jsx         # Configuração geral de rotas
  └ 📌main.jsx        # Ponto de entrada da aplicação
+```
 
 ## 🔐 Funcionalidades
 
@@ -52,10 +53,10 @@ Dashboard Principal
 
 ## ⚙️ Variáveis de Ambiente
 
-### Crie um arquivo .env na raiz do frontend com:
+Crie um arquivo .env na raiz do frontend com:
 
-###📌 Observações
+📌 Observações
 
-### O frontend espera que o backend esteja rodando localmente na porta 3000
+O frontend espera que o backend esteja rodando localmente na porta 3000
 
-### Se necessário, altere o valor da variável VITE_API_BASE_URL no arquivo .env
+Se necessário, altere o valor da variável VITE_API_BASE_URL no arquivo .env
