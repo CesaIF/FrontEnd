@@ -82,7 +82,7 @@ docker-compose up -d
 Crie um arquivo .env na raiz do frontend com:
 
 ```
-NEXT_PUBLIC_LOCAL: https://localhost:3000
+NEXT_PUBLIC_LOCAL=https://localhost:3000
 ```
 
 📌 Observações
