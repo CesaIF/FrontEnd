@@ -2,8 +2,8 @@
 
 ## 🌐 Tecnologias Utilizadas
 
-- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" width="20"/> **Next.js - Framework completo de aplicações frontend.**
-- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" width="20"/> **React - Biblioteca JavaScript de UI.**
+- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" width="20"/> **Next.js.**
+- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" width="20"/> **React.**
 - <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" width="20"/> **JavaScript**
 - <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" width="20"/> **HTML5**
 - <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" width="20"/> **CSS3**
@@ -42,13 +42,19 @@ docker-compose up -d
 ## 🗀️ Estrutura de Pastas
 ```plaintext
 📁 src
- ├ 📂components      # Componentes reutilizáveis
- ├ 📂pages           # Páginas principais do sistema
- ├ 📂services        # Comunicação com backend (Axios)
- ├ 📂contexts        # Contextos globais (autenticação, etc.)
- ├ 📂assets          # Imagens, ícones e fontes
- ├ 📌App.jsx         # Configuração geral de rotas
- └ 📌main.jsx        # Ponto de entrada da aplicação
+ ├── 📂components                # Diretório de componentes reutilizáveis do projeto.
+ ├── 📂dashboard                 # Página principal de locações.
+ ├── 📂history                   # Página de histórico de locações.
+ ├── 📂hooks                     # Páginas dos hooks como useAuth() que detecta se o usuário está logado.
+ ├── 📂motoristas                # Páginas de gestão de motoristas.
+ ├── 📂password                  # Página de recuperação de senha.
+ ├── 📂perfil                    # Página de perfil do gestor.
+ ├── 📂porteiros                 # Página de gestão de porteiros.
+ ├── 📂veiculos                  # Página de gestão de veículos.
+ ├── 📜Login.module.css          # Estilização de Login.
+ ├── 📜not-found.jsx             # Página de Not Found, erro 404.
+ ├── 📜NotFound.module.css       # Estilização de Not Found.
+ └── 📜page.jsx                  # Página de Login
 ```
 
 ## 🔐 Funcionalidades
