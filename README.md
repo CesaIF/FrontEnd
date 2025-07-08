@@ -2,7 +2,11 @@
 
 ## 🌐 Tecnologias Utilizadas
 
-### <img src"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" /> React – Biblioteca principal de UI
+- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" width="20"/> **Next.js - Framework completo de aplicações frontend.**
+- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" width="20"/> **React - Biblioteca JavaScript de UI.**
+- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" width="20"/> **JavaScript**
+- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" width="20"/> **HTML5**
+- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" width="20"/> **CSS3**
 
 ### 
 
