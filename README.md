@@ -2,28 +2,38 @@
 
 ## 🌐 Tecnologias Utilizadas
 
-### ⚛️ React – Biblioteca principal de UI
+### <img src"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" /> React – Biblioteca principal de UI
 
-### 💡 Context API / Zustand (opcional) – Gerenciamento de estado
+### 
 
 ## 📦 Instalação
 
-### 1. Acesse a pasta do frontend
+### Crie uma pasta em qualquer diretório e acesse-a.
 ```
-cd frontend
-```
-
-### 2. Instale as dependências
-```
-npm install
+mkdir CESAIF && cd CESAIF
 ```
 
-### 3. Rode o projeto localmente
+### Clone o repositório frontend dentro da pasta:
 ```
-npm run dev
+git clone "https://github.com/CesaIF/FrontEnd.git"
 ```
 
-## Acesse o app em: http://localhost:5173
+### Em seguida, clone no mesmo diretório o serviço backend.
+```
+git clone "https://github.com/CesaIF/back-end.git"
+```
+
+### Acesse o diretório back-end criado na clonagem.
+```
+cd back-end
+```
+
+### Paa cria os container digite o seguindo no diretório:
+```
+docker-compose up -d
+```
+
+## Acesse o app em: http://localhost:3005
 
 ## 🗀️ Estrutura de Pastas
 ```plaintext
@@ -39,24 +49,40 @@ npm run dev
 
 ## 🔐 Funcionalidades
 
+- Gerência de locações de veículos para viagens oficiais.
+  
+- Gerência de Motoristas, porteiros, gestores.
 
+- Gerência de veículos.
+
+- Acesso a dados e histórico das locações.
 
 ## ✨ Telas
 
-Tela de Login
+- Tela de Login
 
-Dashboard Principal
+- Dashboard Principal
 
+- Tela de Motoristas
 
+- Tela de Porteiros
 
+- Tela do perfil
 
+- Tela de Histórico
+
+- Tela de Recuperar senha
 
 ## ⚙️ Variáveis de Ambiente
 
 Crie um arquivo .env na raiz do frontend com:
 
+```
+NEXT_PUBLIC_LOCAL: https://localhost:3000
+```
+
 📌 Observações
 
-O frontend espera que o backend esteja rodando localmente na porta 3000
+O frontend espera que o backend esteja rodando localmente na porta 3000.
 
-Se necessário, altere o valor da variável VITE_API_BASE_URL no arquivo .env
+Se necessário, altere o valor da variável NEXT_PUBLIC_LOCAL no arquivo .env.
