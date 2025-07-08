@@ -6,10 +6,11 @@ import BadButton from "../components/badButton";
 import Input from "../components/input";
 import styles from "./Password.module.css";
 import { useSearchParams } from "next/navigation";
-import { useState, Suspense } from "react";
+import { useState, Suspense, useEffect } from "react";
 const Modal = dynamic(() => import("../components/modal"), {ssr: false});
 import Loading from "../components/loading";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 function ChangePassword() {
 
@@ -19,6 +20,15 @@ function ChangePassword() {
     const [noticeIsOpen, setNoticeIsOpen] = useState(false);
     const searchParams = useSearchParams();
     const token = searchParams.get("token");
+    const router = useRouter();
+
+    useEffect(() => {
+
+        if (!token) {
+            router.push("/");
+        }
+
+    }, [token, router]);
 
     function handleNoticeIsOpen() {
         setNoticeIsOpen(!noticeIsOpen);
@@ -46,6 +56,9 @@ function ChangePassword() {
             if(res.ok) {
                 handleNoticeIsOpen();
                 setConteudo("Senha atualizada com sucesso!");
+                setTimeout(() => {
+                    router.push("/");
+                }, 2000);
             } else {
                 handleNoticeIsOpen();
                 setConteudo(data.error);

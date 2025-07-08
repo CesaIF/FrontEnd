@@ -18,7 +18,6 @@ export default function Veiculos() {
     modelo: "",
     cor: "",
     tipo: "",
-    km: "",
     ano: "",
   });
   const [novoVeiculo, setNovoVeiculos] = useState({
@@ -137,11 +136,6 @@ export default function Veiculos() {
                     <div>
                       <span className={styles.titleCard}>
                         {`Tipo: ` + veiculo.tipo}
-                      </span>
-                    </div>
-                    <div>
-                      <span className={styles.titleCard}>
-                        {`Km: ` + veiculo.km}
                       </span>
                     </div>
                     <div>
@@ -353,21 +347,6 @@ export default function Veiculos() {
                   <div className={styles.input}>
                     <Ginput
                       type={"number"}
-                      placeholder={"22568"}
-                      maxLength={300}
-                      label={"Km"}
-                      value={veiculosEditando.km}
-                      onChange={(e) =>
-                        setVeiculosEditando({
-                          ...veiculosEditando,
-                          km: parseInt(e.target.value),
-                        })
-                      }
-                    ></Ginput>
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput
-                      type={"number"}
                       placeholder={"2022"}
                       maxLength={30}
                       label={"Ano"}
@@ -408,7 +387,6 @@ export default function Veiculos() {
                             modelo: veiculosEditando.modelo,
                             cor: veiculosEditando.cor,
                             tipo: veiculosEditando.tipo,
-                            km: veiculosEditando.km,
                             ano: veiculosEditando.ano,
                           }),
                         }
