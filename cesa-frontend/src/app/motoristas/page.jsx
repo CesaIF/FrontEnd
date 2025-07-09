@@ -16,9 +16,11 @@ export default function Motoristas() {
 
   const [motoristas, setMotoristas] = useState([]);
   const [motoristaEditando, setMotoristaEditando] = useState({
+    portaria: "",
     nome: "",
     telefone: "",
     email: "",
+    vencimento: "",
   });
   const [novoMotorista, setNovoMotorista] = useState({
     portaria: "",
