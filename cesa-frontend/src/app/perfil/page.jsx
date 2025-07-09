@@ -38,7 +38,7 @@ export default function Perfil() {
 
     const token = localStorage.getItem("token");
 
-    const res = await fetch("https://localhost/usuario", {
+    const res = await fetch("${process.env.NEXT_PUBLIC_LOCAL}/usuario", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -73,7 +73,7 @@ export default function Perfil() {
 
     const cpfGestor = localStorage.getItem("cpf");
 
-    const res = await fetch(`https://localhost/usuario/${cpfGestor}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}/usuario/${cpfGestor}`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -108,7 +108,7 @@ export default function Perfil() {
     const cpfGestor = localStorage.getItem("cpf");
 
     try {
-      const res = await fetch(`https://localhost/usuario/alter/${cpfGestor}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}/usuario/alter/${cpfGestor}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -138,7 +138,7 @@ export default function Perfil() {
 
     const cpfGestor = localStorage.getItem("cpf");
 
-    fetch(`https://localhost/usuario/${cpfGestor}`, {
+    fetch(`${process.env.NEXT_PUBLIC_LOCAL}/usuario/${cpfGestor}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -166,7 +166,7 @@ export default function Perfil() {
     const cpfGestor = localStorage.getItem("cpf");
 
     try {
-      const res = await fetch(`https://localhost/usuario/${cpfGestor}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}/usuario/${cpfGestor}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -339,7 +339,7 @@ export default function Perfil() {
                     <Ginput
                       type={"text"}
                       placeholder={"(77) 12345-6789"}
-                      maxLength={15}
+                      maxLength={16}
                       label={"Telefone"}
                       value={telefone}
                       mask={"(00) 0 0000-0000"}
