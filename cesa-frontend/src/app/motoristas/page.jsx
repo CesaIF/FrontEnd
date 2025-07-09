@@ -210,7 +210,7 @@ export default function Motoristas() {
                       }
                     ></Ginput>
                     <Ginput
-                      type={"text"}
+                      type={"datetime-local"}
                       placeholder={'09/07/2025'}
                       maxLength={200}
                       label={"Vencimentos da portaria"}
