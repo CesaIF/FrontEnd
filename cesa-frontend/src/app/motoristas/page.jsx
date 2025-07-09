@@ -21,10 +21,11 @@ export default function Motoristas() {
     email: "",
   });
   const [novoMotorista, setNovoMotorista] = useState({
-    cpf: "",
+    portaria: "",
     nome: "",
     telefone: "",
     email: "",
+    vencimento: "",
   });
 
   useEffect(() => {
@@ -151,15 +152,14 @@ export default function Motoristas() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={'123.456.789-89'}
+                      placeholder={'24/2025'}
                       maxLength={200}
-                      label={"CPF"}
-                      value={novoMotorista.cpf}
-                      mask={"000.000.000-00"}
+                      label={"Portaria"}
+                      value={novoMotorista.portaria}
                       onChange={(e) =>
                         setNovoMotorista({
                           ...novoMotorista,
-                          cpf: e.target.value,
+                          portaria: e.target.value,
                         })
                       }
                     ></Ginput>
@@ -209,6 +209,19 @@ export default function Motoristas() {
                         })
                       }
                     ></Ginput>
+                    <Ginput
+                      type={"text"}
+                      placeholder={'09/07/2025'}
+                      maxLength={200}
+                      label={"Vencimentos da portaria"}
+                      value={novoMotorista.portaria}
+                      onChange={(e) =>
+                        setNovoMotorista({
+                          ...novoMotorista,
+                          vencimento: e.target.value,
+                        })
+                      }
+                    ></Ginput>
                   </div>
                 </form>
                 <div className={styles.butaoForm}>
@@ -246,7 +259,7 @@ export default function Motoristas() {
                         setConteudo("Motorista cadastrado com sucesso!");
 
                         setNovoMotorista({
-                          cpf: "",
+                          portaria: "",
                           nome: "",
                           telefone: "",
                           email: "",
