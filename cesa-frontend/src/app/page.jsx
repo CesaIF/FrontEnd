@@ -103,6 +103,7 @@ export default function Login() {
   }
 
   const handleLogin = async () => {
+    console.log("API base URL:", process.env.NEXT_PUBLIC_LOCAL);
     const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}/login`, {
       method: "POST",
       headers: {
