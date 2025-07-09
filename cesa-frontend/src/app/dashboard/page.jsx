@@ -103,7 +103,7 @@ export default function Dashboard() {
     if(modalContent === "edicao" && locacaoSelecionada){
       console.log("A locação:", locacaoSelecionada);
       setPlacaSelecionada(locacaoSelecionada.veiculo_placa_fk || "");
-      setMotoristaSelecionado(locacaoSelecionada.motorista_cpf_fk || "");
+      setMotoristaSelecionado(locacaoSelecionada.motorista_id_fk || "");
       setItinerario(locacaoSelecionada.itinerario || "");
       setMotivo(locacaoSelecionada.motivo_saida || "");
       setAutorizacao(locacaoSelecionada.autorizacao || "");
@@ -290,7 +290,7 @@ export default function Dashboard() {
         itinerario: itinerario,
         motivo_saida: motivo,
         autorizacao: autorizacao,
-        motorista_cpf_fk: motoristaSelecionado,
+        motorista_id_fk: motoristaSelecionado,
         gestor_cpf_fk: cpfGestor,
         veiculo_placa_fk: placaSelecionada,
       }),
@@ -409,7 +409,7 @@ export default function Dashboard() {
         itinerario: itinerario,
         motivo_saida: motivo,
         autorizacao: autorizacao,
-        motorista_cpf_fk: motoristaSelecionado,
+        motorista_id_fk: motoristaSelecionado,
         veiculo_placa_fk: placaSelecionada,
       })
     });
@@ -942,7 +942,7 @@ export default function Dashboard() {
                   </div>
                   <div className={styles.colunaDois}>
                     {motorista.map((motoristasNome, index) => (
-                      motoristasNome.cpf === locacaoSelecionada.motorista_cpf_fk ? (
+                      motoristasNome.cpf === locacaoSelecionada.motorista_id_fk ? (
                         <h1 key={index}>{motoristasNome.nome}</h1>
                       ) : null
                     ))}
@@ -1077,7 +1077,7 @@ export default function Dashboard() {
                   </div>
                   <div>
                     {motorista.map((motoristaLocacao, index) => (
-                      locacaoAgendada.motorista_cpf_fk === motoristaLocacao.cpf ? (
+                      locacaoAgendada.motorista_id_fk === motoristaLocacao.cpf ? (
                         <span className={styles.titleCardDois} key={index}>{motoristaLocacao.nome}</span>
                       ) : null
                     ))}

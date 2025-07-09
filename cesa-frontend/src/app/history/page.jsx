@@ -3,7 +3,6 @@
 import dynamic from "next/dynamic";
 import Header from "../components/header";
 import Footer from "../components/footer";
-import { CiCirclePlus } from "react-icons/ci";
 import { useEffect, useState } from "react";
 const Modal = dynamic(() => import("../components/modal"), { ssr: false });
 import BadButton from "../components/badButton";
@@ -154,7 +153,7 @@ const handleBaixar = async () => {
                       </div>
                       <div>
                         <span className={styles.titleCardDois}>
-                          {`Motorista: ` + locacao.motorista_cpf_fk}
+                          {`Motorista: ` + locacao.motorista_id_fk}
                         </span>
                       </div>
                     </div>
@@ -181,7 +180,7 @@ const handleBaixar = async () => {
                     },
                     {
                       label: "Motorista",
-                      value: selectedLocacao.motorista_cpf_fk,
+                      value: selectedLocacao.motorista_id_fk,
                     },
                     {
                       label: "Saída",
