@@ -339,7 +339,7 @@ export default function Perfil() {
                     <Ginput
                       type={"text"}
                       placeholder={"(77) 12345-6789"}
-                      maxLength={16}
+                      maxLength={200}
                       label={"Telefone"}
                       value={telefone}
                       mask={"(00) 0 0000-0000"}
