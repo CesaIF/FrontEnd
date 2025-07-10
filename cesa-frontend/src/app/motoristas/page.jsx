@@ -16,16 +16,16 @@ export default function Motoristas() {
 
   const [motoristas, setMotoristas] = useState([]);
   const [motoristaEditando, setMotoristaEditando] = useState({
-    portaria: "",
     nome: "",
-    vencimento: "",
     email: "",
+    portaria: "",
+    vencimento: "",
   });
   const [novoMotorista, setNovoMotorista] = useState({
-    portaria: "",
     nome: "",
-    vencimento: "",
     email: "",
+    portaria: "",
+    vencimento: "",
   });
 
   useEffect(() => {
@@ -129,7 +129,10 @@ export default function Motoristas() {
                     </div>
                     <div>
                       <span className={styles.titleCard}>
-                        {`Vencimento: ` + motorista.vencimento}
+                        {`Vencimento: ` +
+                          new Date(motorista.vencimento).toLocaleDateString(
+                            "pt-BR"
+                          )}
                       </span>
                     </div>
                     <div>
@@ -197,11 +200,11 @@ export default function Motoristas() {
                   </div>
                   <div className={styles.input}>
                     <Ginput
-                      type={"date-local"}
+                      type={"date"}
                       placeholder={"09/07/2025"}
                       maxLength={200}
                       label={"Vencimento da portaria"}
-                      value={novoMotorista.portaria}
+                      value={novoMotorista.vencimento}
                       onChange={(e) =>
                         setNovoMotorista({
                           ...novoMotorista,
@@ -321,11 +324,11 @@ export default function Motoristas() {
                   </div>
                   <div className={styles.input}>
                     <Ginput
-                      type={"date-local"}
+                      type={"date"}
                       placeholder={"09/07/2025"}
                       maxLength={200}
                       label={"Vencimento da portaria"}
-                      value={motoristaEditando.portaria}
+                      value={motoristaEditando.vencimento}
                       onChange={(e) =>
                         setMotoristaEditando({
                           ...motoristaEditando,
