@@ -103,7 +103,7 @@ export default function Dashboard() {
     if(modalContent === "edicao" && locacaoSelecionada){
       console.log("A locação:", locacaoSelecionada);
       setPlacaSelecionada(locacaoSelecionada.veiculo_placa_fk || "");
-      setMotoristaSelecionado(locacaoSelecionada.motorista_cpf_fk || "");
+      setMotoristaSelecionado(locacaoSelecionada.motorista_fk || "");
       setItinerario(locacaoSelecionada.itinerario || "");
       setMotivo(locacaoSelecionada.motivo_saida || "");
       setAutorizacao(locacaoSelecionada.autorizacao || "");
@@ -161,7 +161,7 @@ export default function Dashboard() {
       if (res.ok) {
         setVeiculo(data);
       } else {
-        alert("Erro ao encontrar veículos");
+        console.log("Erro ao encontrar veículos");
       }
     })
     .catch((err) => {
@@ -185,7 +185,7 @@ export default function Dashboard() {
       if (res.ok) {
         setMotorista(data);
       } else {
-        alert("Erro ao encontrar motoristas");
+        console.log("Erro ao encontrar motoristas");
       }
     })
     .catch((err) => {
@@ -209,7 +209,7 @@ export default function Dashboard() {
       if(res.ok){
         setLocacoesAgendadas(data);
       } else {
-        alert(data.error);
+        console.log(data.error);
       }
     })
     .catch((err) => {
@@ -290,7 +290,7 @@ export default function Dashboard() {
         itinerario: itinerario,
         motivo_saida: motivo,
         autorizacao: autorizacao,
-        motorista_cpf_fk: motoristaSelecionado,
+        motorista_fk: motoristaSelecionado,
         gestor_cpf_fk: cpfGestor,
         veiculo_placa_fk: placaSelecionada,
       }),
@@ -395,39 +395,45 @@ export default function Dashboard() {
     const token = localStorage.getItem("token");
     const cpfGestor = localStorage.getItem("cpf");
 
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}/locacoes/atualizar/${id}`, {
-      method: "PUT",
-      headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id: id,
-        data_saida: dataSaida,
-        data_chegada: dataChegada,
-        itinerario: itinerario,
-        motivo_saida: motivo,
-        autorizacao: autorizacao,
-        motorista_cpf_fk: motoristaSelecionado,
-        veiculo_placa_fk: placaSelecionada,
-      })
-    });
-
-    const data = await res.json();
-
-    if (res.ok){
+    if (!motoristaSelecionado){
       handleNoticeIsOpen();
-      setConteudo("Locação atualizada com sucesso!");
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
+      setConteudo("Escolha o Motorista");
     } else {
-      handleNoticeIsOpen();
-      setConteudo(data.error);
-    }
-    } catch (error) {
-      console.error(error);
+
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}/locacoes/atualizar/${id}`, {
+        method: "PUT",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: id,
+          data_saida: dataSaida,
+          data_chegada: dataChegada,
+          itinerario: itinerario,
+          motivo_saida: motivo,
+          autorizacao: autorizacao,
+          motorista_fk: motoristaSelecionado,
+          veiculo_placa_fk: placaSelecionada,
+        })
+      });
+
+      const data = await res.json();
+
+      if (res.ok){
+        handleNoticeIsOpen();
+        setConteudo("Locação atualizada com sucesso!");
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      } else {
+        handleNoticeIsOpen();
+        setConteudo(data.error);
+      }
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
 
@@ -453,6 +459,9 @@ export default function Dashboard() {
         handleNoticeIsOpen();
         setConteudo("Locação deletada com sucesso!");
         handleConfirmacaoIsOpen();
+        setTimeout(() => {
+          window.location.reload();
+        })
       } else {
         handleNoticeIsOpen();
         setConteudo(data.error);
@@ -705,7 +714,7 @@ export default function Dashboard() {
                         >
                           <option className={styles.choicebox}>Escolha o Motorista</option>
                           {motorista.map((motoristas) => (
-                            <option key={motoristas.cpf} value={motoristas.cpf}>{motoristas.nome}</option>
+                            <option key={motoristas.id} value={motoristas.id}>{motoristas.nome}</option>
                           ))}
                         </select>
                       </div>
@@ -782,7 +791,7 @@ export default function Dashboard() {
           <>
             <div className={styles.containerModal}>
               <div className={styles.containerInternoModal}>
-                <h1 className="text-3xl">Cadastro de Locação</h1>
+                <h1 className="text-3xl">Editar locações</h1>
                 <form onSubmit={(e) => {
                   e.preventDefault();
                   handleEditarLocacao(locacaoSelecionada.id);
@@ -813,7 +822,7 @@ export default function Dashboard() {
                         >
                           <option className={styles.choicebox}>Escolha o Motorista</option>
                           {motorista.map((motoristas) => (
-                            <option key={motoristas.cpf} value={motoristas.cpf}>{motoristas.nome}</option>
+                            <option key={motoristas.id} value={motoristas.id}>{motoristas.nome}</option>
                           ))}
                         </select>
                       </div>
@@ -941,11 +950,7 @@ export default function Dashboard() {
                     <h1>Motorista:</h1>
                   </div>
                   <div className={styles.colunaDois}>
-                    {motorista.map((motoristasNome, index) => (
-                      motoristasNome.cpf === locacaoSelecionada.motorista_cpf_fk ? (
-                        <h1 key={index}>{motoristasNome.nome}</h1>
-                      ) : null
-                    ))}
+                    <h1>{locacaoSelecionada.motorista_fk}</h1>
                   </div>
                 </div>
 
@@ -1077,7 +1082,7 @@ export default function Dashboard() {
                   </div>
                   <div>
                     {motorista.map((motoristaLocacao, index) => (
-                      locacaoAgendada.motorista_cpf_fk === motoristaLocacao.cpf ? (
+                      locacaoAgendada.motorista_fk === motoristaLocacao.id ? (
                         <span className={styles.titleCardDois} key={index}>{motoristaLocacao.nome}</span>
                       ) : null
                     ))}

@@ -31,14 +31,14 @@ export default function Perfil() {
   const cargo = "gestor";
   const [conteudo, setConteudo] = useState("");
   const [gestor, setGestor] = useState("");
-  const [passIsOpen, setPassIsOpen] = useState(false);
+  const [senhaIsOpen, setSenhaIsOpen] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const token = localStorage.getItem("token");
 
-    const res = await fetch("${process.env.NEXT_PUBLIC_LOCAL}/usuario", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}/usuario`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -122,6 +122,7 @@ export default function Perfil() {
       const data = await res.json();
 
       if (res.ok) {
+        handleSenhaModal();
         handleNoticeIsOpen();
         setConteudo("Senha alterada com sucesso!");
       } else {
@@ -192,8 +193,8 @@ export default function Perfil() {
     setModalIsOpen(!modalIsOpen);
   }
 
-  function handlePassModal() {
-    setPassIsOpen(!passIsOpen);
+  function handleSenhaModal() {
+    setSenhaIsOpen(!senhaIsOpen);
   }
 
   function handleNoticeIsOpen() {
@@ -246,7 +247,7 @@ export default function Perfil() {
                 <div>
                   <BadButton
                     buttonWidth={"15rem"}
-                    onClick={handlePassModal}
+                    onClick={handleSenhaModal}
                     colorHover="#a3bc98"
                     cor="#769b6a"
                   >
@@ -433,7 +434,7 @@ export default function Perfil() {
             </div>
           </Modal>
 
-          <Modal isOpen={passIsOpen} onClose={handlePassModal}>
+          <Modal isOpen={senhaIsOpen} onClose={handleSenhaModal}>
             <div className={styles.containerModal}>
               <div className={styles.containerInternoModal}>
                 <h1 className="text-3xl">Cadastrar Gestor</h1>
@@ -453,7 +454,7 @@ export default function Perfil() {
                       textColor={"#48793c"}
                       colorHover={"#a3bc98"}
                       cor={"#d1dec7"}
-                      onClick={handlePassModal}
+                      onClick={handleSenhaModal}
                     >
                       Cancelar
                     </BadButton>

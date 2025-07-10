@@ -3,7 +3,6 @@
 import dynamic from "next/dynamic";
 import Header from "../components/header";
 import Footer from "../components/footer";
-import { CiCirclePlus } from "react-icons/ci";
 import { useEffect, useState } from "react";
 const Modal = dynamic(() => import("../components/modal"), { ssr: false });
 import BadButton from "../components/badButton";
@@ -12,6 +11,8 @@ import { useAuth } from "../hooks/useAuth";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { FaFileExport } from "react-icons/fa6";
+import Ginput from "../components/gInput";
+import { IoCloseCircle } from "react-icons/io5";
 
 export default function History() {
   useAuth();
@@ -22,6 +23,11 @@ export default function History() {
   const [selectedLocacao, setSelectedLocacao] = useState(null);
   const [conteudo, setConteudo] = useState("");
   const [noticeIsOpen, setNoticeIsOpen] = useState(false);
+  const [dateIsOpen, setDateIsOpen] = useState(false);
+
+  function handleDateIsOpen() {
+    setDateIsOpen(!dateIsOpen);
+  }
 
   function handleNoticeIsOpen() {
     setNoticeIsOpen(!noticeIsOpen);
@@ -50,6 +56,7 @@ const handleBaixar = async () => {
     a.click();
     a.remove();
 
+    handleDateIsOpen();
     handleNoticeIsOpen();
     setConteudo("Arquivo baixado com sucesso!");
   } else {
@@ -119,7 +126,7 @@ const handleBaixar = async () => {
             <div>
               <div className={styles.containerTitle}>
                 <h1 className={styles.titleLocacao}>Locações Finalizadas</h1>
-                <button className={styles.butaoAdd} onClick={handleBaixar}>
+                <button className={styles.butaoAdd} onClick={handleDateIsOpen}>
                   <FaFileExport size={35} />
                 </button>
               </div>
@@ -154,7 +161,7 @@ const handleBaixar = async () => {
                       </div>
                       <div>
                         <span className={styles.titleCardDois}>
-                          {`Motorista: ` + locacao.motorista_cpf_fk}
+                          {`Motorista: ` + locacao.motorista_id_fk}
                         </span>
                       </div>
                     </div>
@@ -171,6 +178,12 @@ const handleBaixar = async () => {
           >
             {selectedLocacao && (
               <div className={styles.containerModalGeral}>
+                <div className={styles.containerUpModal}>
+                  <h1 className={styles.titleExpand}>Locação detalhada:</h1>
+                  <div className={styles.butaoAdd} onClick={handleCloseExpandModal}>
+                    <IoCloseCircle size={35} />
+                  </div>
+                </div>
                 <div className={styles.modalExpand}>
                   {[
                     { label: "ID", value: selectedLocacao.id },
@@ -181,7 +194,7 @@ const handleBaixar = async () => {
                     },
                     {
                       label: "Motorista",
-                      value: selectedLocacao.motorista_cpf_fk,
+                      value: selectedLocacao.motorista_fk,
                     },
                     {
                       label: "Saída",
@@ -247,6 +260,22 @@ const handleBaixar = async () => {
             )}
           </Modal>
 
+          <Modal isOpen={dateIsOpen} onClose={handleDateIsOpen} width={"450px"}>
+            <div className={styles.containerModal}>
+              <div className={styles.containerInMini}>
+                <h1>Exportar Dados CSV:</h1>
+              </div>
+              <div className={styles.containerInput}>
+                <Ginput type={"date"} placeholder={"Digite a data início"}/>
+                <Ginput type={"date"} placeholder={"Digite a data final"}/>
+              </div>
+              <div className={styles.butaoBaixar}>
+                <BadButton textColor={"#48793c"} cor={"#d1dec7"} colorHover={"#a3bc98"} onClick={handleDateIsOpen}>Cancelar</BadButton>
+                <BadButton cor={"#48793c"} colorHover={"#769b6a"} onClick={handleBaixar}>Baixar</BadButton>
+              </div>
+            </div>
+          </Modal>
+
           <Modal
             isOpen={noticeIsOpen}
             onClose={handleNoticeIsOpen}
@@ -257,7 +286,7 @@ const handleBaixar = async () => {
                 <h1>{conteudo}</h1>
               </div>
               <div className={styles.butaoMini}>
-                <BadButton onClick={handleNoticeIsOpen} colorHover={"#769b6a"} cor={"#48793c"} >OK</BadButton>
+                <BadButton onClick={handleNoticeIsOpen} colorHover={"#769b6a"} cor={"#48793c"}>OK</BadButton>
               </div>
             </div>
           </Modal>
