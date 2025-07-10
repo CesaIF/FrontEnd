@@ -10,6 +10,7 @@ import BadButton from "../components/badButton";
 import styles from "./Motoristas.module.css";
 import Ginput from "../components/gInput";
 import { useAuth } from "../hooks/useAuth";
+import { FaFileExport } from "react-icons/fa6";
 
 export default function Motoristas() {
   useAuth();
@@ -98,9 +99,14 @@ export default function Motoristas() {
             <div>
               <div className={styles.containerTitle}>
                 <h1 className={styles.titleLocacao}>Motoristas Cadstrados</h1>
-                <button className={styles.butaoAdd} onClick={handleOpenModal}>
-                  <CiCirclePlus size={35}></CiCirclePlus>
-                </button>
+                <div className={styles.buttons}>
+                  <div className={styles.butaoAdd}>
+                    <FaFileExport size={35}/>
+                  </div>
+                  <div className={styles.butaoAdd} onClick={handleOpenModal}>
+                    <CiCirclePlus size={35}/>
+                  </div>
+                </div>
               </div>
               <div className={styles.line}></div>
             </div>

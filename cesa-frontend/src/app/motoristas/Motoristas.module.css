@@ -61,6 +61,12 @@
     margin-top: 1rem;
 }
 
+.buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 0rem 1rem;
+}
+
 .containerCard {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
