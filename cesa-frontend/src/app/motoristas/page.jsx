@@ -111,7 +111,7 @@ export default function Motoristas() {
               ) : (
                 motoristas.map((motorista) => (
                   <div
-                    key={motorista.cpf}
+                    key={motorista.id}
                     onClick={() => {
                       handleEditarMotorista(motorista);
                     }}
@@ -189,7 +189,7 @@ export default function Motoristas() {
                       maxLength={200}
                       label={"Portaria"}
                       value={novoMotorista.portaria}
-                      mask={"000//0000"}
+                      mask={"000/0000"}
                       onChange={(e) =>
                         setNovoMotorista({
                           ...novoMotorista,
@@ -372,7 +372,7 @@ export default function Motoristas() {
                       if (response.ok) {
                         setMotoristas((prevMotoristas) =>
                           prevMotoristas.map((m) =>
-                            m.cpf === motoristaEditando.cpf
+                            m.id === motoristaEditando.id
                               ? motoristaEditando
                               : m
                           )
@@ -465,7 +465,7 @@ export default function Motoristas() {
                     );
                     if (response.ok) {
                       setMotoristas((prev) =>
-                        prev.filter((m) => m.cpf !== motoristaEditando.cpf)
+                        prev.filter((m) => m.id !== motoristaEditando.id)
                       );
                       handleNoticeIsOpen();
                       handleDeletarIsOpen();
