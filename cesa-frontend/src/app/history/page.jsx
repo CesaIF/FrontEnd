@@ -180,7 +180,7 @@ const handleBaixar = async () => {
                     },
                     {
                       label: "Motorista",
-                      value: selectedLocacao.motorista_id_fk,
+                      value: selectedLocacao.motorista_fk,
                     },
                     {
                       label: "Saída",

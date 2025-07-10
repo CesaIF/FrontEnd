@@ -66,6 +66,38 @@ export default function Motoristas() {
   function handleNoticeIsOpen() {
     setNoticeIsOpen(!noticeIsOpen);
   }
+  const handleBaixar = async () => {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_LOCAL}/relatorio/gerarcsvmotorista`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.ok) {
+      const blob = await response.blob();
+
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "RelacaoMotoristas.csv";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      handleNoticeIsOpen();
+      setConteudo("Arquivo baixado com sucesso!");
+    } else {
+      // tenta ler erro como texto
+      const errorText = await response.text();
+      handleNoticeIsOpen();
+      setConteudo("Erro ao baixar: " + errorText);
+    }
+  };
 
   function handleDeletarIsOpen() {
     setDeletarIsOpen(!deletarIsOpen);
@@ -100,11 +132,11 @@ export default function Motoristas() {
               <div className={styles.containerTitle}>
                 <h1 className={styles.titleLocacao}>Motoristas Cadstrados</h1>
                 <div className={styles.buttons}>
-                  <div className={styles.butaoAdd}>
-                    <FaFileExport size={35}/>
+                  <div className={styles.butaoAdd} onClick={handleBaixar}>
+                    <FaFileExport size={35} />
                   </div>
                   <div className={styles.butaoAdd} onClick={handleOpenModal}>
-                    <CiCirclePlus size={35}/>
+                    <CiCirclePlus size={35} />
                   </div>
                 </div>
               </div>
