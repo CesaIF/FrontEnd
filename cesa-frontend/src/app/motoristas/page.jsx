@@ -246,10 +246,10 @@ export default function Motoristas() {
                         setConteudo("Motorista cadastrado com sucesso!");
 
                         setNovoMotorista({
-                          portaria: "",
                           nome: "",
-                          telefone: "",
                           email: "",
+                          portaria: "",
+                          vencimento: "",
                         });
                       } else {
                         const mensage = await response.json();
@@ -276,7 +276,7 @@ export default function Motoristas() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={""}
+                      placeholder={"Admael Santos"}
                       maxLength={200}
                       label={"Nome"}
                       value={motoristaEditando.nome}
@@ -291,15 +291,14 @@ export default function Motoristas() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={""}
+                      placeholder={"admael@gmail.com"}
                       maxLength={200}
-                      label={"Telefone"}
-                      value={motoristaEditando.telefone}
-                      mask={"(00) 0 0000-0000"}
+                      label={"E-mail"}
+                      value={motoristaEditando.email}
                       onChange={(e) =>
                         setMotoristaEditando({
                           ...motoristaEditando,
-                          telefone: e.target.value,
+                          email: e.target.value,
                         })
                       }
                     ></Ginput>
@@ -307,14 +306,30 @@ export default function Motoristas() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={""}
+                      placeholder={"024/2025"}
                       maxLength={200}
-                      label={"Email"}
-                      value={motoristaEditando.email}
+                      label={"Portaria"}
+                      value={motoristaEditando.portaria}
+                      mask={"000/0000"}
                       onChange={(e) =>
                         setMotoristaEditando({
                           ...motoristaEditando,
-                          email: e.target.value,
+                          portaria: e.target.value,
+                        })
+                      }
+                    ></Ginput>
+                  </div>
+                  <div className={styles.input}>
+                    <Ginput
+                      type={"date-local"}
+                      placeholder={"09/07/2025"}
+                      maxLength={200}
+                      label={"Vencimento da portaria"}
+                      value={motoristaEditando.portaria}
+                      onChange={(e) =>
+                        setMotoristaEditando({
+                          ...motoristaEditando,
+                          vencimento: e.target.value,
                         })
                       }
                     ></Ginput>
@@ -343,10 +358,10 @@ export default function Motoristas() {
                             Authorization: `Bearer ${token}`,
                           },
                           body: JSON.stringify({
-                            cpf: motoristaEditando.cpf,
                             nome: motoristaEditando.nome,
                             email: motoristaEditando.email,
-                            telefone: motoristaEditando.telefone,
+                            portaria: motoristaEditando.portaria,
+                            vencimento: motoristaEditando.vencimento,
                           }),
                         }
                       );
