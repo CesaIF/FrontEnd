@@ -18,16 +18,14 @@ export default function Motoristas() {
   const [motoristaEditando, setMotoristaEditando] = useState({
     portaria: "",
     nome: "",
-    telefone: "",
-    email: "",
     vencimento: "",
+    email: "",
   });
   const [novoMotorista, setNovoMotorista] = useState({
     portaria: "",
     nome: "",
-    telefone: "",
-    email: "",
     vencimento: "",
+    email: "",
   });
 
   useEffect(() => {
@@ -126,12 +124,12 @@ export default function Motoristas() {
                     </div>
                     <div>
                       <span className={styles.titleCard}>
-                        {`CPF: ` + motorista.cpf}
+                        {`Portaria: ` + motorista.portaria}
                       </span>
                     </div>
                     <div>
                       <span className={styles.titleCard}>
-                        {`Telefone: ` + motorista.telefone}
+                        {`Vencimento: ` + motorista.vencimento}
                       </span>
                     </div>
                     <div>
@@ -154,22 +152,7 @@ export default function Motoristas() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={'24/2025'}
-                      maxLength={200}
-                      label={"Portaria"}
-                      value={novoMotorista.portaria}
-                      onChange={(e) =>
-                        setNovoMotorista({
-                          ...novoMotorista,
-                          portaria: e.target.value,
-                        })
-                      }
-                    ></Ginput>
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput
-                      type={"text"}
-                      placeholder={'Admael Santos'}
+                      placeholder={"Admael Santos"}
                       maxLength={200}
                       label={"Nome"}
                       value={novoMotorista.nome}
@@ -184,25 +167,9 @@ export default function Motoristas() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={'(77) 9 9988-8155'}
+                      placeholder={"admael@gmail.com"}
                       maxLength={200}
-                      label={"telefone"}
-                      value={novoMotorista.telefone}
-                      mask={"(00) 0 0000-0000"}
-                      onChange={(e) =>
-                        setNovoMotorista({
-                          ...novoMotorista,
-                          telefone: e.target.value,
-                        })
-                      }
-                    ></Ginput>
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput
-                      type={"text"}
-                      placeholder={'user@hotmail.com'}
-                      maxLength={200}
-                      label={"Email"}
+                      label={"E-mail"}
                       value={novoMotorista.email}
                       onChange={(e) =>
                         setNovoMotorista({
@@ -211,11 +178,29 @@ export default function Motoristas() {
                         })
                       }
                     ></Ginput>
+                  </div>
+                  <div className={styles.input}>
                     <Ginput
-                      type={"datetime-local"}
-                      placeholder={'09/07/2025'}
+                      type={"text"}
+                      placeholder={"024/2025"}
                       maxLength={200}
-                      label={"Vencimentos da portaria"}
+                      label={"Portaria"}
+                      value={novoMotorista.portaria}
+                      mask={"000/0000"}
+                      onChange={(e) =>
+                        setNovoMotorista({
+                          ...novoMotorista,
+                          portaria: e.target.value,
+                        })
+                      }
+                    ></Ginput>
+                  </div>
+                  <div className={styles.input}>
+                    <Ginput
+                      type={"date-local"}
+                      placeholder={"09/07/2025"}
+                      maxLength={200}
+                      label={"Vencimento da portaria"}
                       value={novoMotorista.portaria}
                       onChange={(e) =>
                         setNovoMotorista({
@@ -261,19 +246,21 @@ export default function Motoristas() {
                         setConteudo("Motorista cadastrado com sucesso!");
 
                         setNovoMotorista({
-                          portaria: "",
                           nome: "",
-                          telefone: "",
                           email: "",
+                          portaria: "",
+                          vencimento: "",
                         });
                       } else {
                         const mensage = await response.json();
                         handleNoticeIsOpen();
-                        setConteudo(mensage.error || "Erro ao cadastrar motorista");
+                        setConteudo(
+                          mensage.error || "Erro ao cadastrar motorista"
+                        );
                       }
                     }}
                   >
-                    Cadastrar 
+                    Cadastrar
                   </BadButton>
                 </div>
               </div>
@@ -289,7 +276,7 @@ export default function Motoristas() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={''}
+                      placeholder={"Admael Santos"}
                       maxLength={200}
                       label={"Nome"}
                       value={motoristaEditando.nome}
@@ -304,15 +291,14 @@ export default function Motoristas() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={''}
+                      placeholder={"admael@gmail.com"}
                       maxLength={200}
-                      label={"Telefone"}
-                      value={motoristaEditando.telefone}
-                      mask={"(00) 0 0000-0000"}
+                      label={"E-mail"}
+                      value={motoristaEditando.email}
                       onChange={(e) =>
                         setMotoristaEditando({
                           ...motoristaEditando,
-                          telefone: e.target.value,
+                          email: e.target.value,
                         })
                       }
                     ></Ginput>
@@ -320,14 +306,30 @@ export default function Motoristas() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={''}
+                      placeholder={"024/2025"}
                       maxLength={200}
-                      label={"Email"}
-                      value={motoristaEditando.email}
+                      label={"Portaria"}
+                      value={motoristaEditando.portaria}
+                      mask={"000/0000"}
                       onChange={(e) =>
                         setMotoristaEditando({
                           ...motoristaEditando,
-                          email: e.target.value,
+                          portaria: e.target.value,
+                        })
+                      }
+                    ></Ginput>
+                  </div>
+                  <div className={styles.input}>
+                    <Ginput
+                      type={"date-local"}
+                      placeholder={"09/07/2025"}
+                      maxLength={200}
+                      label={"Vencimento da portaria"}
+                      value={motoristaEditando.portaria}
+                      onChange={(e) =>
+                        setMotoristaEditando({
+                          ...motoristaEditando,
+                          vencimento: e.target.value,
                         })
                       }
                     ></Ginput>
@@ -356,10 +358,10 @@ export default function Motoristas() {
                             Authorization: `Bearer ${token}`,
                           },
                           body: JSON.stringify({
-                            cpf: motoristaEditando.cpf,
                             nome: motoristaEditando.nome,
                             email: motoristaEditando.email,
-                            telefone: motoristaEditando.telefone,
+                            portaria: motoristaEditando.portaria,
+                            vencimento: motoristaEditando.vencimento,
                           }),
                         }
                       );
@@ -377,11 +379,13 @@ export default function Motoristas() {
                         setConteudo("Motorista editado com sucesso!");
                       } else {
                         handleNoticeIsOpen();
-                        setConteudo(data.error || "Erro ao atualizar motorista");
+                        setConteudo(
+                          data.error || "Erro ao atualizar motorista"
+                        );
                       }
                     }}
                   >
-                    Atualizar 
+                    Atualizar
                   </BadButton>
                 </div>
               </div>
@@ -430,53 +434,59 @@ export default function Motoristas() {
           <Modal isOpen={deletarIsOpen} onClose={handleDeletarIsOpen}>
             <div className={styles.containerModal}>
               <div className={styles.containerInMini}>
-              <h1 className="mb-3">Tem certeza que deseja deletar?</h1>
-            </div>
-            <div className={styles.butaoForm}>
-              <BadButton
-                textColor={"#48793c"}
-                colorHover={"#a3bc98"}
-                cor={"#d1dec7"}
-                onClick={handleDeletarIsOpen}
-              >
-                Cancelar
-              </BadButton>
-              <BadButton
-                colorHover={"#769b6a"}
-                cor={"#48793c"}
-                onClick={async () => {
-                  const token = localStorage.getItem("token");
-                  const response = await fetch(
-                    `${process.env.NEXT_PUBLIC_LOCAL}/motoristas/${motoristaEditando.cpf}`,
-                    {
-                      method: "DELETE",
-                      headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                      },
-                    }
-                  );
-                  if (response.ok) {
-                    setMotoristas((prev) =>
-                      prev.filter((m) => m.cpf !== motoristaEditando.cpf)
+                <h1 className="mb-3">Tem certeza que deseja deletar?</h1>
+              </div>
+              <div className={styles.butaoForm}>
+                <BadButton
+                  textColor={"#48793c"}
+                  colorHover={"#a3bc98"}
+                  cor={"#d1dec7"}
+                  onClick={handleDeletarIsOpen}
+                >
+                  Cancelar
+                </BadButton>
+                <BadButton
+                  colorHover={"#769b6a"}
+                  cor={"#48793c"}
+                  onClick={async () => {
+                    const token = localStorage.getItem("token");
+                    const response = await fetch(
+                      `${process.env.NEXT_PUBLIC_LOCAL}/motoristas/${motoristaEditando.cpf}`,
+                      {
+                        method: "DELETE",
+                        headers: {
+                          "Content-Type": "application/json",
+                          Authorization: `Bearer ${token}`,
+                        },
+                      }
                     );
-                    handleNoticeIsOpen();
-                    handleDeletarIsOpen();
-                    setConteudo("Motorista deletado com sucesso!");
-                  } else {
-                    const erro = await response.json();
-                    handleNoticeIsOpen();
-                    setConteudo(erro.message || "Erro ao deletar motorista. ");
-                  }
-                }}
-              >
-                Deletar
-              </BadButton>
-            </div>
+                    if (response.ok) {
+                      setMotoristas((prev) =>
+                        prev.filter((m) => m.cpf !== motoristaEditando.cpf)
+                      );
+                      handleNoticeIsOpen();
+                      handleDeletarIsOpen();
+                      setConteudo("Motorista deletado com sucesso!");
+                    } else {
+                      const erro = await response.json();
+                      handleNoticeIsOpen();
+                      setConteudo(
+                        erro.message || "Erro ao deletar motorista. "
+                      );
+                    }
+                  }}
+                >
+                  Deletar
+                </BadButton>
+              </div>
             </div>
           </Modal>
 
-          <Modal width={"400px"} isOpen={noticeIsOpen} onClose={handleNoticeIsOpen}>
+          <Modal
+            width={"400px"}
+            isOpen={noticeIsOpen}
+            onClose={handleNoticeIsOpen}
+          >
             <div className={styles.containerModal}>
               <div className={styles.containerInMini}>
                 <h1>{conteudo}</h1>
