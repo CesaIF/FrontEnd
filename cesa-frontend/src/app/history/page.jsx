@@ -12,6 +12,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { FaFileExport } from "react-icons/fa6";
 import Ginput from "../components/gInput";
+import { IoCloseCircle } from "react-icons/io5";
 
 export default function History() {
   useAuth();
@@ -177,6 +178,12 @@ const handleBaixar = async () => {
           >
             {selectedLocacao && (
               <div className={styles.containerModalGeral}>
+                <div className={styles.containerUpModal}>
+                  <h1 className={styles.titleExpand}>Locação detalhada:</h1>
+                  <div className={styles.butaoAdd} onClick={handleCloseExpandModal}>
+                    <IoCloseCircle size={35} />
+                  </div>
+                </div>
                 <div className={styles.modalExpand}>
                   {[
                     { label: "ID", value: selectedLocacao.id },
@@ -262,7 +269,8 @@ const handleBaixar = async () => {
                 <Ginput type={"date"} placeholder={"Digite a data início"}/>
                 <Ginput type={"date"} placeholder={"Digite a data final"}/>
               </div>
-              <div className={styles.butaoMini}>
+              <div className={styles.butaoBaixar}>
+                <BadButton textColor={"#48793c"} cor={"#d1dec7"} colorHover={"#a3bc98"} onClick={handleDateIsOpen}>Cancelar</BadButton>
                 <BadButton cor={"#48793c"} colorHover={"#769b6a"} onClick={handleBaixar}>Baixar</BadButton>
               </div>
             </div>
@@ -278,7 +286,7 @@ const handleBaixar = async () => {
                 <h1>{conteudo}</h1>
               </div>
               <div className={styles.butaoMini}>
-                <BadButton onClick={handleNoticeIsOpen} colorHover={"#769b6a"} cor={"#48793c"} >OK</BadButton>
+                <BadButton onClick={handleNoticeIsOpen} colorHover={"#769b6a"} cor={"#48793c"}>OK</BadButton>
               </div>
             </div>
           </Modal>

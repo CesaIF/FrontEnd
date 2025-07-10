@@ -127,9 +127,13 @@
   padding: 1rem;
   box-sizing: border-box;
   overflow-y: auto;
-  max-height: 70vh;
+  max-height: 40vh;
 }
 
+.titleExpand {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
 
 .partUm {
     display: grid;
@@ -199,11 +203,25 @@
     width: 80%;
 }
 
+.containerUpModal {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+}
+
 .butaoMini {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 2.5rem;
+}
+
+.butaoBaixar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2.5rem;
+    width: 100%;
 }
 
 .containerInput {
