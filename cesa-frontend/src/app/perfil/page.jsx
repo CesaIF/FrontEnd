@@ -38,7 +38,7 @@ export default function Perfil() {
 
     const token = localStorage.getItem("token");
 
-    const res = await fetch("${process.env.NEXT_PUBLIC_LOCAL}/usuario", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}/usuario`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
