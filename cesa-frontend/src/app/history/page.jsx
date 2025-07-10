@@ -11,6 +11,7 @@ import { useAuth } from "../hooks/useAuth";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { FaFileExport } from "react-icons/fa6";
+import Ginput from "../components/gInput";
 
 export default function History() {
   useAuth();
@@ -21,6 +22,11 @@ export default function History() {
   const [selectedLocacao, setSelectedLocacao] = useState(null);
   const [conteudo, setConteudo] = useState("");
   const [noticeIsOpen, setNoticeIsOpen] = useState(false);
+  const [dateIsOpen, setDateIsOpen] = useState(false);
+
+  function handleDateIsOpen() {
+    setDateIsOpen(!dateIsOpen);
+  }
 
   function handleNoticeIsOpen() {
     setNoticeIsOpen(!noticeIsOpen);
@@ -49,6 +55,7 @@ const handleBaixar = async () => {
     a.click();
     a.remove();
 
+    handleDateIsOpen();
     handleNoticeIsOpen();
     setConteudo("Arquivo baixado com sucesso!");
   } else {
@@ -118,7 +125,7 @@ const handleBaixar = async () => {
             <div>
               <div className={styles.containerTitle}>
                 <h1 className={styles.titleLocacao}>Locações Finalizadas</h1>
-                <button className={styles.butaoAdd} onClick={handleBaixar}>
+                <button className={styles.butaoAdd} onClick={handleDateIsOpen}>
                   <FaFileExport size={35} />
                 </button>
               </div>
@@ -244,6 +251,21 @@ const handleBaixar = async () => {
                 </div>
               </div>
             )}
+          </Modal>
+
+          <Modal isOpen={dateIsOpen} onClose={handleDateIsOpen} width={"450px"}>
+            <div className={styles.containerModal}>
+              <div className={styles.containerInMini}>
+                <h1>Exportar Dados CSV:</h1>
+              </div>
+              <div className={styles.containerInput}>
+                <Ginput type={"date"} placeholder={"Digite a data início"}/>
+                <Ginput type={"date"} placeholder={"Digite a data final"}/>
+              </div>
+              <div className={styles.butaoMini}>
+                <BadButton cor={"#48793c"} colorHover={"#769b6a"} onClick={handleBaixar}>Baixar</BadButton>
+              </div>
+            </div>
           </Modal>
 
           <Modal

@@ -206,6 +206,14 @@
     margin-top: 2.5rem;
 }
 
+.containerInput {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 2.5rem;
+    width: 100%;
+}
+
 .containerModalGeral {
     display: flex;
     flex-direction: column;
