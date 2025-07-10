@@ -161,7 +161,7 @@ export default function Dashboard() {
       if (res.ok) {
         setVeiculo(data);
       } else {
-        alert("Erro ao encontrar veículos");
+        console.log("Erro ao encontrar veículos");
       }
     })
     .catch((err) => {
@@ -185,7 +185,7 @@ export default function Dashboard() {
       if (res.ok) {
         setMotorista(data);
       } else {
-        alert("Erro ao encontrar motoristas");
+        console.log("Erro ao encontrar motoristas");
       }
     })
     .catch((err) => {
@@ -209,7 +209,7 @@ export default function Dashboard() {
       if(res.ok){
         setLocacoesAgendadas(data);
       } else {
-        alert(data.error);
+        console.log(data.error);
       }
     })
     .catch((err) => {
