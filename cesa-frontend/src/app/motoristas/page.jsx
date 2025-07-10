@@ -189,7 +189,7 @@ export default function Motoristas() {
                       maxLength={200}
                       label={"Portaria"}
                       value={novoMotorista.portaria}
-                      mask={"000/0000"}
+                      mask={"000//0000"}
                       onChange={(e) =>
                         setNovoMotorista({
                           ...novoMotorista,
@@ -353,7 +353,7 @@ export default function Motoristas() {
                     onClick={async () => {
                       const token = localStorage.getItem("token");
                       const response = await fetch(
-                        `${process.env.NEXT_PUBLIC_LOCAL}/motoristas/${motoristaEditando.cpf}`,
+                        `${process.env.NEXT_PUBLIC_LOCAL}/motoristas/${motoristaEditando.id}`,
                         {
                           method: "PUT",
                           headers: {
@@ -454,7 +454,7 @@ export default function Motoristas() {
                   onClick={async () => {
                     const token = localStorage.getItem("token");
                     const response = await fetch(
-                      `${process.env.NEXT_PUBLIC_LOCAL}/motoristas/${motoristaEditando.cpf}`,
+                      `${process.env.NEXT_PUBLIC_LOCAL}/motoristas/${motoristaEditando.id}`,
                       {
                         method: "DELETE",
                         headers: {
