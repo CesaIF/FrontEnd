@@ -395,39 +395,45 @@ export default function Dashboard() {
     const token = localStorage.getItem("token");
     const cpfGestor = localStorage.getItem("cpf");
 
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}/locacoes/atualizar/${id}`, {
-      method: "PUT",
-      headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id: id,
-        data_saida: dataSaida,
-        data_chegada: dataChegada,
-        itinerario: itinerario,
-        motivo_saida: motivo,
-        autorizacao: autorizacao,
-        motorista_fk: motoristaSelecionado,
-        veiculo_placa_fk: placaSelecionada,
-      })
-    });
-
-    const data = await res.json();
-
-    if (res.ok){
+    if (!motoristaSelecionado){
       handleNoticeIsOpen();
-      setConteudo("Locação atualizada com sucesso!");
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
+      setConteudo("Escolha o Motorista");
     } else {
-      handleNoticeIsOpen();
-      setConteudo(data.error);
-    }
-    } catch (error) {
-      console.error(error);
+
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}/locacoes/atualizar/${id}`, {
+        method: "PUT",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: id,
+          data_saida: dataSaida,
+          data_chegada: dataChegada,
+          itinerario: itinerario,
+          motivo_saida: motivo,
+          autorizacao: autorizacao,
+          motorista_fk: motoristaSelecionado,
+          veiculo_placa_fk: placaSelecionada,
+        })
+      });
+
+      const data = await res.json();
+
+      if (res.ok){
+        handleNoticeIsOpen();
+        setConteudo("Locação atualizada com sucesso!");
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      } else {
+        handleNoticeIsOpen();
+        setConteudo(data.error);
+      }
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
 
@@ -944,11 +950,7 @@ export default function Dashboard() {
                     <h1>Motorista:</h1>
                   </div>
                   <div className={styles.colunaDois}>
-                    {motorista.map((motoristasNome, index) => (
-                      motoristasNome.id === locacaoSelecionada.motorista_fk ? (
-                        <h1 key={index}>{motoristasNome.nome}</h1>
-                      ) : null
-                    ))}
+                    <h1>{locacaoSelecionada.motorista_fk}</h1>
                   </div>
                 </div>
 
