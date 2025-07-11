@@ -83,6 +83,8 @@ docker-compose up -d
 
 - Tela de Recuperar senha
 
+- Tela de Not Found
+
 ## ⚙️ Variáveis de Ambiente
 
 Crie um arquivo .env na raiz do frontend com:
