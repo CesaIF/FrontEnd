@@ -1,6 +1,9 @@
+"use client"
+
 import styles from './Input.module.css';
 import React from 'react';
 import { IMaskInput } from 'react-imask';
+import { useState } from 'react';
 
 export default function Ginput({
   label,
@@ -18,6 +21,10 @@ export default function Ginput({
     onChange({ target: { value: val } });
   };
 
+  const [tocado, setTocado] = useState(false);
+
+  const isEmpty = tocado && value?.toString().trim() === "";
+
   return (
     <div className={styles.inputContainer}>
       <label htmlFor={htmlFor} className={styles.label}>{label}</label>
@@ -32,7 +39,8 @@ export default function Ginput({
           type={type}
           maxLength={maxLength}
           placeholder={placeholder}
-          className={styles.input}
+          onBlur={() => {setTocado(true)}}
+          className={`${styles.input} ${isEmpty ? styles.inputVazio : ""}`}
         />
       ) : (
         <input
@@ -41,7 +49,8 @@ export default function Ginput({
           maxLength={maxLength}
           type={type}
           placeholder={placeholder}
-          className={styles.input}
+          onBlur={() => {setTocado(true)}}
+          className={`${styles.input} ${isEmpty ? styles.inputVazio : ""}`}
           onChange={onChange}
         />
       )}

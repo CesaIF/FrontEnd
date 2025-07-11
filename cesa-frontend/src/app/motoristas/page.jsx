@@ -130,7 +130,7 @@ export default function Motoristas() {
           <div className={styles.containerInternoUm}>
             <div>
               <div className={styles.containerTitle}>
-                <h1 className={styles.titleLocacao}>Motoristas Cadstrados</h1>
+                <h1 className={styles.titleLocacao}>Motoristas Cadastrados</h1>
                 <div className={styles.buttons}>
                   <div className={styles.butaoAdd} onClick={handleBaixar}>
                     <FaFileExport size={35} />

@@ -44,15 +44,15 @@
     cursor: pointer;
 }
 
+.butaoAdd:hover {
+    background-color: #d1dec7;
+}
+
 .containerExpand {
     display: grid;
     grid-template-columns: repeat(1, minmax(0, 1fr));
     justify-items: center;
     gap: 2rem;
-}
-
-.butaoAdd:hover {
-    background-color: #d1dec7;
 }
 
 .line {

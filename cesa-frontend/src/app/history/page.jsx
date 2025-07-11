@@ -16,6 +16,9 @@ import { IoCloseCircle } from "react-icons/io5";
 
 export default function History() {
   useAuth();
+  const [dataInicio, setDataInicio] = useState("");
+  const [dataFim, setDataFim] = useState("");
+
   const [locacoes, setLocacoes] = useState([]);
   const [isOpen, setIsOpen] = useState(true);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -33,40 +36,48 @@ export default function History() {
     setNoticeIsOpen(!noticeIsOpen);
   }
 
-const handleBaixar = async () => {
-  const token = localStorage.getItem("token");
+  const handleBaixar = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_LOCAL}/relatorio/gerarcsv`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            dataInicio,
+            dataFim,
+          }),
+        }
+      );
 
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_LOCAL}/relatorio/gerarcsv`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "Relatorio.csv";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+
+        handleDateIsOpen();
+        handleNoticeIsOpen();
+        setConteudo("Arquivo baixado com sucesso!");
+      } else {
+        // tenta ler erro como texto
+        const errorText = await response.text();
+        handleNoticeIsOpen();
+        setConteudo("Erro ao baixar: " + errorText);
+      }
+    } catch (error) {
+      handleNoticeIsOpen();
+      setConteudo("Erro inesperado: " + error.message);
     }
-  );
-
-  if (response.ok) {
-    const blob = await response.blob();
-
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "Relatorio.csv";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-
-    handleDateIsOpen();
-    handleNoticeIsOpen();
-    setConteudo("Arquivo baixado com sucesso!");
-  } else {
-    // tenta ler erro como texto
-    const errorText = await response.text();
-    handleNoticeIsOpen();
-    setConteudo("Erro ao baixar: " + errorText);
-  }
-};
-
+  };
 
   useEffect(() => {
     const fetchLocacoes = async () => {
@@ -161,7 +172,7 @@ const handleBaixar = async () => {
                       </div>
                       <div>
                         <span className={styles.titleCardDois}>
-                          {`Motorista: ` + locacao.motorista_id_fk}
+                          {`Motorista: ` + locacao.motorista_fk}
                         </span>
                       </div>
                     </div>
@@ -180,7 +191,10 @@ const handleBaixar = async () => {
               <div className={styles.containerModalGeral}>
                 <div className={styles.containerUpModal}>
                   <h1 className={styles.titleExpand}>Locação detalhada:</h1>
-                  <div className={styles.butaoAdd} onClick={handleCloseExpandModal}>
+                  <div
+                    className={styles.butaoClose}
+                    onClick={handleCloseExpandModal}
+                  >
                     <IoCloseCircle size={35} />
                   </div>
                 </div>
@@ -266,12 +280,35 @@ const handleBaixar = async () => {
                 <h1>Exportar Dados CSV:</h1>
               </div>
               <div className={styles.containerInput}>
-                <Ginput type={"date"} placeholder={"Digite a data início"}/>
-                <Ginput type={"date"} placeholder={"Digite a data final"}/>
+                <Ginput
+                  type={"date"}
+                  value={dataInicio}
+                  onChange={(e) => setDataInicio(e.target.value)}
+                  placeholder={"Digite a data início"}
+                />
+                <Ginput
+                  type={"date"}
+                  value={dataFim}
+                  onChange={(e) => setDataFim(e.target.value)}
+                  placeholder={"Digite a data final"}
+                />
               </div>
               <div className={styles.butaoBaixar}>
-                <BadButton textColor={"#48793c"} cor={"#d1dec7"} colorHover={"#a3bc98"} onClick={handleDateIsOpen}>Cancelar</BadButton>
-                <BadButton cor={"#48793c"} colorHover={"#769b6a"} onClick={handleBaixar}>Baixar</BadButton>
+                <BadButton
+                  textColor={"#48793c"}
+                  cor={"#d1dec7"}
+                  colorHover={"#a3bc98"}
+                  onClick={handleDateIsOpen}
+                >
+                  Cancelar
+                </BadButton>
+                <BadButton
+                  cor={"#48793c"}
+                  colorHover={"#769b6a"}
+                  onClick={handleBaixar}
+                >
+                  Baixar
+                </BadButton>
               </div>
             </div>
           </Modal>
@@ -286,7 +323,13 @@ const handleBaixar = async () => {
                 <h1>{conteudo}</h1>
               </div>
               <div className={styles.butaoMini}>
-                <BadButton onClick={handleNoticeIsOpen} colorHover={"#769b6a"} cor={"#48793c"}>OK</BadButton>
+                <BadButton
+                  onClick={handleNoticeIsOpen}
+                  colorHover={"#769b6a"}
+                  cor={"#48793c"}
+                >
+                  OK
+                </BadButton>
               </div>
             </div>
           </Modal>

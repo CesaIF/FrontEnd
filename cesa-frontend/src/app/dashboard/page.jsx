@@ -23,72 +23,47 @@ export default function Dashboard() {
 
   // constantes de funcionamento geral da página.
 
-  // constante de abrem e fecham os modais.
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  // constante que abre e fecha os modais de confirmação.
   const [confirmacaoIsOpen, setConfirmacaoIsOpen] = useState(false);
-  // constante que abre e fecha o menu lateral.
   const [isOpen, setIsOpen] = useState(true);
-  // constante que altera o conteúdo dos modais.
   const [modalContent, setModalContent] = useState("cadastro");
-  // constante que altera o conteúdo do modal de confirmação.
   const [confirmacao, setConfirmacao] = useState("cadastrado");
-  // constante que altera o tipo de modal de expansão dos dados que vai inferir na funcionalidade deles.
   const [expandType, setExpandType] = useState(1);
-  // constante que altera o valor do popUp e permite que ele seja aberto.
   const [popUp, setPopUp] = useState(false);
-  // constante que informa a localização do popUp.
   const [popUpPosition, setPopUpPosition] = useState({ x: 0, y: 0 });
-  // constante que altera largura do modal.
   const [widthModal, setWidthModal] = useState("1000px");
-  // constante que inicializa o useRef do popUp.
   const popUpRef = useRef(null);
 
   // função que verifica se tem algum login feito.
   useAuth();
 
-  // constantes que inicializa dados do cadastro de locação.
-
-  // constante que mapeia as locações agendadas do backend.
   const [locacoesAgendadas, setLocacoesAgendadas] = useState([]);
-  // constante que mapeia as locações iniciadas do backend.
   const [locacoes, setLocacoes] = useState([]);
-  // consante que mapeia os veículos do backend.
   const [veiculo, setVeiculo] = useState([]);
-  // constante que mapeia motoristas
   const [motorista, setMotorista] = useState([]);
-  // constante que guarda itinerario do form de cadastro.
+
   const [itinerario, setItinerario] = useState("");
-  // constante que guarda motivo de saida.
   const [motivo, setMotivo] = useState("");
-  // constante que recebe data de saída.
   const [dataSaida, setDataSaida] = useState("");
-  // constante que recebe data de chegada.
   const [dataChegada, setDataChegada] = useState("");
-  // constante que recebe a observação antes do carro sair.
   const [observacaoSaida, setObservacaoSaida] = useState("");
-  // constante que recebe a placa para edição.
   const [placaSelecionada, setPlacaSelecionada] = useState("");
-  // constante que recebe o motorista para edição.
   const [motoristaSelecionado, setMotoristaSelecionado] = useState("");
-  // constante que armazena uma locação quando for clicada.
   const [locacaoSelecionada, setLocacaoSelecionada] = useState("");
-  // constante que recebe a observação ao chegar.
   const [observacaoEntrada, setObservacaoEntrada] = useState("");
-  // constante que recebe a quilomeragem do carro ao chegar. Obs: a quilometragem ao sair é pega do próprio veículo.
   const [kmChegada, setKmChegada] = useState("");
-  // constante que descreve a autorização da locação.
   const [autorizacao, setAutorizacao] = useState("");
-  // constante que pega um indice de uma locação.
+
   const [indexSelecionado, setIndexSelecionado] = useState(null);
-  // constante que define o conteúdo ao ser exibido nas moldais de aviso.
   const [conteudo, setConteudo] = useState("");
-  // constante que abre o modal de aviso.
   const [noticeIsOpen, setNoticeIsOpen] = useState(false);
-  // constante que mapeia gestores.
   const [gestores, setGestores] = useState([]);
-  // constante que recebe um usuário.
   const [usuario, setUsuario] = useState(null);
+
+  const [valorSelecionado, setValorSelecionado] = useState("");
+  const [tocado, setTocado] = useState(false);
+
+  const isEmpty = tocado && valorSelecionado === "";
 
   // função que cria data formatada pra ser utilizada no input de edição.
   function formatarData(data) {
@@ -103,7 +78,6 @@ export default function Dashboard() {
     if(modalContent === "edicao" && locacaoSelecionada){
       console.log("A locação:", locacaoSelecionada);
       setPlacaSelecionada(locacaoSelecionada.veiculo_placa_fk || "");
-      setMotoristaSelecionado(locacaoSelecionada.motorista_fk || "");
       setItinerario(locacaoSelecionada.itinerario || "");
       setMotivo(locacaoSelecionada.motivo_saida || "");
       setAutorizacao(locacaoSelecionada.autorizacao || "");
@@ -278,39 +252,45 @@ export default function Dashboard() {
     const token = localStorage.getItem("token");
     const cpfGestor = localStorage.getItem("cpf");
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}/locacoes`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        data_saida: dataSaida,
-        data_chegada: dataChegada,
-        itinerario: itinerario,
-        motivo_saida: motivo,
-        autorizacao: autorizacao,
-        motorista_fk: motoristaSelecionado,
-        gestor_cpf_fk: cpfGestor,
-        veiculo_placa_fk: placaSelecionada,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      setMotoristaSelecionado("");
-      setPlacaSelecionada("");
-      setItinerario("");
-      setMotivo("");
+    if (!motoristaSelecionado) {
       handleNoticeIsOpen();
-      setConteudo("Locação criada com sucesso!");
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
+      setConteudo("Escolha o motorista");
     } else {
-      handleNoticeIsOpen();
-      setConteudo(data.error);
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL}/locacoes`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          data_saida: dataSaida,
+          data_chegada: dataChegada,
+          itinerario: itinerario,
+          motivo_saida: motivo,
+          autorizacao: autorizacao,
+          motorista_fk: motoristaSelecionado,
+          gestor_cpf_fk: cpfGestor,
+          veiculo_placa_fk: placaSelecionada,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setMotoristaSelecionado("");
+        setPlacaSelecionada("");
+        setItinerario("");
+        setMotivo("");
+        handleNoticeIsOpen();
+        setConteudo("Locação criada com sucesso!");
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      } else {
+        handleNoticeIsOpen();
+        setConteudo(data.error);
+      }
     }
   }
 
@@ -1081,11 +1061,7 @@ export default function Dashboard() {
                     <span className={styles.titleCard}>{locacaoAgendada.veiculo_placa_fk}</span>
                   </div>
                   <div>
-                    {motorista.map((motoristaLocacao, index) => (
-                      locacaoAgendada.motorista_fk === motoristaLocacao.id ? (
-                        <span className={styles.titleCardDois} key={index}>{motoristaLocacao.nome}</span>
-                      ) : null
-                    ))}
+                    <span className={styles.titleCardDois}>{locacaoAgendada.motorista_fk}</span>
                   </div>
                 </div>
                 <div className={styles.threeDotsContainer}>
