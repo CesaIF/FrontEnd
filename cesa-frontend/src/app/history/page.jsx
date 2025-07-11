@@ -12,7 +12,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { FaFileExport } from "react-icons/fa6";
 import Ginput from "../components/gInput";
-import { IoCloseCircle } from "react-icons/io5";
+import { IoClose } from "react-icons/io5";
 
 export default function History() {
   useAuth();
@@ -84,7 +84,7 @@ export default function History() {
       try {
         const token = localStorage.getItem("token");
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_LOCAL}/locacoes/all`,
+          `${process.env.NEXT_PUBLIC_LOCAL}/locacoes/allhist`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -190,12 +190,14 @@ export default function History() {
             {selectedLocacao && (
               <div className={styles.containerModalGeral}>
                 <div className={styles.containerUpModal}>
-                  <h1 className={styles.titleExpand}>Locação detalhada:</h1>
+                  <div className={styles.titleExpand}>
+                    <h1>Locação detalhada:</h1>
+                  </div>
                   <div
                     className={styles.butaoClose}
                     onClick={handleCloseExpandModal}
                   >
-                    <IoCloseCircle size={35} />
+                    <IoClose size={35} />
                   </div>
                 </div>
                 <div className={styles.modalExpand}>
@@ -204,7 +206,7 @@ export default function History() {
                     { label: "Itinerário", value: selectedLocacao.itinerario },
                     {
                       label: "Veículo",
-                      value: selectedLocacao.veiculo_placa_fk,
+                      value: `${selectedLocacao.modelo_veiculo} - ${selectedLocacao.veiculo_placa_fk}`,
                     },
                     {
                       label: "Motorista",
@@ -237,17 +239,17 @@ export default function History() {
                     },
                     {
                       label: "Porteiro Saída",
-                      value: selectedLocacao.porteiro_saida_fk,
+                      value: selectedLocacao.nome_porteiro_saida,
                     },
                     {
                       label: "Porteiro Chegada",
-                      value: selectedLocacao.porteiro_chegada_fk,
+                      value: selectedLocacao.nome_porteiro_chegada,
                     },
                     {
                       label: "Motivo da saída",
                       value: selectedLocacao.motivo_saida,
                     },
-                    { label: "Gestor", value: selectedLocacao.gestor_cpf_fk },
+                    { label: "Gestor", value: selectedLocacao.nome_gestor },
                     {
                       label: "Autorização",
                       value: selectedLocacao.autorizacao,
@@ -258,17 +260,6 @@ export default function History() {
                       <h1>{item.value || "—"}</h1>
                     </div>
                   ))}
-                </div>
-
-                <div className={styles.butaoForm}>
-                  <BadButton
-                    colorHover={"#a3bc98"}
-                    textColor={"#48793c"}
-                    cor={"#d1dec7"}
-                    onClick={handleCloseExpandModal}
-                  >
-                    Fechar
-                  </BadButton>
                 </div>
               </div>
             )}
