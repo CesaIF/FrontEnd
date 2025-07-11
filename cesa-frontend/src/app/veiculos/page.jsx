@@ -98,7 +98,7 @@ export default function Veiculos() {
           <div className={styles.containerInternoUm}>
             <div>
               <div className={styles.containerTitle}>
-                <h1 className={styles.titleLocacao}>Veículos Cadstrados</h1>
+                <h1 className={styles.titleLocacao}>Veículos Cadastrados</h1>
                 <button className={styles.butaoAdd} onClick={handleOpenModal}>
                   <CiCirclePlus size={35}></CiCirclePlus>
                 </button>

@@ -192,7 +192,7 @@ export default function History() {
                 <div className={styles.containerUpModal}>
                   <h1 className={styles.titleExpand}>Locação detalhada:</h1>
                   <div
-                    className={styles.butaoAdd}
+                    className={styles.butaoClose}
                     onClick={handleCloseExpandModal}
                   >
                     <IoCloseCircle size={35} />

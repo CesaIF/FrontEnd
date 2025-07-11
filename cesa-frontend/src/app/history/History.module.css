@@ -48,6 +48,18 @@
     background-color: #fde9b6;
 }
 
+.butaoClose {
+    padding: 0.5rem 0.5rem;
+    color: #48793c;
+    border-radius: 1rem;
+    transition: background-color 0.3s;
+    cursor: pointer;
+}
+
+.butaoClose:hover {
+    background-color: #d1dec7;
+}
+
 .line {
     background-color: #48793c;
     height: 1px;

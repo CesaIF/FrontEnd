@@ -16,3 +16,8 @@
     background-color: #efeeef;
     border-color: #a3bc98;
 }
+
+.textareaVazio {
+    background-color: #fde8ed;
+    border-color: red;
+}

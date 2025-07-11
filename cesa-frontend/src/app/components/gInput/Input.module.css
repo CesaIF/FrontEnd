@@ -14,9 +14,13 @@
     width: 100%;
     color: #2b2b2b;
     background-color: #efeeef;
-    border-color: #a3bc98;
 }
 
 .label {
     color: black;
+}
+
+.inputVazio {
+    background-color: #fde8ed;
+    border-color: red;
 }
