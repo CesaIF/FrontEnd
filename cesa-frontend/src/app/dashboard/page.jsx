@@ -54,6 +54,14 @@ export default function Dashboard() {
   const [kmChegada, setKmChegada] = useState("");
   const [autorizacao, setAutorizacao] = useState("");
 
+  const [placaEdicao, setPlacaEdicao] = useState("");
+  const [motoristaEdicao, setMotoristaEdicao] = useState("");
+  const [itinerarioEdicao, setItinerarioEdicao] = useState("");
+  const [motivoEdicao, setMotivoEdicao] = useState("");
+  const [dataSaidaEdicao, setDataSaidaEdicao] = useState("");
+  const [dataChegadaEdicao, setDataChegadaEdicao] = useState("");
+  const [autorizacaoEdicao, setAutorizacaoEdicao] = useState("");
+
   const [indexSelecionado, setIndexSelecionado] = useState(null);
   const [conteudo, setConteudo] = useState("");
   const [noticeIsOpen, setNoticeIsOpen] = useState(false);
@@ -77,17 +85,17 @@ export default function Dashboard() {
   useEffect(() => {
     if(modalContent === "edicao" && locacaoSelecionada){
       console.log("A locação:", locacaoSelecionada);
-      setPlacaSelecionada(locacaoSelecionada.veiculo_placa_fk || "");
-      setItinerario(locacaoSelecionada.itinerario || "");
-      setMotivo(locacaoSelecionada.motivo_saida || "");
-      setAutorizacao(locacaoSelecionada.autorizacao || "");
+      setPlacaEdicao(locacaoSelecionada.veiculo_placa_fk || "");
+      setItinerarioEdicao(locacaoSelecionada.itinerario || "");
+      setMotivoEdicao(locacaoSelecionada.motivo_saida || "");
+      setAutorizacaoEdicao(locacaoSelecionada.autorizacao || "");
 
       if (locacaoSelecionada.data_saida) {
-        setDataSaida(formatarData(locacaoSelecionada.data_saida));
+        setDataSaidaEdicao(formatarData(locacaoSelecionada.data_saida));
       }
 
       if (locacaoSelecionada.data_chegada) {
-        setDataChegada(formatarData(locacaoSelecionada.data_chegada));
+        setDataChegadaEdicao(formatarData(locacaoSelecionada.data_chegada));
       }
 
     }
@@ -389,13 +397,13 @@ export default function Dashboard() {
         },
         body: JSON.stringify({
           id: id,
-          data_saida: dataSaida,
-          data_chegada: dataChegada,
-          itinerario: itinerario,
-          motivo_saida: motivo,
-          autorizacao: autorizacao,
-          motorista_fk: motoristaSelecionado,
-          veiculo_placa_fk: placaSelecionada,
+          data_saida: dataSaidaEdicao,
+          data_chegada: dataChegadaEdicao,
+          itinerario: itinerarioEdicao,
+          motivo_saida: motivoEdicao,
+          autorizacao: autorizacaoEdicao,
+          motorista_fk: motoristaEdicao,
+          veiculo_placa_fk: placaEdicao,
         })
       });
 
@@ -782,8 +790,8 @@ export default function Dashboard() {
 
                       <div className={styles.choiceboxContainer}>
                         <select
-                        value={placaSelecionada}
-                        onChange={(e) => setPlacaSelecionada(e.target.value)}
+                        value={placaEdicao}
+                        onChange={(e) => setPlacaEdicao(e.target.value)}
                         >
                           <option className={styles.choicebox}>Escolha o Veículo</option>
                           {veiculo.map((veiculos) => (
@@ -797,8 +805,8 @@ export default function Dashboard() {
 
                       <div className={styles.choiceboxContainer}>
                         <select
-                        value={motoristaSelecionado}
-                        onChange={(e) => setMotoristaSelecionado(e.target.value)}
+                        value={motoristaEdicao}
+                        onChange={(e) => setMotoristaEdicao(e.target.value)}
                         >
                           <option className={styles.choicebox}>Escolha o Motorista</option>
                           {motorista.map((motoristas) => (
@@ -814,8 +822,8 @@ export default function Dashboard() {
                         placeholder={"Descreva o Itinerário"}
                         maxLength={300}
                         rows={2}
-                        value={itinerario}
-                        onChange={(e) => setItinerario(e.target.value)}
+                        value={itinerarioEdicao}
+                        onChange={(e) => setItinerarioEdicao(e.target.value)}
                       ></Textarea>
                     </div>
                     <div className={styles.input}>
@@ -824,8 +832,8 @@ export default function Dashboard() {
                         placeholder={"Descreva o motivo da Saída"}
                         maxLength={300}
                         rows={2}
-                        value={motivo}
-                        onChange={(e) => setMotivo(e.target.value)}
+                        value={motivoEdicao}
+                        onChange={(e) => setMotivoEdicao(e.target.value)}
                       ></Textarea>
                     </div>
                     <div className={styles.input}>
@@ -833,8 +841,8 @@ export default function Dashboard() {
                         label={"Data Prevista de Saída"}
                         type={"datetime-local"}
                         maxLength={300}
-                        value={dataSaida}
-                        onChange={(e) => setDataSaida(e.target.value)}
+                        value={dataSaidaEdicao}
+                        onChange={(e) => setDataSaidaEdicao(e.target.value)}
                       ></Ginput>
                     </div>
                     <div className={styles.input}>
@@ -845,8 +853,8 @@ export default function Dashboard() {
                         label={"Autorização"}
                         type={"text"}
                         maxLength={300}
-                        value={autorizacao}
-                        onChange={(e) => setAutorizacao(e.target.value)}
+                        value={autorizacaoEdicao}
+                        onChange={(e) => setAutorizacaoEdicao(e.target.value)}
                       ></Ginput>
                     </div>
                   </div>
