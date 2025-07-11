@@ -84,7 +84,7 @@ export default function History() {
       try {
         const token = localStorage.getItem("token");
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_LOCAL}/locacoes/all`,
+          `${process.env.NEXT_PUBLIC_LOCAL}/locacoes/allhist`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
