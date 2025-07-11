@@ -49,9 +49,9 @@
 }
 
 .butaoClose {
-    padding: 0.5rem 0.5rem;
+    padding: 0.3rem 0.3rem;
     color: #48793c;
-    border-radius: 1rem;
+    border-radius: 100%;
     transition: background-color 0.3s;
     cursor: pointer;
 }
@@ -140,11 +140,13 @@
   box-sizing: border-box;
   overflow-y: auto;
   max-height: 40vh;
+  margin-bottom: 2rem;
 }
 
 .titleExpand {
+    display: flex;
     font-size: 1.5rem;
-    margin-bottom: 1rem;
+    align-items: center;
 }
 
 .partUm {
@@ -219,6 +221,8 @@
     display: flex;
     justify-content: space-between;
     width: 90%;
+    align-items: center;
+    margin-bottom: 0.5rem;
 }
 
 .butaoMini {
