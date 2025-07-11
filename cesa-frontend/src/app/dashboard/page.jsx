@@ -68,10 +68,11 @@ export default function Dashboard() {
   const [gestores, setGestores] = useState([]);
   const [usuario, setUsuario] = useState(null);
 
-  const [valorSelecionado, setValorSelecionado] = useState("");
-  const [tocado, setTocado] = useState(false);
-
-  const isEmpty = tocado && valorSelecionado === "";
+  
+  const [clickPlaca, setClickPlaca] = useState(false);
+  const [clickMotorista, setClickMotorista] = useState(false);
+  const [clickPlacaEdicao, setClickPlacaEdicao] = useState(false);
+  const [clickMotoristaEdicao, setClickMotoristaEdicao] = useState(false);
 
   // função que cria data formatada pra ser utilizada no input de edição.
   function formatarData(data) {
@@ -254,7 +255,7 @@ export default function Dashboard() {
   }, []);
 
   // fetch que cria locação.
-  const handleSubmit = async (e) => {
+  const handleCriarLocacao = async (e) => {
     e.preventDefault();
 
     const token = localStorage.getItem("token");
@@ -286,6 +287,7 @@ export default function Dashboard() {
       const data = await response.json();
 
       if (response.ok) {
+        handleOpenModal();
         setMotoristaSelecionado("");
         setPlacaSelecionada("");
         setItinerario("");
@@ -383,7 +385,7 @@ export default function Dashboard() {
     const token = localStorage.getItem("token");
     const cpfGestor = localStorage.getItem("cpf");
 
-    if (!motoristaSelecionado){
+    if (!motoristaEdicao){
       handleNoticeIsOpen();
       setConteudo("Escolha o Motorista");
     } else {
@@ -410,6 +412,7 @@ export default function Dashboard() {
       const data = await res.json();
 
       if (res.ok){
+        handleOpenModal();
         handleNoticeIsOpen();
         setConteudo("Locação atualizada com sucesso!");
         setTimeout(() => {
@@ -676,16 +679,17 @@ export default function Dashboard() {
             <div className={styles.containerModal}>
               <div className={styles.containerInternoModal}>
                 <h1 className="text-3xl">Cadastro de Locação</h1>
-                <form onSubmit={handleSubmit} className={styles.containerForm}>
+                <form onSubmit={handleCriarLocacao} className={styles.containerForm}>
                   <div className={styles.formAdd}>
                     <div className={styles.input}>
 
-                      <div className={styles.choiceboxContainer}>
+                      <div className={`${styles.choiceboxContainer} ${clickPlaca && placaSelecionada === "" ? styles.erro : ""}`}>
                         <select
                         value={placaSelecionada}
                         onChange={(e) => setPlacaSelecionada(e.target.value)}
+                        onBlur={() => setClickPlaca(true)}
                         >
-                          <option className={styles.choicebox}>Escolha o Veículo</option>
+                          <option value={""} className={styles.choicebox}>Escolha o Veículo</option>
                           {veiculo.map((veiculos) => (
                             <option key={veiculos.placa} value={veiculos.placa}>{veiculos.modelo}</option>
                           ))}
@@ -695,12 +699,13 @@ export default function Dashboard() {
                     </div>
                     <div className={styles.input}>
 
-                      <div className={styles.choiceboxContainer}>
+                      <div className={`${styles.choiceboxContainer} ${clickMotorista && motoristaSelecionado === "" ? styles.erro : ""}`}>
                         <select
                         value={motoristaSelecionado}
                         onChange={(e) => setMotoristaSelecionado(e.target.value)}
+                        onBlur={() => setClickMotorista(true)}
                         >
-                          <option className={styles.choicebox}>Escolha o Motorista</option>
+                          <option value={""} className={styles.choicebox}>Escolha o Motorista</option>
                           {motorista.map((motoristas) => (
                             <option key={motoristas.id} value={motoristas.id}>{motoristas.nome}</option>
                           ))}
@@ -788,12 +793,13 @@ export default function Dashboard() {
                   <div className={styles.formAdd}>
                     <div className={styles.input}>
 
-                      <div className={styles.choiceboxContainer}>
+                      <div className={`${styles.choiceboxContainer} ${clickPlacaEdicao && placaEdicao === "" ? styles.erro : ""}`}>
                         <select
                         value={placaEdicao}
                         onChange={(e) => setPlacaEdicao(e.target.value)}
+                        onBlur={() => setClickPlacaEdicao(true)}
                         >
-                          <option className={styles.choicebox}>Escolha o Veículo</option>
+                          <option value={""} className={styles.choicebox}>Escolha o Veículo</option>
                           {veiculo.map((veiculos) => (
                             <option key={veiculos.placa} value={veiculos.placa}>{veiculos.modelo}</option>
                           ))}
@@ -803,12 +809,13 @@ export default function Dashboard() {
                     </div>
                     <div className={styles.input}>
 
-                      <div className={styles.choiceboxContainer}>
+                      <div className={`${styles.choiceboxContainer} ${clickMotoristaEdicao && motoristaEdicao === "" ? styles.erro : ""}`}>
                         <select
                         value={motoristaEdicao}
                         onChange={(e) => setMotoristaEdicao(e.target.value)}
+                        onBlur={() => setClickMotoristaEdicao(true)}
                         >
-                          <option className={styles.choicebox}>Escolha o Motorista</option>
+                          <option value={""} className={styles.choicebox}>Escolha o Motorista</option>
                           {motorista.map((motoristas) => (
                             <option key={motoristas.id} value={motoristas.id}>{motoristas.nome}</option>
                           ))}
@@ -846,7 +853,7 @@ export default function Dashboard() {
                       ></Ginput>
                     </div>
                     <div className={styles.input}>
-                      <Ginput label={"Data Prevista de Chegada"} type={"datetime-local"} maxLength={300} value={dataChegada} onChange={(e) => setDataChegada(e.target.value)}></Ginput>
+                      <Ginput label={"Data Prevista de Chegada"} type={"datetime-local"} maxLength={300} value={dataChegadaEdicao} onChange={(e) => setDataChegadaEdicao(e.target.value)}></Ginput>
                     </div>
                     <div className={styles.input}>
                       <Ginput

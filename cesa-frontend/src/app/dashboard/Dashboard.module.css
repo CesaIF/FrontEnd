@@ -303,6 +303,11 @@
     border-bottom-width: 2px;
 }
 
+.erro {
+    background-color: #fde8ed;
+    border-color: red;
+}
+
 .choicebox {
     color: black;
     background-color: white;
