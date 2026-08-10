@@ -14,17 +14,42 @@ import { useAuth } from "../hooks/useAuth";
 export default function Veiculos() {
   useAuth();
   const [Lembrete, setLembrete] = useState([]);
+  const [veiculo, setVeiculo] = useState([]);
   const [lembreteEditando, setLembreteEditando] = useState({
     placa_lembrete: "",
     km_condicao: "",
     informacao: "",
   });
-  const [novoLembrete, setNovoVeiculos] = useState({
+  const [novoLembrete, setNovoLembrete] = useState({
     placa_lembrete: "",
     km_condicao: "",
     informacao: "",
   });
   const [conteudo, setConteudo] = useState("");
+
+  // fetch que pega dados dos veículos.
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    fetch(`${process.env.NEXT_PUBLIC_LOCAL}/veiculos`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(async (res) => {
+        const data = await res.json();
+
+        if (res.ok) {
+          setVeiculo(data);
+        } else {
+          console.log("Erro ao encontrar veículos");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
 
   useEffect(() => {
     const fetchVeiculos = async () => {
@@ -130,6 +155,15 @@ export default function Veiculos() {
                       </span>
                     </div>
                     <div>
+                      <span className={styles.titleCard}>
+                        {`Criado em : ` +
+                          new Date(lembrete.criado_em).toLocaleDateString(
+                            "pt-BR",
+                          )}
+                        ,
+                      </span>
+                    </div>
+                    <div>
                       <span className={styles.titleCardDois}>
                         {`Quilometragem: ` + lembrete.km_condicao}
                       </span>
@@ -146,19 +180,25 @@ export default function Veiculos() {
                 <h1 className="text-3xl">Cadastro de Lembrete</h1>
                 <form className={styles.formAdd}>
                   <div className={styles.input}>
-                    <Ginput
-                      type={"text"}
-                      placeholder={"EX: 'ABC1234 ou ABC1D23'"}
-                      maxLength={7}
-                      label={"Placa"}
-                      value={novoLembrete.placa_lembrete}
-                      onChange={(e) =>
-                        setNovoVeiculos({
-                          ...novoLembrete,
-                          placa_lembrete: e.target.value.toUpperCase(),
-                        })
-                      }
-                    />
+                    <div className={styles.choiceboxContainer}>
+                      <select
+                        value={novoLembrete.placa_lembrete}
+                        onChange={(e) =>
+                          setNovoLembrete({
+                            ...novoLembrete,
+                            placa_lembrete: e.target.value,
+                          })
+                        }
+                      >
+                        <option value="">Escolha o Veículo</option>
+
+                        {veiculo.map((veiculos) => (
+                          <option key={veiculos.placa} value={veiculos.placa}>
+                            {veiculos.modelo} - {veiculos.placa}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
                   <div className={styles.input}>
                     <Ginput
@@ -168,7 +208,7 @@ export default function Veiculos() {
                       label={"Quilometragem de condição"}
                       value={novoLembrete.km_condicao}
                       onChange={(e) =>
-                        setNovoVeiculos({
+                        setNovoLembrete({
                           ...novoLembrete,
                           km_condicao: parseInt(e.target.value),
                         })
@@ -183,7 +223,7 @@ export default function Veiculos() {
                       label={"Informação "}
                       value={novoLembrete.informacao}
                       onChange={(e) =>
-                        setNovoVeiculos({
+                        setNovoLembrete({
                           ...novoLembrete,
                           informacao: e.target.value,
                         })
@@ -224,7 +264,7 @@ export default function Veiculos() {
                         handleOpenModal();
                         setConteudo("VLembrete cadastrado com sucesso!");
 
-                        setNovoVeiculos({
+                        setNovoLembrete({
                           placa_lembrete: "",
                           km_condicao: "",
                           informacao: "",
@@ -309,7 +349,7 @@ export default function Veiculos() {
                     onClick={async () => {
                       const token = localStorage.getItem("token");
                       const response = await fetch(
-                        `${process.env.NEXT_PUBLIC_LOCAL}/Lembrete/${lembreteEditando.id}`,
+                        `${process.env.NEXT_PUBLIC_LOCAL}/lembretes/atualizar/${lembreteEditando.id}`,
                         {
                           method: "PUT",
                           headers: {
@@ -327,9 +367,7 @@ export default function Veiculos() {
                       if (response.ok) {
                         setLembrete((prevVeiculos) =>
                           prevVeiculos.map((m) =>
-                            m.id === lembreteEditando.id
-                              ? lembreteEditando
-                              : m,
+                            m.id === lembreteEditando.id ? lembreteEditando : m,
                           ),
                         );
                         handleUpdateModal();
@@ -350,7 +388,9 @@ export default function Veiculos() {
           {/*Modal para o painel*/}
           <Modal isOpen={expandModal} onClose={handleExpandModal}>
             <div className={styles.containerExpand}>
-              <span className={styles.titleCardQuatro}>Painel de Lembretes</span>
+              <span className={styles.titleCardQuatro}>
+                Painel de Lembretes
+              </span>
               <BadButton
                 onClick={() => {
                   handleExpandModal();
@@ -404,7 +444,7 @@ export default function Veiculos() {
                   onClick={async () => {
                     const token = localStorage.getItem("token");
                     const response = await fetch(
-                      `${process.env.NEXT_PUBLIC_LOCAL}/Lembrete/${lembreteEditando.id}`,
+                      `${process.env.NEXT_PUBLIC_LOCAL}/lembretes/deletar/${lembreteEditando.id}`,
                       {
                         method: "DELETE",
                         headers: {

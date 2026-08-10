@@ -29,6 +29,8 @@ export default function Manutencao() {
   const [noticeIsOpen, setNoticeIsOpen] = useState(false);
   const [dateIsOpen, setDateIsOpen] = useState(false);
 
+  const [veiculo, setVeiculo] = useState([]);
+
   const [novaManutencao, setNovaManutencao] = useState({
     placa_manutencao: "",
     tipo_manutencao: "",
@@ -90,6 +92,30 @@ export default function Manutencao() {
       setConteudo("Erro inesperado: " + error.message);
     }
   };
+
+  // fetch que pega dados dos veículos.
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    fetch(`${process.env.NEXT_PUBLIC_LOCAL}/veiculos`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(async (res) => {
+        const data = await res.json();
+
+        if (res.ok) {
+          setVeiculo(data);
+        } else {
+          console.log("Erro ao encontrar veículos");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
 
   useEffect(() => {
     const fetchLocacoes = async () => {
@@ -204,19 +230,25 @@ export default function Manutencao() {
                 <h1 className="text-3xl">Cadastro de Manutenções</h1>
                 <form className={styles.formAdd}>
                   <div className={styles.input}>
-                    <Ginput
-                      type={"text"}
-                      placeholder={"EX: 'ABC1234 ou ABC1D23'"}
-                      maxLength={7}
-                      label={"Placa"}
-                      value={novaManutencao.placa_manutencao}
-                      onChange={(e) =>
-                        setNovaManutencao({
-                          ...novaManutencao,
-                          placa_manutencao: e.target.value.toUpperCase(),
-                        })
-                      }
-                    />
+                    <div className={styles.choiceboxContainer}>
+                      <select
+                        value={novaManutencao.placa_manutencao}
+                        onChange={(e) =>
+                          setNovaManutencao({
+                            ...novaManutencao,
+                            placa_manutencao: e.target.value,
+                          })
+                        }
+                      >
+                        <option value="">Escolha o Veículo</option>
+
+                        {veiculo.map((veiculos) => (
+                          <option key={veiculos.placa} value={veiculos.placa}>
+                            {veiculos.modelo} - {veiculos.placa}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
                   <div className={styles.input}>
                     <Ginput

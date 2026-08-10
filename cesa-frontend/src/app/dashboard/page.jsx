@@ -39,7 +39,7 @@ export default function Dashboard() {
 
   const [locacoesAgendadas, setLocacoesAgendadas] = useState([]);
   const [locacoes, setLocacoes] = useState([]);
-  const [veiculo, setVeiculo] = useState([]);
+  const [veiculo, setVeiculo] = useState([]); //Devo pegar isso para colocar em outras partes
   const [motorista, setMotorista] = useState([]);
 
   const [itinerario, setItinerario] = useState("");

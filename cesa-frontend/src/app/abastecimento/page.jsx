@@ -28,6 +28,7 @@ export default function Abastecimento() {
   const [conteudo, setConteudo] = useState("");
   const [noticeIsOpen, setNoticeIsOpen] = useState(false);
   const [dateIsOpen, setDateIsOpen] = useState(false);
+  const [veiculo, setVeiculo] = useState([]);
 
   const [novaAbastecimento, setNovaAbastecimento] = useState({
     placa_abastecimento: "",
@@ -89,6 +90,30 @@ export default function Abastecimento() {
       setConteudo("Erro inesperado: " + error.message);
     }
   };
+
+  // fetch que pega dados dos veículos.
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    fetch(`${process.env.NEXT_PUBLIC_LOCAL}/veiculos`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(async (res) => {
+        const data = await res.json();
+
+        if (res.ok) {
+          setVeiculo(data);
+        } else {
+          console.log("Erro ao encontrar veículos");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
 
   useEffect(() => {
     const fetchLocacoes = async () => {
@@ -204,20 +229,28 @@ export default function Abastecimento() {
                 <h1 className="text-3xl">Cadastro de Abastecimentos</h1>
                 <form className={styles.formAdd}>
                   <div className={styles.input}>
-                    <Ginput
-                      type={"text"}
-                      placeholder={"EX: 'ABC1234 ou ABC1D23'"}
-                      maxLength={7}
-                      label={"Placa"}
-                      value={novaAbastecimento.placa_abastecimento}
-                      onChange={(e) =>
-                        setNovaAbastecimento({
-                          ...novaAbastecimento,
-                          placa_abastecimento: e.target.value.toUpperCase(),
-                        })
-                      }
-                    />
+                    <div className={styles.choiceboxContainer}>
+
+                      <select
+                        value={novaAbastecimento.placa_abastecimento}
+                        onChange={(e) =>
+                          setNovaAbastecimento({
+                            ...novaAbastecimento,
+                            placa_abastecimento: e.target.value,
+                          })
+                        }
+                      >
+                        <option value="">Escolha o Veículo</option>
+
+                        {veiculo.map((veiculos) => (
+                          <option key={veiculos.placa} value={veiculos.placa}>
+                            {veiculos.modelo} - {veiculos.placa}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
+
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
@@ -334,7 +367,10 @@ export default function Abastecimento() {
                       );
                       if (response.ok) {
                         const abastecimentoCadastrado = await response.json();
-                        setVeiculos((prev) => [...prev, abastecimentoCadastrado]);
+                        setVeiculos((prev) => [
+                          ...prev,
+                          abastecimentoCadastrado,
+                        ]);
 
                         handleNoticeIsOpen();
                         handleOpenModal();
@@ -352,7 +388,9 @@ export default function Abastecimento() {
                       } else {
                         const erro = await response.json();
                         handleNoticeIsOpen();
-                        setConteudo(erro.error || "Erro ao cadastrar abastecimento");
+                        setConteudo(
+                          erro.error || "Erro ao cadastrar abastecimento",
+                        );
                       }
                     }}
                   >
@@ -390,7 +428,7 @@ export default function Abastecimento() {
                     },
                     {
                       label: "Veículo",
-                      value: `${selectedAbastecimento.modelo_veiculo} - ${selectedAbastecimento.placa_abastecimento}`,
+                      value: selectedAbastecimento.placa_abastecimento,
                     },
                     {
                       label: "Valor do abastecimento",
@@ -407,7 +445,9 @@ export default function Abastecimento() {
 
                     {
                       label: "Data do abastecimento",
-                      value: formatarData(selectedAbastecimento.data_abastecimento),
+                      value: formatarData(
+                        selectedAbastecimento.data_abastecimento,
+                      ),
                     },
                     {
                       label: "Número da nota",
