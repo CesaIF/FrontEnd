@@ -7,7 +7,7 @@ import { CiCirclePlus } from "react-icons/ci";
 import { useEffect, useState } from "react";
 const Modal = dynamic(() => import("../components/modal"), { ssr: false });
 import BadButton from "../components/badButton";
-import styles from "./Veiculos.module.css";
+import styles from "./Lembretes.module.css";
 import Ginput from "../components/gInput";
 import { useAuth } from "../hooks/useAuth";
 
@@ -18,7 +18,6 @@ export default function Veiculos() {
     modelo: "",
     cor: "",
     tipo: "",
-    km: "",
     ano: "",
   });
   const [novoVeiculo, setNovoVeiculos] = useState({
@@ -158,7 +157,7 @@ export default function Veiculos() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={"EX: 'ABC1234 ou ABC1D23'"}
+                      placeholder={"ABC1234 ou ABC1D23"}
                       maxLength={7}
                       label={"Placa"}
                       value={novoVeiculo.placa}
@@ -173,7 +172,7 @@ export default function Veiculos() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={"EX: 'Corsa'"}
+                      placeholder={"Corsa"}
                       maxLength={50}
                       label={"Modelo"}
                       value={novoVeiculo.modelo}
@@ -188,7 +187,7 @@ export default function Veiculos() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={"EX: 'Branco'"}
+                      placeholder={"Branco"}
                       maxLength={50}
                       label={"Cor"}
                       value={novoVeiculo.cor}
@@ -200,7 +199,7 @@ export default function Veiculos() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={"EX: 'Hatch'"}
+                      placeholder={"Hatch"}
                       maxLength={50}
                       label={"Tipo"}
                       value={novoVeiculo.tipo}
@@ -215,9 +214,9 @@ export default function Veiculos() {
                   <div className={styles.input}>
                     <Ginput
                       type={"number"}
-                      placeholder={"EX: '22568'"}
+                      placeholder={"22568"}
                       maxLength={300}
-                      label={"Quilometragem"}
+                      label={"Km"}
                       value={novoVeiculo.km}
                       onChange={(e) =>
                         setNovoVeiculos({
@@ -230,7 +229,7 @@ export default function Veiculos() {
                   <div className={styles.input}>
                     <Ginput
                       type={"number"}
-                      placeholder={"EX: '2022'"}
+                      placeholder={"2022"}
                       maxLength={30}
                       label={"Ano"}
                       value={novoVeiculo.ano}
@@ -351,21 +350,6 @@ export default function Veiculos() {
                   <div className={styles.input}>
                     <Ginput
                       type={"number"}
-                      placeholder={"20222"}
-                      maxLength={300}
-                      label={"Quilometragem"}
-                      value={veiculosEditando.km}
-                      onChange={(e) =>
-                        setVeiculosEditando({
-                          ...veiculosEditando,
-                          km: parseInt(e.target.value),
-                        })
-                      }
-                    ></Ginput>
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput
-                      type={"number"}
                       placeholder={"2022"}
                       maxLength={30}
                       label={"Ano"}
@@ -406,7 +390,6 @@ export default function Veiculos() {
                             modelo: veiculosEditando.modelo,
                             cor: veiculosEditando.cor,
                             tipo: veiculosEditando.tipo,
-                            km: veiculosEditando.km,
                             ano: veiculosEditando.ano,
                           }),
                         },

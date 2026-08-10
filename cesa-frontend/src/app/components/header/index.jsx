@@ -70,6 +70,42 @@ export default function Header({ isOpen, onClick }) {
                 <span className={styles.title}>Porteiros</span>
               </Link>
             </li>
+            
+            <li className={styles.liDois}>
+              <Link className={styles.link} href={"/manutencao"}>
+                <span>
+                  <GoHistory />
+                </span>
+                <span className={styles.title}>Manutenções</span>
+              </Link>
+            </li>
+
+            <li className={styles.liDois}>
+              <Link className={styles.link} href={"/lembretes"}>
+                <span>
+                  <GoHistory />
+                </span>
+                <span className={styles.title}>Lembretes</span>
+              </Link>
+            </li>
+
+            <li className={styles.liDois}>
+              <Link className={styles.link} href={"/abastecimento"}>
+                <span>
+                  <GoHistory />
+                </span>
+                <span className={styles.title}>Abastecimentos</span>
+              </Link>
+            </li>
+
+            <li className={styles.liDois}>
+              <Link className={styles.link} href={"/alarmes"}>
+                <span>
+                  <GoHistory />
+                </span>
+                <span className={styles.title}>Criar Alarmes</span>
+              </Link>
+            </li>
 
             <li className={styles.liDois}>
               <Link className={styles.link} href={"/history"}>

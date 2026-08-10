@@ -6,7 +6,7 @@ import Footer from "../components/footer";
 import { useEffect, useState } from "react";
 const Modal = dynamic(() => import("../components/modal"), { ssr: false });
 import BadButton from "../components/badButton";
-import styles from "./History.module.css";
+import styles from "./Abastecimento.module.css";
 import { useAuth } from "../hooks/useAuth";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
