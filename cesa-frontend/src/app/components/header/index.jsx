@@ -3,7 +3,13 @@
 import Link from "next/link";
 import styles from "./Header.module.css";
 import { IoExitOutline } from "react-icons/io5";
-import { GoHistory, GoPasskeyFill, GoTools, GoBell, GoAlert } from "react-icons/go";
+import {
+  GoHistory,
+  GoPasskeyFill,
+  GoTools,
+  GoBell,
+  GoAlert,
+} from "react-icons/go";
 import { FaHome, FaCar, FaRegUserCircle, FaGasPump } from "react-icons/fa";
 import { BsPersonVcard } from "react-icons/bs";
 import { FiTable } from "react-icons/fi";
@@ -103,7 +109,7 @@ export default function Header({ isOpen, onClick }) {
                 <span>
                   <GoAlert />
                 </span>
-                <span className={styles.title}>Criar Alarmes</span>
+                <span className={styles.title}>Alarmes</span>
               </Link>
             </li>
 

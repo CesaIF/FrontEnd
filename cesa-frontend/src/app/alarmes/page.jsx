@@ -3,7 +3,6 @@
 import dynamic from "next/dynamic";
 import Header from "../components/header";
 import Footer from "../components/footer";
-import { CiCirclePlus } from "react-icons/ci";
 import { useEffect, useState } from "react";
 const Modal = dynamic(() => import("../components/modal"), { ssr: false });
 import BadButton from "../components/badButton";
@@ -11,31 +10,17 @@ import styles from "./Alarmes.module.css";
 import Ginput from "../components/gInput";
 import { useAuth } from "../hooks/useAuth";
 
-export default function Veiculos() {
+export default function Alarmes() {
   useAuth();
-  const [veiculos, setVeiculos] = useState([]);
-  const [veiculosEditando, setVeiculosEditando] = useState({
-    modelo: "",
-    cor: "",
-    tipo: "",
-    ano: "",
-  });
-  const [novoVeiculo, setNovoVeiculos] = useState({
-    placa: "",
-    modelo: "",
-    cor: "",
-    tipo: "",
-    km: "",
-    ano: "",
-  });
+  const [alarmes, setAlarmes] = useState([]);
   const [conteudo, setConteudo] = useState("");
 
   useEffect(() => {
-    const fetchVeiculos = async () => {
+    const fetchAlarmes = async () => {
       try {
         const token = localStorage.getItem("token");
         const receberAPI = await fetch(
-          `${process.env.NEXT_PUBLIC_LOCAL}/veiculos`,
+          `${process.env.NEXT_PUBLIC_LOCAL}/alertas`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -43,16 +28,16 @@ export default function Veiculos() {
           },
         );
         const data = await receberAPI.json();
-        setVeiculos(data);
+        setAlarmes(data);
       } catch (error) {
-        console.error("Erro ao buscar veiculos".error);
+        console.error("Erro ao buscar os alertas do sistemas".error);
       }
     };
-    fetchVeiculos();
+    fetchAlarmes();
   }, []);
 
-  const handleEditarVeiculo = (veiculo) => {
-    setVeiculosEditando(veiculo);
+  const handleEditarVeiculo = (alarmes) => {
+    setAlarmesEditando(alarmes);
     handleExpandModal();
   };
 
@@ -98,49 +83,36 @@ export default function Veiculos() {
           <div className={styles.containerInternoUm}>
             <div>
               <div className={styles.containerTitle}>
-                <h1 className={styles.titleLocacao}>Veículos Cadastrados</h1>
-                <button className={styles.butaoAdd} onClick={handleOpenModal}>
-                  <CiCirclePlus size={35}></CiCirclePlus>
-                </button>
+                <h1 className={styles.titleLocacao}>Alarmes disparados pelo sistema</h1>
               </div>
               <div className={styles.line}></div>
             </div>
 
             <div className={styles.containerCard}>
-              {veiculos.length === 0 ? (
-                <p>Nenhum veiculo cadastrado.</p>
+              {alarmes.length === 0 ? (
+                <p>Nenhum alarmes.</p>
               ) : (
-                veiculos.map((veiculo) => (
+                alarmes.map((alarmes) => (
                   <div
-                    key={veiculo.placa}
+                    key={alarmes.id}
                     onClick={() => {
-                      handleEditarVeiculo(veiculo);
+                      handleEditarVeiculo(alarmes);
                     }}
                     className={styles.card}
                   >
                     <div>
                       <span className={styles.titleCardTres}>
-                        {veiculo.modelo}
+                        {alarmes.placa_evento}
                       </span>
                     </div>
                     <div>
                       <span className={styles.titleCard}>
-                        {`Placa: ` + veiculo.placa}
+                        {`Observação: ` + alarmes.observacoes}
                       </span>
                     </div>
                     <div>
                       <span className={styles.titleCard}>
-                        {`Cor: ` + veiculo.cor}
-                      </span>
-                    </div>
-                    <div>
-                      <span className={styles.titleCard}>
-                        {`Tipo: ` + veiculo.tipo}
-                      </span>
-                    </div>
-                    <div>
-                      <span className={styles.titleCardDois}>
-                        {`Ano: ` + veiculo.ano}
+                        {`ID: ` + alarmes.id}
                       </span>
                     </div>
                   </div>
@@ -148,280 +120,10 @@ export default function Veiculos() {
               )}
             </div>
           </div>
-          {/*Modal para a cadastrar veiculo*/}
-          <Modal isOpen={modalIsOpen} onClose={handleOpenModal}>
-            <div className={styles.containerModal}>
-              <div className={styles.containerInternoModal}>
-                <h1 className="text-3xl">Cadastro de Veículos</h1>
-                <form className={styles.formAdd}>
-                  <div className={styles.input}>
-                    <Ginput
-                      type={"text"}
-                      placeholder={"ABC1234 ou ABC1D23"}
-                      maxLength={7}
-                      label={"Placa"}
-                      value={novoVeiculo.placa}
-                      onChange={(e) =>
-                        setNovoVeiculos({
-                          ...novoVeiculo,
-                          placa: e.target.value.toUpperCase(),
-                        })
-                      }
-                    />
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput
-                      type={"text"}
-                      placeholder={"Corsa"}
-                      maxLength={50}
-                      label={"Modelo"}
-                      value={novoVeiculo.modelo}
-                      onChange={(e) =>
-                        setNovoVeiculos({
-                          ...novoVeiculo,
-                          modelo: e.target.value,
-                        })
-                      }
-                    ></Ginput>
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput
-                      type={"text"}
-                      placeholder={"Branco"}
-                      maxLength={50}
-                      label={"Cor"}
-                      value={novoVeiculo.cor}
-                      onChange={(e) =>
-                        setNovoVeiculos({ ...novoVeiculo, cor: e.target.value })
-                      }
-                    ></Ginput>
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput
-                      type={"text"}
-                      placeholder={"Hatch"}
-                      maxLength={50}
-                      label={"Tipo"}
-                      value={novoVeiculo.tipo}
-                      onChange={(e) =>
-                        setNovoVeiculos({
-                          ...novoVeiculo,
-                          tipo: e.target.value,
-                        })
-                      }
-                    ></Ginput>
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput
-                      type={"number"}
-                      placeholder={"22568"}
-                      maxLength={300}
-                      label={"Km"}
-                      value={novoVeiculo.km}
-                      onChange={(e) =>
-                        setNovoVeiculos({
-                          ...novoVeiculo,
-                          km: parseInt(e.target.value),
-                        })
-                      }
-                    ></Ginput>
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput
-                      type={"number"}
-                      placeholder={"2022"}
-                      maxLength={30}
-                      label={"Ano"}
-                      value={novoVeiculo.ano}
-                      onChange={(e) =>
-                        setNovoVeiculos({
-                          ...novoVeiculo,
-                          ano: parseInt(e.target.value),
-                        })
-                      }
-                    ></Ginput>
-                  </div>
-                </form>
-                <div className={styles.butaoForm}>
-                  <BadButton
-                    textColor={"#48793c"}
-                    colorHover={"#a3bc98"}
-                    cor={"#d1dec7"}
-                    onClick={handleOpenModal}
-                  >
-                    Cancelar
-                  </BadButton>
-                  <BadButton
-                    colorHover={"#769b6a"}
-                    cor={"#48793c"}
-                    onClick={async () => {
-                      const token = localStorage.getItem("token");
-                      const response = await fetch(
-                        `${process.env.NEXT_PUBLIC_LOCAL}/veiculos`,
-                        {
-                          method: "POST",
-                          headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${token}`,
-                          },
-                          body: JSON.stringify(novoVeiculo),
-                        },
-                      );
-                      if (response.ok) {
-                        const veiculoCadastrado = await response.json();
-                        setVeiculos((prev) => [...prev, veiculoCadastrado]);
-
-                        handleNoticeIsOpen();
-                        handleOpenModal();
-                        setConteudo("Veículo cadastrado com sucesso!");
-
-                        setNovoVeiculos({
-                          placa: "",
-                          modelo: "",
-                          cor: "",
-                          tipo: "",
-                          km: "",
-                          ano: "",
-                        });
-                      } else {
-                        const erro = await response.json();
-                        handleNoticeIsOpen();
-                        setConteudo(erro.error || "Erro ao cadastrar veiculo");
-                      }
-                    }}
-                  >
-                    Cadastrar
-                  </BadButton>
-                </div>
-              </div>
-            </div>
-          </Modal>
-          {/*Modal para a atualizar veiculo*/}
-          <Modal isOpen={updateModal} onClose={handleUpdateModal}>
-            <div className={styles.containerModal}>
-              <div className={styles.containerInternoModal}>
-                <h1 className="text-3xl">Atualizar Veículos</h1>
-                <form className={styles.formAdd}>
-                  <div className={styles.input}>
-                    <Ginput
-                      type={"text"}
-                      placeholder={""}
-                      maxLength={200}
-                      label={"Modelo"}
-                      value={veiculosEditando.modelo}
-                      onChange={(e) =>
-                        setVeiculosEditando({
-                          ...veiculosEditando,
-                          modelo: e.target.value,
-                        })
-                      }
-                    ></Ginput>
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput
-                      type={"text"}
-                      placeholder={"Branco"}
-                      maxLength={7}
-                      label={"Cor"}
-                      value={veiculosEditando.cor}
-                      onChange={(e) =>
-                        setVeiculosEditando({
-                          ...veiculosEditando,
-                          cor: e.target.value,
-                        })
-                      }
-                    ></Ginput>
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput
-                      type={"text"}
-                      placeholder={"Hatch"}
-                      maxLength={30}
-                      label={"Tipo"}
-                      value={veiculosEditando.tipo}
-                      onChange={(e) =>
-                        setVeiculosEditando({
-                          ...veiculosEditando,
-                          tipo: e.target.value,
-                        })
-                      }
-                    ></Ginput>
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput
-                      type={"number"}
-                      placeholder={"2022"}
-                      maxLength={30}
-                      label={"Ano"}
-                      value={veiculosEditando.ano}
-                      onChange={(e) =>
-                        setVeiculosEditando({
-                          ...veiculosEditando,
-                          ano: parseInt(e.target.value),
-                        })
-                      }
-                    ></Ginput>
-                  </div>
-                </form>
-                <div className={styles.butaoForm}>
-                  <BadButton
-                    textColor={"#48793c"}
-                    colorHover={"#a3bc98"}
-                    cor={"#d1dec7"}
-                    onClick={handleUpdateModal}
-                  >
-                    Cancelar
-                  </BadButton>
-                  <BadButton
-                    colorHover={"#769b6a"}
-                    cor={"#48793c"}
-                    onClick={async () => {
-                      const token = localStorage.getItem("token");
-                      const response = await fetch(
-                        `${process.env.NEXT_PUBLIC_LOCAL}/veiculos/${veiculosEditando.placa}`,
-                        {
-                          method: "PUT",
-                          headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${token}`,
-                          },
-                          body: JSON.stringify({
-                            placa: veiculosEditando.placa,
-                            modelo: veiculosEditando.modelo,
-                            cor: veiculosEditando.cor,
-                            tipo: veiculosEditando.tipo,
-                            ano: veiculosEditando.ano,
-                          }),
-                        },
-                      );
-                      const data = await response.json();
-                      if (response.ok) {
-                        setVeiculos((prevVeiculos) =>
-                          prevVeiculos.map((m) =>
-                            m.placa === veiculosEditando.placa
-                              ? veiculosEditando
-                              : m,
-                          ),
-                        );
-                        handleUpdateModal();
-                        handleNoticeIsOpen();
-                        setConteudo("Veículo editado com sucesso!");
-                      } else {
-                        handleNoticeIsOpen();
-                        setConteudo(data.error || "Erro ao atualizar veiculo");
-                      }
-                    }}
-                  >
-                    Atualizar
-                  </BadButton>
-                </div>
-              </div>
-            </div>
-          </Modal>
           {/*Modal para o painel*/}
           <Modal isOpen={expandModal} onClose={handleExpandModal}>
             <div className={styles.containerExpand}>
-              <span className={styles.titleCardQuatro}>Painel de Veículos</span>
+              <span className={styles.titleCardQuatro}>Painel de Alarmes</span>
               <BadButton
                 onClick={() => {
                   handleExpandModal();
@@ -433,17 +135,6 @@ export default function Veiculos() {
                 buttonWidth={"400px"}
               >
                 Deletar
-              </BadButton>
-              <BadButton
-                onClick={() => {
-                  handleExpandModal();
-                  handleUpdateModal();
-                }}
-                colorHover={"#769b6a"}
-                cor={"#48793c"}
-                buttonWidth={"400px"}
-              >
-                Atualizar
               </BadButton>
               <BadButton
                 onClick={handleExpandModal}
@@ -475,7 +166,7 @@ export default function Veiculos() {
                   onClick={async () => {
                     const token = localStorage.getItem("token");
                     const response = await fetch(
-                      `${process.env.NEXT_PUBLIC_LOCAL}/veiculos/${veiculosEditando.placa}`,
+                      `${process.env.NEXT_PUBLIC_LOCAL}/alarmes/${alarmesEditando.id}`,
                       {
                         method: "DELETE",
                         headers: {
@@ -485,16 +176,16 @@ export default function Veiculos() {
                       },
                     );
                     if (response.ok) {
-                      setVeiculos((prev) =>
-                        prev.filter((m) => m.placa !== veiculosEditando.placa),
+                      setAlarmes((prev) =>
+                        prev.filter((m) => m.id !== alarmesEditando.id),
                       );
                       handleNoticeIsOpen();
                       handleDeletarIsOpen();
-                      setConteudo("Veículo deletado com sucesso!");
+                      setConteudo("Alarme deletado com sucesso!");
                     } else {
                       const erro = await response.json();
                       handleNoticeIsOpen();
-                      setConteudo(erro.error || "Erro ao deletar veiculos");
+                      setConteudo(erro.error || "Erro ao deletar alarmes");
                     }
                   }}
                 >

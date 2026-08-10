@@ -13,20 +13,16 @@ import { useAuth } from "../hooks/useAuth";
 
 export default function Veiculos() {
   useAuth();
-  const [veiculos, setVeiculos] = useState([]);
-  const [veiculosEditando, setVeiculosEditando] = useState({
-    modelo: "",
-    cor: "",
-    tipo: "",
-    ano: "",
+  const [Lembrete, setLembrete] = useState([]);
+  const [lembreteEditando, setLembreteEditando] = useState({
+    placa_lembrete: "",
+    km_condicao: "",
+    informacao: "",
   });
-  const [novoVeiculo, setNovoVeiculos] = useState({
-    placa: "",
-    modelo: "",
-    cor: "",
-    tipo: "",
-    km: "",
-    ano: "",
+  const [novoLembrete, setNovoVeiculos] = useState({
+    placa_lembrete: "",
+    km_condicao: "",
+    informacao: "",
   });
   const [conteudo, setConteudo] = useState("");
 
@@ -35,7 +31,7 @@ export default function Veiculos() {
       try {
         const token = localStorage.getItem("token");
         const receberAPI = await fetch(
-          `${process.env.NEXT_PUBLIC_LOCAL}/veiculos`,
+          `${process.env.NEXT_PUBLIC_LOCAL}/lembretes`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -43,16 +39,16 @@ export default function Veiculos() {
           },
         );
         const data = await receberAPI.json();
-        setVeiculos(data);
+        setLembrete(data);
       } catch (error) {
-        console.error("Erro ao buscar veiculos".error);
+        console.error("Erro ao buscar Lembrete".error);
       }
     };
     fetchVeiculos();
   }, []);
 
-  const handleEditarVeiculo = (veiculo) => {
-    setVeiculosEditando(veiculo);
+  const handleEditarLembrete = (lembrete) => {
+    setLembreteEditando(lembrete);
     handleExpandModal();
   };
 
@@ -98,7 +94,7 @@ export default function Veiculos() {
           <div className={styles.containerInternoUm}>
             <div>
               <div className={styles.containerTitle}>
-                <h1 className={styles.titleLocacao}>Veículos Cadastrados</h1>
+                <h1 className={styles.titleLocacao}>Lembretes Cadastrados</h1>
                 <button className={styles.butaoAdd} onClick={handleOpenModal}>
                   <CiCirclePlus size={35}></CiCirclePlus>
                 </button>
@@ -107,40 +103,35 @@ export default function Veiculos() {
             </div>
 
             <div className={styles.containerCard}>
-              {veiculos.length === 0 ? (
-                <p>Nenhum veiculo cadastrado.</p>
+              {Lembrete.length === 0 ? (
+                <p>Nenhum lembrete cadastrado.</p>
               ) : (
-                veiculos.map((veiculo) => (
+                Lembrete.map((lembrete) => (
                   <div
-                    key={veiculo.placa}
+                    key={lembrete.id}
                     onClick={() => {
-                      handleEditarVeiculo(veiculo);
+                      handleEditarLembrete(lembrete);
                     }}
                     className={styles.card}
                   >
                     <div>
                       <span className={styles.titleCardTres}>
-                        {veiculo.modelo}
+                        {lembrete.placa_lembrete}
                       </span>
                     </div>
                     <div>
                       <span className={styles.titleCard}>
-                        {`Placa: ` + veiculo.placa}
+                        {`ID: ` + lembrete.id}
                       </span>
                     </div>
                     <div>
                       <span className={styles.titleCard}>
-                        {`Cor: ` + veiculo.cor}
-                      </span>
-                    </div>
-                    <div>
-                      <span className={styles.titleCard}>
-                        {`Tipo: ` + veiculo.tipo}
+                        {`Informação: ` + lembrete.informacao}
                       </span>
                     </div>
                     <div>
                       <span className={styles.titleCardDois}>
-                        {`Ano: ` + veiculo.ano}
+                        {`Quilometragem: ` + lembrete.km_condicao}
                       </span>
                     </div>
                   </div>
@@ -148,95 +139,53 @@ export default function Veiculos() {
               )}
             </div>
           </div>
-          {/*Modal para a cadastrar veiculo*/}
+          {/*Modal para a cadastrar lembrete*/}
           <Modal isOpen={modalIsOpen} onClose={handleOpenModal}>
             <div className={styles.containerModal}>
               <div className={styles.containerInternoModal}>
-                <h1 className="text-3xl">Cadastro de Veículos</h1>
+                <h1 className="text-3xl">Cadastro de Lembrete</h1>
                 <form className={styles.formAdd}>
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={"ABC1234 ou ABC1D23"}
+                      placeholder={"EX: 'ABC1234 ou ABC1D23'"}
                       maxLength={7}
                       label={"Placa"}
-                      value={novoVeiculo.placa}
+                      value={novoLembrete.placa_lembrete}
                       onChange={(e) =>
                         setNovoVeiculos({
-                          ...novoVeiculo,
-                          placa: e.target.value.toUpperCase(),
+                          ...novoLembrete,
+                          placa_lembrete: e.target.value.toUpperCase(),
                         })
                       }
                     />
                   </div>
                   <div className={styles.input}>
                     <Ginput
-                      type={"text"}
-                      placeholder={"Corsa"}
-                      maxLength={50}
-                      label={"Modelo"}
-                      value={novoVeiculo.modelo}
-                      onChange={(e) =>
-                        setNovoVeiculos({
-                          ...novoVeiculo,
-                          modelo: e.target.value,
-                        })
-                      }
-                    ></Ginput>
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput
-                      type={"text"}
-                      placeholder={"Branco"}
-                      maxLength={50}
-                      label={"Cor"}
-                      value={novoVeiculo.cor}
-                      onChange={(e) =>
-                        setNovoVeiculos({ ...novoVeiculo, cor: e.target.value })
-                      }
-                    ></Ginput>
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput
-                      type={"text"}
-                      placeholder={"Hatch"}
-                      maxLength={50}
-                      label={"Tipo"}
-                      value={novoVeiculo.tipo}
-                      onChange={(e) =>
-                        setNovoVeiculos({
-                          ...novoVeiculo,
-                          tipo: e.target.value,
-                        })
-                      }
-                    ></Ginput>
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput
                       type={"number"}
-                      placeholder={"22568"}
+                      placeholder={"EX: '22568'"}
                       maxLength={300}
-                      label={"Km"}
-                      value={novoVeiculo.km}
+                      label={"Quilometragem de condição"}
+                      value={novoLembrete.km_condicao}
                       onChange={(e) =>
                         setNovoVeiculos({
-                          ...novoVeiculo,
-                          km: parseInt(e.target.value),
+                          ...novoLembrete,
+                          km_condicao: parseInt(e.target.value),
                         })
                       }
                     ></Ginput>
                   </div>
                   <div className={styles.input}>
                     <Ginput
-                      type={"number"}
-                      placeholder={"2022"}
-                      maxLength={30}
-                      label={"Ano"}
-                      value={novoVeiculo.ano}
+                      type={"text"}
+                      placeholder={"EX: 'Trocar óleo do motor"}
+                      maxLength={500}
+                      label={"Informação "}
+                      value={novoLembrete.informacao}
                       onChange={(e) =>
                         setNovoVeiculos({
-                          ...novoVeiculo,
-                          ano: parseInt(e.target.value),
+                          ...novoLembrete,
+                          informacao: e.target.value,
                         })
                       }
                     ></Ginput>
@@ -257,36 +206,33 @@ export default function Veiculos() {
                     onClick={async () => {
                       const token = localStorage.getItem("token");
                       const response = await fetch(
-                        `${process.env.NEXT_PUBLIC_LOCAL}/veiculos`,
+                        `${process.env.NEXT_PUBLIC_LOCAL}/lembretes/cadastro`,
                         {
                           method: "POST",
                           headers: {
                             "Content-Type": "application/json",
                             Authorization: `Bearer ${token}`,
                           },
-                          body: JSON.stringify(novoVeiculo),
+                          body: JSON.stringify(novoLembrete),
                         },
                       );
                       if (response.ok) {
                         const veiculoCadastrado = await response.json();
-                        setVeiculos((prev) => [...prev, veiculoCadastrado]);
+                        setLembrete((prev) => [...prev, veiculoCadastrado]);
 
                         handleNoticeIsOpen();
                         handleOpenModal();
-                        setConteudo("Veículo cadastrado com sucesso!");
+                        setConteudo("VLembrete cadastrado com sucesso!");
 
                         setNovoVeiculos({
-                          placa: "",
-                          modelo: "",
-                          cor: "",
-                          tipo: "",
-                          km: "",
-                          ano: "",
+                          placa_lembrete: "",
+                          km_condicao: "",
+                          informacao: "",
                         });
                       } else {
                         const erro = await response.json();
                         handleNoticeIsOpen();
-                        setConteudo(erro.error || "Erro ao cadastrar veiculo");
+                        setConteudo(erro.error || "Erro ao cadastrar lembrete");
                       }
                     }}
                   >
@@ -296,53 +242,23 @@ export default function Veiculos() {
               </div>
             </div>
           </Modal>
-          {/*Modal para a atualizar veiculo*/}
+          {/*Modal para a atualizar lembrete*/}
           <Modal isOpen={updateModal} onClose={handleUpdateModal}>
             <div className={styles.containerModal}>
               <div className={styles.containerInternoModal}>
-                <h1 className="text-3xl">Atualizar Veículos</h1>
+                <h1 className="text-3xl">Atualizar Lembrete</h1>
                 <form className={styles.formAdd}>
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
                       placeholder={""}
                       maxLength={200}
-                      label={"Modelo"}
-                      value={veiculosEditando.modelo}
+                      label={"Placa"}
+                      value={lembreteEditando.placa_lembrete}
                       onChange={(e) =>
-                        setVeiculosEditando({
-                          ...veiculosEditando,
-                          modelo: e.target.value,
-                        })
-                      }
-                    ></Ginput>
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput
-                      type={"text"}
-                      placeholder={"Branco"}
-                      maxLength={7}
-                      label={"Cor"}
-                      value={veiculosEditando.cor}
-                      onChange={(e) =>
-                        setVeiculosEditando({
-                          ...veiculosEditando,
-                          cor: e.target.value,
-                        })
-                      }
-                    ></Ginput>
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput
-                      type={"text"}
-                      placeholder={"Hatch"}
-                      maxLength={30}
-                      label={"Tipo"}
-                      value={veiculosEditando.tipo}
-                      onChange={(e) =>
-                        setVeiculosEditando({
-                          ...veiculosEditando,
-                          tipo: e.target.value,
+                        setLembreteEditando({
+                          ...lembreteEditando,
+                          placa_lembrete: e.target.value.toUpperCase(),
                         })
                       }
                     ></Ginput>
@@ -352,12 +268,27 @@ export default function Veiculos() {
                       type={"number"}
                       placeholder={"2022"}
                       maxLength={30}
-                      label={"Ano"}
-                      value={veiculosEditando.ano}
+                      label={"Quilometragem de condição"}
+                      value={lembreteEditando.km_condicao}
                       onChange={(e) =>
-                        setVeiculosEditando({
-                          ...veiculosEditando,
-                          ano: parseInt(e.target.value),
+                        setLembreteEditando({
+                          ...lembreteEditando,
+                          km_condicao: parseInt(e.target.value),
+                        })
+                      }
+                    ></Ginput>
+                  </div>
+                  <div className={styles.input}>
+                    <Ginput
+                      type={"text"}
+                      placeholder={"Branco"}
+                      maxLength={400}
+                      label={"Informação"}
+                      value={lembreteEditando.informacao}
+                      onChange={(e) =>
+                        setLembreteEditando({
+                          ...lembreteEditando,
+                          informacao: e.target.value,
                         })
                       }
                     ></Ginput>
@@ -378,7 +309,7 @@ export default function Veiculos() {
                     onClick={async () => {
                       const token = localStorage.getItem("token");
                       const response = await fetch(
-                        `${process.env.NEXT_PUBLIC_LOCAL}/veiculos/${veiculosEditando.placa}`,
+                        `${process.env.NEXT_PUBLIC_LOCAL}/Lembrete/${lembreteEditando.id}`,
                         {
                           method: "PUT",
                           headers: {
@@ -386,29 +317,27 @@ export default function Veiculos() {
                             Authorization: `Bearer ${token}`,
                           },
                           body: JSON.stringify({
-                            placa: veiculosEditando.placa,
-                            modelo: veiculosEditando.modelo,
-                            cor: veiculosEditando.cor,
-                            tipo: veiculosEditando.tipo,
-                            ano: veiculosEditando.ano,
+                            placa_lembrete: lembreteEditando.placa_lembrete,
+                            km_condicao: lembreteEditando.km_condicao,
+                            informacao: lembreteEditando.informacao,
                           }),
                         },
                       );
                       const data = await response.json();
                       if (response.ok) {
-                        setVeiculos((prevVeiculos) =>
+                        setLembrete((prevVeiculos) =>
                           prevVeiculos.map((m) =>
-                            m.placa === veiculosEditando.placa
-                              ? veiculosEditando
+                            m.id === lembreteEditando.id
+                              ? lembreteEditando
                               : m,
                           ),
                         );
                         handleUpdateModal();
                         handleNoticeIsOpen();
-                        setConteudo("Veículo editado com sucesso!");
+                        setConteudo("Lembrete editado com sucesso!");
                       } else {
                         handleNoticeIsOpen();
-                        setConteudo(data.error || "Erro ao atualizar veiculo");
+                        setConteudo(data.error || "Erro ao atualizar lembrete");
                       }
                     }}
                   >
@@ -421,7 +350,7 @@ export default function Veiculos() {
           {/*Modal para o painel*/}
           <Modal isOpen={expandModal} onClose={handleExpandModal}>
             <div className={styles.containerExpand}>
-              <span className={styles.titleCardQuatro}>Painel de Veículos</span>
+              <span className={styles.titleCardQuatro}>Painel de Lembretes</span>
               <BadButton
                 onClick={() => {
                   handleExpandModal();
@@ -475,7 +404,7 @@ export default function Veiculos() {
                   onClick={async () => {
                     const token = localStorage.getItem("token");
                     const response = await fetch(
-                      `${process.env.NEXT_PUBLIC_LOCAL}/veiculos/${veiculosEditando.placa}`,
+                      `${process.env.NEXT_PUBLIC_LOCAL}/Lembrete/${lembreteEditando.id}`,
                       {
                         method: "DELETE",
                         headers: {
@@ -485,16 +414,16 @@ export default function Veiculos() {
                       },
                     );
                     if (response.ok) {
-                      setVeiculos((prev) =>
-                        prev.filter((m) => m.placa !== veiculosEditando.placa),
+                      setLembrete((prev) =>
+                        prev.filter((m) => m.id !== lembreteEditando.id),
                       );
                       handleNoticeIsOpen();
                       handleDeletarIsOpen();
-                      setConteudo("Veículo deletado com sucesso!");
+                      setConteudo("Lembrete deletado com sucesso!");
                     } else {
                       const erro = await response.json();
                       handleNoticeIsOpen();
-                      setConteudo(erro.error || "Erro ao deletar veiculos");
+                      setConteudo(erro.error || "Erro ao deletar Lembrete");
                     }
                   }}
                 >

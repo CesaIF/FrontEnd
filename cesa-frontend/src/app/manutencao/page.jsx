@@ -15,7 +15,7 @@ import { FaFileExport } from "react-icons/fa6";
 import Ginput from "../components/gInput";
 import { IoClose } from "react-icons/io5";
 
-export default function History() {
+export default function Manutencao() {
   useAuth();
   const [dataInicio, setDataInicio] = useState("");
   const [dataFim, setDataFim] = useState("");
