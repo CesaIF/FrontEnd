@@ -20,7 +20,7 @@ export default function History() {
   const [dataInicio, setDataInicio] = useState("");
   const [dataFim, setDataFim] = useState("");
 
-  const [locacoes, setLocacoes] = useState([]);
+  const [manutencao, setManutencao] = useState([]);
   const [isOpen, setIsOpen] = useState(true);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
@@ -104,7 +104,7 @@ export default function History() {
           },
         );
         const data = await response.json();
-        setLocacoes(data);
+        setManutencao(data);
       } catch (error) {
         console.error("Erro ao buscar manutenções", error);
       }
@@ -160,10 +160,10 @@ export default function History() {
             </div>
 
             <div className={styles.containerCard}>
-              {locacoes.length === 0 ? (
+              {manutencao.length === 0 ? (
                 <p>Nenhuma manutencao cadastrada.</p>
               ) : (
-                locacoes.map((manutencao) => (
+                manutencao.map((manutencao) => (
                   <div
                     key={manutencao.id}
                     onClick={() => handleExpandModal(manutencao)}
@@ -368,7 +368,9 @@ export default function History() {
                       } else {
                         const erro = await response.json();
                         handleNoticeIsOpen();
-                        setConteudo(erro.error || "Erro ao cadastrar veiculo");
+                        setConteudo(
+                          erro.error || "Erro ao cadastrar manutenção",
+                        );
                       }
                     }}
                   >
@@ -388,7 +390,7 @@ export default function History() {
               <div className={styles.containerModalGeral}>
                 <div className={styles.containerUpModal}>
                   <div className={styles.titleExpand}>
-                    <h1>Locação detalhada:</h1>
+                    <h1>Manutenção detalhada:</h1>
                   </div>
                   <div
                     className={styles.butaoClose}
@@ -422,7 +424,7 @@ export default function History() {
                     },
 
                     {
-                      label: "Quilometragem de Saída",
+                      label: "Data da manutenção",
                       value: formatarData(selectedManutencao.data_manutencao),
                     },
                     {

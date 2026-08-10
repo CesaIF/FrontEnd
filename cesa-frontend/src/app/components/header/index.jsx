@@ -3,8 +3,8 @@
 import Link from "next/link";
 import styles from "./Header.module.css";
 import { IoExitOutline } from "react-icons/io5";
-import { GoHistory, GoPasskeyFill } from "react-icons/go";
-import { FaHome, FaCar, FaRegUserCircle } from "react-icons/fa";
+import { GoHistory, GoPasskeyFill, GoTools, GoBell, GoAlert } from "react-icons/go";
+import { FaHome, FaCar, FaRegUserCircle, FaGasPump } from "react-icons/fa";
 import { BsPersonVcard } from "react-icons/bs";
 import { FiTable } from "react-icons/fi";
 import { useRouter } from "next/navigation";
@@ -70,11 +70,11 @@ export default function Header({ isOpen, onClick }) {
                 <span className={styles.title}>Porteiros</span>
               </Link>
             </li>
-            
+
             <li className={styles.liDois}>
               <Link className={styles.link} href={"/manutencao"}>
                 <span>
-                  <GoHistory />
+                  <GoTools />
                 </span>
                 <span className={styles.title}>Manutenções</span>
               </Link>
@@ -83,7 +83,7 @@ export default function Header({ isOpen, onClick }) {
             <li className={styles.liDois}>
               <Link className={styles.link} href={"/lembretes"}>
                 <span>
-                  <GoHistory />
+                  <GoBell />
                 </span>
                 <span className={styles.title}>Lembretes</span>
               </Link>
@@ -92,7 +92,7 @@ export default function Header({ isOpen, onClick }) {
             <li className={styles.liDois}>
               <Link className={styles.link} href={"/abastecimento"}>
                 <span>
-                  <GoHistory />
+                  <FaGasPump />
                 </span>
                 <span className={styles.title}>Abastecimentos</span>
               </Link>
@@ -101,7 +101,7 @@ export default function Header({ isOpen, onClick }) {
             <li className={styles.liDois}>
               <Link className={styles.link} href={"/alarmes"}>
                 <span>
-                  <GoHistory />
+                  <GoAlert />
                 </span>
                 <span className={styles.title}>Criar Alarmes</span>
               </Link>

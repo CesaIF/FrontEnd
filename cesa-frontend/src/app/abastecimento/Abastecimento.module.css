@@ -32,7 +32,7 @@
     align-items: center;
 }
 
-.titleLocacao {
+.titlemanutencao {
     font-size: 24px;
 }
 
@@ -74,7 +74,7 @@
     margin-bottom: 40px;
 }
 
-.cardLocacao {
+.cardmanutencao {
     display: flex;
     background-color: white;
     flex-direction: row;
@@ -95,7 +95,7 @@
     width: 8em;
 }
 
-.cardLocacao:hover {
+.cardmanutencao:hover {
     transform: translate(-5px, -5px);
     box-shadow: 8px 8px 20px #e0dee0;
 }

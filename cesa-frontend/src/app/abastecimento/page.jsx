@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 const Modal = dynamic(() => import("../components/modal"), { ssr: false });
 import BadButton from "../components/badButton";
 import styles from "./Abastecimento.module.css";
+import { CiCirclePlus } from "react-icons/ci";
 import { useAuth } from "../hooks/useAuth";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -19,14 +20,24 @@ export default function History() {
   const [dataInicio, setDataInicio] = useState("");
   const [dataFim, setDataFim] = useState("");
 
-  const [locacoes, setLocacoes] = useState([]);
+  const [abastecimento, setAbastecimento] = useState([]);
   const [isOpen, setIsOpen] = useState(true);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-  const [selectedLocacao, setSelectedLocacao] = useState(null);
+  const [selectedAbastecimento, setSelectedManutencao] = useState(null);
   const [conteudo, setConteudo] = useState("");
   const [noticeIsOpen, setNoticeIsOpen] = useState(false);
   const [dateIsOpen, setDateIsOpen] = useState(false);
+
+  const [novaAbastecimento, setNovaAbastecimento] = useState({
+    placa_abastecimento: "",
+    tipo_combustivel: "",
+    valor_abastecimento: "",
+    km_abastecimento: "",
+    posto_abastecimento: "",
+    data_abastecimento: "",
+    numero_nota: "",
+  });
 
   function handleDateIsOpen() {
     setDateIsOpen(!dateIsOpen);
@@ -51,7 +62,7 @@ export default function History() {
             dataInicio,
             dataFim,
           }),
-        }
+        },
       );
 
       if (response.ok) {
@@ -84,17 +95,17 @@ export default function History() {
       try {
         const token = localStorage.getItem("token");
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_LOCAL}/locacoes/allhist`,
+          `${process.env.NEXT_PUBLIC_LOCAL}/combustivel`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
         const data = await response.json();
-        setLocacoes(data);
+        setAbastecimento(data);
       } catch (error) {
-        console.error("Erro ao buscar locações", error);
+        console.error("Erro ao buscar manutenções", error);
       }
     };
     fetchLocacoes();
@@ -104,13 +115,13 @@ export default function History() {
     setModalIsOpen(!modalIsOpen);
   }
 
-  function handleExpandModal(locacao) {
-    setSelectedLocacao(locacao);
+  function handleExpandModal(abastecimento) {
+    setSelectedManutencao(abastecimento);
     setIsDetailModalOpen(true);
   }
 
   function handleCloseExpandModal() {
-    setSelectedLocacao(null);
+    setSelectedManutencao(null);
     setIsDetailModalOpen(false);
   }
   //Formata a data que vem do back end
@@ -136,7 +147,10 @@ export default function History() {
           <div className={styles.containerInternoUm}>
             <div>
               <div className={styles.containerTitle}>
-                <h1 className={styles.titleLocacao}>Historico de Locações Finalizadas</h1>
+                <h1 className={styles.titlemanutencao}> Abastecimentos </h1>
+                <button className={styles.butaoAdd} onClick={handleOpenModal}>
+                  <CiCirclePlus size={35}></CiCirclePlus>
+                </button>
                 <button className={styles.butaoAdd} onClick={handleDateIsOpen}>
                   <FaFileExport size={35} />
                 </button>
@@ -145,34 +159,35 @@ export default function History() {
             </div>
 
             <div className={styles.containerCard}>
-              {locacoes.length === 0 ? (
-                <p>Nenhuma locação cadastrada.</p>
+              {abastecimento.length === 0 ? (
+                <p>Nenhumo abastecimento cadastrado.</p>
               ) : (
-                locacoes.map((locacao) => (
+                abastecimento.map((abastecimento) => (
                   <div
-                    key={locacao.id}
-                    onClick={() => handleExpandModal(locacao)}
-                    className={styles.cardLocacao}
+                    key={abastecimento.id}
+                    onClick={() => handleExpandModal(abastecimento)}
+                    className={styles.cardmanutencao}
                   >
                     <div>
                       <div className={styles.containerTitles}>
                         <span className={styles.titleCard}>
-                          {`#ID: ` + locacao.id}
+                          {`#ID: ` + abastecimento.id}
                         </span>
                       </div>
                       <div>
                         <span className={styles.titleCard}>
-                          {`Itinerario: ` + locacao.itinerario}
+                          {`Placa: ` + abastecimento.placa_abastecimento}
                         </span>
                       </div>
                       <div>
                         <span className={styles.titleCardDois}>
-                          {`Veiculo: ` + locacao.veiculo_placa_fk}
+                          {`Tipo de combustível: ` +
+                            abastecimento.tipo_combustivel}
                         </span>
                       </div>
                       <div>
                         <span className={styles.titleCardDois}>
-                          {`Motorista: ` + locacao.motorista_fk}
+                          {`Valor: R$ ` + abastecimento.valor_abastecimento}
                         </span>
                       </div>
                     </div>
@@ -182,16 +197,182 @@ export default function History() {
             </div>
           </div>
 
+          {/*Modal para a cadastrar Abastecimentos*/}
+          <Modal isOpen={modalIsOpen} onClose={handleOpenModal}>
+            <div className={styles.containerModal}>
+              <div className={styles.containerInternoModal}>
+                <h1 className="text-3xl">Cadastro de Abastecimentos</h1>
+                <form className={styles.formAdd}>
+                  <div className={styles.input}>
+                    <Ginput
+                      type={"text"}
+                      placeholder={"EX: 'ABC1234 ou ABC1D23'"}
+                      maxLength={7}
+                      label={"Placa"}
+                      value={novaAbastecimento.placa_abastecimento}
+                      onChange={(e) =>
+                        setNovaAbastecimento({
+                          ...novaAbastecimento,
+                          placa_abastecimento: e.target.value.toUpperCase(),
+                        })
+                      }
+                    />
+                  </div>
+                  <div className={styles.input}>
+                    <Ginput
+                      type={"text"}
+                      placeholder={"EX: 'Gasolina/Disel/Álcool'"}
+                      maxLength={50}
+                      label={"Tipo do combustível "}
+                      value={novaAbastecimento.tipo_combustivel}
+                      onChange={(e) =>
+                        setNovaAbastecimento({
+                          ...novaAbastecimento,
+                          tipo_combustivel: e.target.value,
+                        })
+                      }
+                    ></Ginput>
+                  </div>
+                  <div className={styles.input}>
+                    <Ginput
+                      type={"number"}
+                      placeholder={"EX: 'R$222.00'"}
+                      maxLength={30}
+                      label={"Valor do Abastecimento"}
+                      value={novaAbastecimento.valor_abastecimento}
+                      onChange={(e) =>
+                        setNovaAbastecimento({
+                          ...novaAbastecimento,
+                          valor_abastecimento: parseInt(e.target.value),
+                        })
+                      }
+                    ></Ginput>
+                  </div>
+                  <div className={styles.input}>
+                    <Ginput
+                      type={"number"}
+                      placeholder={"EX: '22568'"}
+                      maxLength={300}
+                      label={"Quilometragem"}
+                      value={novaAbastecimento.km_abastecimento}
+                      onChange={(e) =>
+                        setNovaAbastecimento({
+                          ...novaAbastecimento,
+                          km_abastecimento: parseInt(e.target.value),
+                        })
+                      }
+                    ></Ginput>
+                  </div>
+                  <div className={styles.input}>
+                    <Ginput
+                      type={"text"}
+                      placeholder={"EX: 'Posto Americo Nogueiro-Itapetinga'"}
+                      maxLength={400}
+                      label={"Nome do Posto e/ou Cidade"}
+                      value={novaAbastecimento.posto_abastecimento}
+                      onChange={(e) =>
+                        setNovaAbastecimento({
+                          ...novaAbastecimento,
+                          posto_abastecimento: e.target.value,
+                        })
+                      }
+                    ></Ginput>
+                  </div>
+                  <div className={styles.input}>
+                    <Ginput
+                      type={"date"}
+                      label={"Data do abastecimento"}
+                      value={novaAbastecimento.data_abastecimento}
+                      onChange={(e) =>
+                        setNovaAbastecimento({
+                          ...novaAbastecimento,
+                          data_abastecimento: e.target.value,
+                        })
+                      }
+                    ></Ginput>
+                  </div>
+                  <div className={styles.input}>
+                    <Ginput
+                      type={"number"}
+                      placeholder={"EX: 'Se tiver caso negativo coleque 123'"}
+                      maxLength={30}
+                      label={"Número da nota fiscal "}
+                      value={novaAbastecimento.numero_nota}
+                      onChange={(e) =>
+                        setNovaAbastecimento({
+                          ...novaAbastecimento,
+                          numero_nota: parseInt(e.target.value),
+                        })
+                      }
+                    ></Ginput>
+                  </div>
+                </form>
+                <div className={styles.butaoForm}>
+                  <BadButton
+                    textColor={"#48793c"}
+                    colorHover={"#a3bc98"}
+                    cor={"#d1dec7"}
+                    onClick={handleOpenModal}
+                  >
+                    Cancelar
+                  </BadButton>
+                  <BadButton
+                    colorHover={"#769b6a"}
+                    cor={"#48793c"}
+                    onClick={async () => {
+                      const token = localStorage.getItem("token");
+                      const response = await fetch(
+                        `${process.env.NEXT_PUBLIC_LOCAL}/combustivel/cadastro`,
+                        {
+                          method: "POST",
+                          headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`,
+                          },
+                          body: JSON.stringify(novaAbastecimento),
+                        },
+                      );
+                      if (response.ok) {
+                        const abastecimentoCadastrado = await response.json();
+                        setVeiculos((prev) => [...prev, abastecimentoCadastrado]);
+
+                        handleNoticeIsOpen();
+                        handleOpenModal();
+                        setConteudo("Abastecimento cadastrado com sucesso!");
+
+                        setNovaAbastecimento({
+                          placa_abastecimento: "",
+                          tipo_combustivel: "",
+                          valor_abastecimento: "",
+                          km_abastecimento: "",
+                          posto_abastecimento: "",
+                          data_abastecimento: "",
+                          numero_nota: "",
+                        });
+                      } else {
+                        const erro = await response.json();
+                        handleNoticeIsOpen();
+                        setConteudo(erro.error || "Erro ao cadastrar abastecimento");
+                      }
+                    }}
+                  >
+                    Cadastrar
+                  </BadButton>
+                </div>
+              </div>
+            </div>
+          </Modal>
+
           <Modal
             width={"700px"}
             isOpen={isDetailModalOpen}
             onClose={handleCloseExpandModal}
           >
-            {selectedLocacao && (
+            {selectedAbastecimento && (
               <div className={styles.containerModalGeral}>
                 <div className={styles.containerUpModal}>
                   <div className={styles.titleExpand}>
-                    <h1>Locação detalhada:</h1>
+                    <h1>Abastecimento detalhado:</h1>
                   </div>
                   <div
                     className={styles.butaoClose}
@@ -202,57 +383,35 @@ export default function History() {
                 </div>
                 <div className={styles.modalExpand}>
                   {[
-                    { label: "ID", value: selectedLocacao.id },
-                    { label: "Itinerário", value: selectedLocacao.itinerario },
+                    { label: "ID", value: selectedAbastecimento.id },
+                    {
+                      label: "Tipo de combustível",
+                      value: selectedAbastecimento.tipo_combustivel,
+                    },
                     {
                       label: "Veículo",
-                      value: `${selectedLocacao.modelo_veiculo} - ${selectedLocacao.veiculo_placa_fk}`,
+                      value: `${selectedAbastecimento.modelo_veiculo} - ${selectedAbastecimento.placa_abastecimento}`,
                     },
                     {
-                      label: "Motorista",
-                      value: selectedLocacao.motorista_fk,
+                      label: "Valor do abastecimento",
+                      value: selectedAbastecimento.valor_abastecimento,
                     },
                     {
-                      label: "Saída",
-                      value: formatarData(selectedLocacao.data_saida),
+                      label: "Quilometragem",
+                      value: selectedAbastecimento.km_abastecimento,
                     },
                     {
-                      label: "Chegada",
-                      value: formatarData(selectedLocacao.data_chegada),
+                      label: "Posto e/ou Cidade de abastecimento",
+                      value: selectedAbastecimento.posto_abastecimento,
                     },
 
                     {
-                      label: "Quilometragem de Saída",
-                      value: selectedLocacao.km_saida,
+                      label: "Data do abastecimento",
+                      value: formatarData(selectedAbastecimento.data_abastecimento),
                     },
                     {
-                      label: "Quilometragem de Chegada",
-                      value: selectedLocacao.km_chegada,
-                    },
-                    {
-                      label: "Observação Saída",
-                      value: selectedLocacao.observacao_saida,
-                    },
-                    {
-                      label: "Observação Chegada",
-                      value: selectedLocacao.observacao_entrada,
-                    },
-                    {
-                      label: "Porteiro Saída",
-                      value: selectedLocacao.nome_porteiro_saida,
-                    },
-                    {
-                      label: "Porteiro Chegada",
-                      value: selectedLocacao.nome_porteiro_chegada,
-                    },
-                    {
-                      label: "Motivo da saída",
-                      value: selectedLocacao.motivo_saida,
-                    },
-                    { label: "Gestor", value: selectedLocacao.nome_gestor },
-                    {
-                      label: "Autorização",
-                      value: selectedLocacao.autorizacao,
+                      label: "Número da nota",
+                      value: selectedAbastecimento.numero_nota,
                     },
                   ].map((item, index) => (
                     <div key={index} className={styles.itemPartUm}>
