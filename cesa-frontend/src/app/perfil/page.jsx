@@ -308,7 +308,7 @@ export default function Perfil() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={"João Barreto Hünnerbein"}
+                      placeholder={"EX: 'João Barreto Hünnerbein'"}
                       maxLength={200}
                       label={"Nome"}
                       value={nome}
@@ -318,7 +318,7 @@ export default function Perfil() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={"joaobarreto@email.com"}
+                      placeholder={"EX: 'joaobarreto@email.com'"}
                       maxLength={200}
                       label={"Email"}
                       value={email}
@@ -328,7 +328,7 @@ export default function Perfil() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={"123.456.789-10"}
+                      placeholder={"EX: '123.456.789-10'"}
                       maxLength={14}
                       label={"CPF"}
                       value={cpf}
@@ -339,7 +339,7 @@ export default function Perfil() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={"(77) 12345-6789"}
+                      placeholder={"EX: '(77) 12345-6789'"}
                       maxLength={200}
                       label={"Telefone"}
                       value={telefone}

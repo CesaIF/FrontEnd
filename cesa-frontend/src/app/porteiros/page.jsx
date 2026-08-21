@@ -202,7 +202,7 @@ export default function Porteiros() {
                   <div className={styles.input}>
                     <Ginput
                       type="text"
-                      placeholder="123.456.789-00"
+                      placeholder="EX: '123.456.789-00'"
                       maxLength={14}
                       label="Cpf"
                       value={novoPorteiro.cpf}
@@ -218,7 +218,7 @@ export default function Porteiros() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={"joaobarreto@email.com"}
+                      placeholder={"EX: 'joaobarreto@email.com'"}
                       maxLength={200}
                       label={"Email"}
                       value={novoPorteiro.email}
@@ -233,7 +233,7 @@ export default function Porteiros() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={"São Gustavo"}
+                      placeholder={"EX: 'São Gustavo'"}
                       maxLength={200}
                       label={"Nome"}
                       value={novoPorteiro.nome}
@@ -263,7 +263,7 @@ export default function Porteiros() {
                   <div className={styles.input}>
                     <Ginput
                       type="text"
-                      placeholder="(99) 99999-9999"
+                      placeholder="EX: '(99) 99999-9999'"
                       maxLength={16}
                       label="Telefone"
                       value={novoPorteiro.telefone}
