@@ -9,11 +9,21 @@ import BadButton from "../components/badButton";
 import styles from "./Alarmes.module.css";
 import Ginput from "../components/gInput";
 import { useAuth } from "../hooks/useAuth";
+import Pagination from "../components/pagination";
+import { usePagination } from "../hooks/usePagination";
+import {
+  initializeAlertNotifications,
+  isAlertSeen,
+  markAlertAsSeen,
+} from "../utils/alertNotifications";
 
 export default function Alarmes() {
   useAuth();
   const [alarmes, setAlarmes] = useState([]);
+  const [alarmesEditando, setAlarmesEditando] = useState(null);
+  const { currentPage, setCurrentPage, totalPages, paginatedItems: paginatedAlarmes } = usePagination(alarmes, 12);
   const [conteudo, setConteudo] = useState("");
+  const [visualizados, setVisualizados] = useState([]);
 
   useEffect(() => {
     const fetchAlarmes = async () => {
@@ -28,7 +38,10 @@ export default function Alarmes() {
           },
         );
         const data = await receberAPI.json();
-        setAlarmes(data);
+        const lista = Array.isArray(data) ? data : [];
+        initializeAlertNotifications(lista);
+        setAlarmes(lista);
+        setVisualizados(lista.filter((alarme) => isAlertSeen(alarme.id)).map((alarme) => String(alarme.id)));
       } catch (error) {
         console.error("Erro ao buscar os alertas do sistemas".error);
       }
@@ -36,8 +49,12 @@ export default function Alarmes() {
     fetchAlarmes();
   }, []);
 
-  const handleEditarVeiculo = (alarmes) => {
-    setAlarmesEditando(alarmes);
+  const handleEditarVeiculo = (alarme) => {
+    markAlertAsSeen(alarme.id);
+    setVisualizados((prev) =>
+      prev.includes(String(alarme.id)) ? prev : [...prev, String(alarme.id)],
+    );
+    setAlarmesEditando(alarme);
     handleExpandModal();
   };
 
@@ -92,14 +109,19 @@ export default function Alarmes() {
               {alarmes.length === 0 ? (
                 <p>Nenhum alarmes.</p>
               ) : (
-                alarmes.map((alarmes) => (
+                paginatedAlarmes.map((alarmes) => (
                   <div
                     key={alarmes.id}
                     onClick={() => {
                       handleEditarVeiculo(alarmes);
                     }}
-                    className={styles.card}
+                    className={`${styles.card} ${
+                      visualizados.includes(String(alarmes.id)) ? "" : styles.cardNovo
+                    }`}
                   >
+                    {!visualizados.includes(String(alarmes.id)) && (
+                      <span className={styles.badgeNovo}>Novo</span>
+                    )}
                     <div>
                       <span className={styles.titleCardTres}>
                         {alarmes.placa_evento}
@@ -119,6 +141,11 @@ export default function Alarmes() {
                 ))
               )}
             </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
           </div>
           {/*Modal para o painel*/}
           <Modal isOpen={expandModal} onClose={handleExpandModal}>
@@ -166,7 +193,7 @@ export default function Alarmes() {
                   onClick={async () => {
                     const token = localStorage.getItem("token");
                     const response = await fetch(
-                      `${process.env.NEXT_PUBLIC_LOCAL}/alarmes/${alarmesEditando.id}`,
+                      `${process.env.NEXT_PUBLIC_LOCAL}/alertas/${alarmesEditando?.id}`,
                       {
                         method: "DELETE",
                         headers: {
@@ -183,9 +210,15 @@ export default function Alarmes() {
                       handleDeletarIsOpen();
                       setConteudo("Alarme deletado com sucesso!");
                     } else {
-                      const erro = await response.json();
+                      let mensagem = "Erro ao deletar alarme";
+                      try {
+                        const erro = await response.json();
+                        mensagem = erro.error || erro.message || mensagem;
+                      } catch {
+                        mensagem = `Erro ${response.status} ao deletar o alarme.`;
+                      }
                       handleNoticeIsOpen();
-                      setConteudo(erro.error || "Erro ao deletar alarmes");
+                      setConteudo(mensagem);
                     }
                   }}
                 >

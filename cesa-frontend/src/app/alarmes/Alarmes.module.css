@@ -189,3 +189,22 @@
 .asideOpen .footer {
   margin-left: 200px;
 }
+
+.cardNovo {
+  position: relative;
+  border: 2px solid #fca61d;
+  box-shadow: 0 0 0 3px rgba(252, 166, 29, 0.12), 6px 6px 10px #e0dee0;
+}
+
+.badgeNovo {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #dc3545;
+  color: white;
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}

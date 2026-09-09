@@ -9,6 +9,8 @@ import BadButton from "../components/badButton";
 import styles from "./Manutencao.module.css";
 import { CiCirclePlus } from "react-icons/ci";
 import { useAuth } from "../hooks/useAuth";
+import Pagination from "../components/pagination";
+import { usePagination } from "../hooks/usePagination";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { FaFileExport } from "react-icons/fa6";
@@ -21,6 +23,7 @@ export default function Manutencao() {
   const [dataFim, setDataFim] = useState("");
 
   const [manutencao, setManutencao] = useState([]);
+  const { currentPage, setCurrentPage, totalPages, paginatedItems: paginatedManutencoes } = usePagination(manutencao, 12);
   const [isOpen, setIsOpen] = useState(true);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
@@ -175,12 +178,24 @@ export default function Manutencao() {
             <div>
               <div className={styles.containerTitle}>
                 <h1 className={styles.titlemanutencao}> Manutenção </h1>
-                <button className={styles.butaoAdd} onClick={handleOpenModal}>
-                  <CiCirclePlus size={35}></CiCirclePlus>
-                </button>
-                <button className={styles.butaoAdd} onClick={handleDateIsOpen}>
-                  <FaFileExport size={35} />
-                </button>
+                <div className={styles.titleActions}>
+                  <button
+                    className={styles.butaoAdd}
+                    onClick={handleOpenModal}
+                    title="Adicionar"
+                    aria-label="Adicionar"
+                  >
+                    <CiCirclePlus size={35} />
+                  </button>
+                  <button
+                    className={styles.butaoAdd}
+                    onClick={handleDateIsOpen}
+                    title="Exportar"
+                    aria-label="Exportar"
+                  >
+                    <FaFileExport size={35} />
+                  </button>
+                </div>
               </div>
               <div className={styles.line}></div>
             </div>
@@ -189,7 +204,7 @@ export default function Manutencao() {
               {manutencao.length === 0 ? (
                 <p>Nenhuma manutencao cadastrada.</p>
               ) : (
-                manutencao.map((manutencao) => (
+                paginatedManutencoes.map((manutencao) => (
                   <div
                     key={manutencao.id}
                     onClick={() => handleExpandModal(manutencao)}
@@ -221,6 +236,11 @@ export default function Manutencao() {
                 ))
               )}
             </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
           </div>
 
           {/*Modal para a cadastrar Manutenções*/}
@@ -232,6 +252,7 @@ export default function Manutencao() {
                   <div className={styles.input}>
                     <div className={styles.choiceboxContainer}>
                       <select
+                        className={styles.choicebox}
                         value={novaManutencao.placa_manutencao}
                         onChange={(e) =>
                           setNovaManutencao({

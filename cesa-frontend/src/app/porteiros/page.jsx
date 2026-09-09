@@ -10,6 +10,8 @@ import BadButton from "../components/badButton";
 import styles from "./Porteiro.module.css";
 import Ginput from "../components/gInput";
 import { useAuth } from "../hooks/useAuth";
+import Pagination from "../components/pagination";
+import { usePagination } from "../hooks/usePagination";
 import { TbPasswordUser } from "react-icons/tb";
 
 export default function Porteiros() {
@@ -17,6 +19,7 @@ export default function Porteiros() {
 
   const [conteudo, setConteudo] = useState("");
   const [porteiro, setPorteiro] = useState([]);
+  const { currentPage, setCurrentPage, totalPages, paginatedItems: paginatedPorteiros } = usePagination(porteiro, 12);
   const [porteiroEditando, setPorteiroEditando] = useState({
     email: "",
     nome: "",
@@ -155,7 +158,7 @@ export default function Porteiros() {
               {porteiro.length === 0 ? (
                 <p>Nenhum porteiro cadastrado</p>
               ) : (
-                porteiro.map((porteiro) => (
+                paginatedPorteiros.map((porteiro) => (
                   <div
                     key={porteiro.cpf}
                     onClick={() => {
@@ -192,6 +195,11 @@ export default function Porteiros() {
                 ))
               )}
             </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
           </div>
           {/*Modal para a cadastrar porteiro*/}
           <Modal isOpen={modalIsOpen} onClose={handleOpenModal}>

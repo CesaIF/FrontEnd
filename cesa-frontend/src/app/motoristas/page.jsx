@@ -10,12 +10,15 @@ import BadButton from "../components/badButton";
 import styles from "./Motoristas.module.css";
 import Ginput from "../components/gInput";
 import { useAuth } from "../hooks/useAuth";
+import Pagination from "../components/pagination";
+import { usePagination } from "../hooks/usePagination";
 import { FaFileExport } from "react-icons/fa6";
 
 export default function Motoristas() {
   useAuth();
 
   const [motoristas, setMotoristas] = useState([]);
+  const { currentPage, setCurrentPage, totalPages, paginatedItems: paginatedMotoristas } = usePagination(motoristas, 12);
   const [motoristaEditando, setMotoristaEditando] = useState({
     nome: "",
     email: "",
@@ -147,7 +150,7 @@ export default function Motoristas() {
               {motoristas.length === 0 ? (
                 <p>Nenhum motorista cadastrado.</p>
               ) : (
-                motoristas.map((motorista) => (
+                paginatedMotoristas.map((motorista) => (
                   <div
                     key={motorista.id}
                     onClick={() => {
@@ -182,6 +185,11 @@ export default function Motoristas() {
                 ))
               )}
             </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
           </div>
 
           {/*Modal para a cadastrar motorista*/}

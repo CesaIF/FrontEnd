@@ -9,6 +9,8 @@ import BadButton from "../components/badButton";
 import styles from "./Abastecimento.module.css";
 import { CiCirclePlus } from "react-icons/ci";
 import { useAuth } from "../hooks/useAuth";
+import Pagination from "../components/pagination";
+import { usePagination } from "../hooks/usePagination";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { FaFileExport } from "react-icons/fa6";
@@ -21,6 +23,7 @@ export default function Abastecimento() {
   const [dataFim, setDataFim] = useState("");
 
   const [abastecimento, setAbastecimento] = useState([]);
+  const { currentPage, setCurrentPage, totalPages, paginatedItems: paginatedAbastecimentos } = usePagination(abastecimento, 12);
   const [isOpen, setIsOpen] = useState(true);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
@@ -173,12 +176,24 @@ export default function Abastecimento() {
             <div>
               <div className={styles.containerTitle}>
                 <h1 className={styles.titlemanutencao}> Abastecimentos </h1>
-                <button className={styles.butaoAdd} onClick={handleOpenModal}>
-                  <CiCirclePlus size={35}></CiCirclePlus>
-                </button>
-                <button className={styles.butaoAdd} onClick={handleDateIsOpen}>
-                  <FaFileExport size={35} />
-                </button>
+                <div className={styles.titleActions}>
+                  <button
+                    className={styles.butaoAdd}
+                    onClick={handleOpenModal}
+                    title="Adicionar"
+                    aria-label="Adicionar"
+                  >
+                    <CiCirclePlus size={35} />
+                  </button>
+                  <button
+                    className={styles.butaoAdd}
+                    onClick={handleDateIsOpen}
+                    title="Exportar"
+                    aria-label="Exportar"
+                  >
+                    <FaFileExport size={35} />
+                  </button>
+                </div>
               </div>
               <div className={styles.line}></div>
             </div>
@@ -187,7 +202,7 @@ export default function Abastecimento() {
               {abastecimento.length === 0 ? (
                 <p>Nenhumo abastecimento cadastrado.</p>
               ) : (
-                abastecimento.map((abastecimento) => (
+                paginatedAbastecimentos.map((abastecimento) => (
                   <div
                     key={abastecimento.id}
                     onClick={() => handleExpandModal(abastecimento)}
@@ -220,6 +235,11 @@ export default function Abastecimento() {
                 ))
               )}
             </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
           </div>
 
           {/*Modal para a cadastrar Abastecimentos*/}
@@ -232,6 +252,7 @@ export default function Abastecimento() {
                     <div className={styles.choiceboxContainer}>
 
                       <select
+                        className={styles.choicebox}
                         value={novaAbastecimento.placa_abastecimento}
                         onChange={(e) =>
                           setNovaAbastecimento({

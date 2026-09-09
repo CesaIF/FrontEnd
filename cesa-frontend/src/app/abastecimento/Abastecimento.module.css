@@ -32,6 +32,13 @@
     align-items: center;
 }
 
+
+.titleActions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 .titlemanutencao {
     font-size: 24px;
 }
@@ -111,7 +118,8 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    padding: 1rem 1.75rem;
+    padding: 0.25rem 0.5rem 0.5rem;
+    box-sizing: border-box;
 }
 
 .containerInternoModal {
@@ -120,6 +128,13 @@
     justify-content: center;
     align-items: center;
     width: 100%;
+}
+
+.containerInternoModal > h1 {
+    width: 100%;
+    text-align: center;
+    line-height: 1.2;
+    margin: 0 0 0.5rem;
 }
 
 .containerInMini {
@@ -198,23 +213,50 @@
 
 .formAdd {
     width: 100%;
-    margin-top: 2.5rem;
+    margin-top: 1rem;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
 }
 
 .input {
     display: flex;
     justify-content: center;
+    width: 100%;
+}
+
+.choiceboxContainer {
+    display: flex;
+    flex-direction: column;
+    height: 45px;
+    width: 100%;
+    justify-content: center;
+    background-color: #efeeef;
+    border-color: #a3bc98;
+    border-bottom-width: 2px;
+    box-sizing: border-box;
+}
+
+.choicebox {
+    width: 100%;
+    height: 100%;
+    padding: 0 0.75rem;
+    color: #2b2b2b;
+    background-color: transparent;
+    border: 0;
+    outline: none;
+    font: inherit;
+    cursor: pointer;
 }
 
 .butaoForm {
     display: flex;
     flex-direction: row;
-    justify-content: end;
-    margin-top: 2.5rem;
-    width: 80%;
+    justify-content: center;
+    margin-top: 1.25rem;
+    width: 100%;
+    gap: 0.5rem;
+    padding-bottom: 0.25rem;
 }
 
 .containerUpModal {
@@ -295,4 +337,22 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
+}
+
+@media (max-width: 640px) {
+    .containerModal {
+        padding: 0;
+    }
+
+    .containerInternoModal > h1 {
+        font-size: 1.5rem;
+    }
+
+    .formAdd {
+        gap: 0.85rem;
+    }
+
+    .butaoForm {
+        flex-direction: column;
+    }
 }

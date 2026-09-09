@@ -10,10 +10,13 @@ import BadButton from "../components/badButton";
 import styles from "./Lembretes.module.css";
 import Ginput from "../components/gInput";
 import { useAuth } from "../hooks/useAuth";
+import Pagination from "../components/pagination";
+import { usePagination } from "../hooks/usePagination";
 
 export default function Veiculos() {
   useAuth();
   const [Lembrete, setLembrete] = useState([]);
+  const { currentPage, setCurrentPage, totalPages, paginatedItems: paginatedLembretes } = usePagination(Lembrete, 12);
   const [veiculo, setVeiculo] = useState([]);
   const [lembreteEditando, setLembreteEditando] = useState({
     placa_lembrete: "",
@@ -131,7 +134,7 @@ export default function Veiculos() {
               {Lembrete.length === 0 ? (
                 <p>Nenhum lembrete cadastrado.</p>
               ) : (
-                Lembrete.map((lembrete) => (
+                paginatedLembretes.map((lembrete) => (
                   <div
                     key={lembrete.id}
                     onClick={() => {
@@ -172,6 +175,11 @@ export default function Veiculos() {
                 ))
               )}
             </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
           </div>
           {/*Modal para a cadastrar lembrete*/}
           <Modal isOpen={modalIsOpen} onClose={handleOpenModal}>

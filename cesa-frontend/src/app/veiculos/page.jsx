@@ -10,10 +10,13 @@ import BadButton from "../components/badButton";
 import styles from "./Veiculos.module.css";
 import Ginput from "../components/gInput";
 import { useAuth } from "../hooks/useAuth";
+import Pagination from "../components/pagination";
+import { usePagination } from "../hooks/usePagination";
 
 export default function Veiculos() {
   useAuth();
   const [veiculos, setVeiculos] = useState([]);
+  const { currentPage, setCurrentPage, totalPages, paginatedItems: paginatedVeiculos } = usePagination(veiculos, 12);
   const [veiculosEditando, setVeiculosEditando] = useState({
     modelo: "",
     cor: "",
@@ -111,7 +114,7 @@ export default function Veiculos() {
               {veiculos.length === 0 ? (
                 <p>Nenhum veiculo cadastrado.</p>
               ) : (
-                veiculos.map((veiculo) => (
+                paginatedVeiculos.map((veiculo) => (
                   <div
                     key={veiculo.placa}
                     onClick={() => {
@@ -148,6 +151,11 @@ export default function Veiculos() {
                 ))
               )}
             </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
           </div>
           {/*Modal para a cadastrar veiculo*/}
           <Modal isOpen={modalIsOpen} onClose={handleOpenModal}>

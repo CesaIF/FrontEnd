@@ -8,6 +8,8 @@ const Modal = dynamic(() => import("../components/modal"), { ssr: false });
 import BadButton from "../components/badButton";
 import styles from "./History.module.css";
 import { useAuth } from "../hooks/useAuth";
+import Pagination from "../components/pagination";
+import { usePagination } from "../hooks/usePagination";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { FaFileExport } from "react-icons/fa6";
@@ -20,6 +22,7 @@ export default function History() {
   const [dataFim, setDataFim] = useState("");
 
   const [locacoes, setLocacoes] = useState([]);
+  const { currentPage, setCurrentPage, totalPages, paginatedItems: paginatedLocacoes } = usePagination(locacoes, 12);
   const [isOpen, setIsOpen] = useState(true);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
@@ -148,7 +151,7 @@ export default function History() {
               {locacoes.length === 0 ? (
                 <p>Nenhuma locação cadastrada.</p>
               ) : (
-                locacoes.map((locacao) => (
+                paginatedLocacoes.map((locacao) => (
                   <div
                     key={locacao.id}
                     onClick={() => handleExpandModal(locacao)}
@@ -180,6 +183,11 @@ export default function History() {
                 ))
               )}
             </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
           </div>
 
           <Modal
