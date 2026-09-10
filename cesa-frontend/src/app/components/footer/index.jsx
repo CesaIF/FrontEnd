@@ -19,6 +19,7 @@ export default function Footer(){
                         <h1>Equipe</h1>
                         <div className={styles.techUsed}>
                             <Link className={styles.link} href={"https://www.github.com/thellllima02"}>Hércules da Silva Santos</Link>
+                            <Link className={styles.link} href={"https://www.github.com/natanael9999"}>Natanael Dos Santos Gonçalves</Link>
                         </div>
                     </div>
                     <div>
@@ -30,9 +31,9 @@ export default function Footer(){
                         <h1>Nossa missão é garantir a segurança e eficiência no controle de locações de veículos institucionais.</h1>
                     </div>
                     <div>
-                        <h1>Orientador</h1>
-                        <p>Fábio</p>
-                        <p></p>
+                        <h1>Orientadores/Supervisores</h1>
+                        <p>Éber Chagas</p>
+                        <p>Sandoelton Coelho</p>
                     </div>
                     <div className={styles.techUsed}>
                         <div>
