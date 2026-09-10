@@ -1,6 +1,7 @@
 // MELHORIA FRONT-END: centraliza a chamada da nova rota de exportação criada no back-end.
-// Evita repetir a lógica de download do CSV em todas as páginas.
-export async function exportarCsv({ entidade, body, nomeArquivo }) {
+// MELHORIA FRONT-END: exportação atualizada para PDF em todas as páginas.
+// Mantém a rota unificada do back-end e apenas ajusta o download para o novo formato.
+export async function exportarPdf({ entidade, body, nomeArquivo }) {
   const token = localStorage.getItem("token");
 
   const response = await fetch(
@@ -27,7 +28,10 @@ export async function exportarCsv({ entidade, body, nomeArquivo }) {
     throw new Error(mensagem);
   }
 
-  const blob = await response.blob();
+  // MELHORIA FRONT-END: força o MIME type correto para evitar que o navegador
+  // trate o relatório como CSV ou arquivo genérico.
+  const dados = await response.blob();
+  const blob = new Blob([dados], { type: "application/pdf" });
   const url = window.URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;

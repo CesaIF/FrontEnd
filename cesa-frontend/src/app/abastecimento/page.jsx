@@ -17,7 +17,7 @@ import { FaFileExport } from "react-icons/fa6";
 import Ginput from "../components/gInput";
 import { IoClose } from "react-icons/io5";
 import SearchBar from "../components/searchBar";
-import { exportarCsv } from "../utils/exportCsv";
+import { exportarPdf } from "../utils/exportPdf";
 
 export default function Abastecimento() {
   useAuth();
@@ -65,10 +65,10 @@ export default function Abastecimento() {
           ? { modo, q: busca.trim(), tipoCombustivel: filtroCombustivel }
           : { modo: "todos" };
 
-      await exportarCsv({
+      await exportarPdf({
         entidade: "abastecimentos",
         body,
-        nomeArquivo: "RelatorioAbastecimentos.csv",
+        nomeArquivo: "RelatorioAbastecimentos.pdf",
       });
       handleDateIsOpen();
       handleNoticeIsOpen();

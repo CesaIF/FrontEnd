@@ -14,7 +14,7 @@ import Pagination from "../components/pagination";
 import { usePagination } from "../hooks/usePagination";
 import { FaFileExport } from "react-icons/fa6";
 import SearchBar from "../components/searchBar";
-import { exportarCsv } from "../utils/exportCsv";
+import { exportarPdf } from "../utils/exportPdf";
 
 export default function Veiculos() {
   useAuth();
@@ -83,12 +83,12 @@ export default function Veiculos() {
   const handleBaixar = async () => {
     try {
       // MELHORIA FRONT-END: veículos usam a nova rota /relatorio/exportar/veiculos.
-      await exportarCsv({
+      await exportarPdf({
         entidade: "veiculos",
         body: buscaPlaca.trim()
           ? { modo: "filtro", placa: buscaPlaca.trim() }
           : { modo: "todos" },
-        nomeArquivo: "RelacaoVeiculos.csv",
+        nomeArquivo: "RelacaoVeiculos.pdf",
       });
       handleNoticeIsOpen();
       setConteudo("Arquivo baixado com sucesso!");

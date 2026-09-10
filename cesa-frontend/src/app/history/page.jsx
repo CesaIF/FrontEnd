@@ -16,7 +16,7 @@ import { FaFileExport } from "react-icons/fa6";
 import Ginput from "../components/gInput";
 import { IoClose } from "react-icons/io5";
 import SearchBar from "../components/searchBar";
-import { exportarCsv } from "../utils/exportCsv";
+import { exportarPdf } from "../utils/exportPdf";
 
 export default function History() {
   useAuth();
@@ -51,7 +51,7 @@ export default function History() {
           ? { modo, q: busca.trim() }
           : { modo: "todos" };
 
-      await exportarCsv({ entidade: "locacoes", body, nomeArquivo: "RelatorioLocacoes.csv" });
+      await exportarPdf({ entidade: "locacoes", body, nomeArquivo: "RelatorioLocacoes.pdf" });
       handleDateIsOpen();
       handleNoticeIsOpen();
       setConteudo("Arquivo baixado com sucesso!");

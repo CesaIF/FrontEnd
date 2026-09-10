@@ -14,7 +14,7 @@ import Pagination from "../components/pagination";
 import { usePagination } from "../hooks/usePagination";
 import { FaFileExport } from "react-icons/fa6";
 import SearchBar from "../components/searchBar";
-import { exportarCsv } from "../utils/exportCsv";
+import { exportarPdf } from "../utils/exportPdf";
 
 export default function Motoristas() {
   useAuth();
@@ -78,12 +78,12 @@ export default function Motoristas() {
   const handleBaixar = async () => {
     try {
       // MELHORIA FRONT-END: usa a nova exportação unificada; com busca ativa exporta apenas o filtro.
-      await exportarCsv({
+      await exportarPdf({
         entidade: "motoristas",
         body: buscaNome.trim()
           ? { modo: "filtro", nome: buscaNome.trim() }
           : { modo: "todos" },
-        nomeArquivo: "RelacaoMotoristas.csv",
+        nomeArquivo: "RelacaoMotoristas.pdf",
       });
       handleNoticeIsOpen();
       setConteudo("Arquivo baixado com sucesso!");

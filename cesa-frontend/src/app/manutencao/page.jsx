@@ -17,7 +17,7 @@ import { FaFileExport } from "react-icons/fa6";
 import Ginput from "../components/gInput";
 import { IoClose } from "react-icons/io5";
 import SearchBar from "../components/searchBar";
-import { exportarCsv } from "../utils/exportCsv";
+import { exportarPdf } from "../utils/exportPdf";
 
 export default function Manutencao() {
   useAuth();
@@ -67,10 +67,10 @@ export default function Manutencao() {
           ? { modo, q: busca.trim(), tipoManutencao: filtroTipoManutencao }
           : { modo: "todos" };
 
-      await exportarCsv({
+      await exportarPdf({
         entidade: "manutencoes",
         body,
-        nomeArquivo: "RelatorioManutencoes.csv",
+        nomeArquivo: "RelatorioManutencoes.pdf",
       });
       handleDateIsOpen();
       handleNoticeIsOpen();
