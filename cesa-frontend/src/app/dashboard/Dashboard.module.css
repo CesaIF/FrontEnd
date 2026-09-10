@@ -341,3 +341,10 @@
     justify-content: center;
     align-items: center;
 }
+/* MELHORIA FRONT-END: mantém as imagens dos diferentes tipos de veículo com tamanho uniforme nos cards. */
+.img img {
+    width: 100%;
+    height: 8em;
+    object-fit: contain;
+    display: block;
+}

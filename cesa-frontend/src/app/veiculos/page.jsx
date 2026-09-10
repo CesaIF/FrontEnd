@@ -37,6 +37,8 @@ export default function Veiculos() {
     km: "",
     ano: "",
   });
+  // MELHORIA FRONT-END: controla o dropdown de tipo do veículo e a opção de digitação manual.
+  const [tipoVeiculoSelecionado, setTipoVeiculoSelecionado] = useState("");
   const [conteudo, setConteudo] = useState("");
 
   useEffect(() => {
@@ -243,21 +245,51 @@ export default function Veiculos() {
                       }
                     ></Ginput>
                   </div>
+                  {/* MELHORIA FRONT-END: tipo do veículo agora é selecionado por dropdown. */}
                   <div className={styles.input}>
-                    <Ginput
-                      type={"text"}
-                      placeholder={"EX: 'Hatch'"}
-                      maxLength={50}
-                      label={"Tipo"}
-                      value={novoVeiculo.tipo}
-                      onChange={(e) =>
-                        setNovoVeiculos({
-                          ...novoVeiculo,
-                          tipo: e.target.value,
-                        })
-                      }
-                    ></Ginput>
+                    <div className={styles.choiceboxContainer}>
+                      <label className={styles.selectLabel}>Tipo</label>
+                      <select
+                        className={styles.choicebox}
+                        value={tipoVeiculoSelecionado}
+                        onChange={(e) => {
+                          const valor = e.target.value;
+                          setTipoVeiculoSelecionado(valor);
+                          setNovoVeiculos({
+                            ...novoVeiculo,
+                            tipo: valor === "Outro" ? "" : valor,
+                          });
+                        }}
+                      >
+                        <option value="">Escolha o tipo</option>
+                        <option value="Hatch">Hatch</option>
+                        <option value="Sedan">Sedan</option>
+                        <option value="Pickup">Pickup</option>
+                        <option value="SUV">SUV</option>
+                        <option value="Van">Van</option>
+                        <option value="Micro-ônibus">Micro-ônibus</option>
+                        <option value="Ônibus">Ônibus</option>
+                        <option value="Outro">Outro</option>
+                      </select>
+                    </div>
                   </div>
+                  {tipoVeiculoSelecionado === "Outro" && (
+                    <div className={styles.input}>
+                      <Ginput
+                        type={"text"}
+                        placeholder={"Digite o tipo do veículo"}
+                        maxLength={50}
+                        label={"Outro tipo"}
+                        value={novoVeiculo.tipo}
+                        onChange={(e) =>
+                          setNovoVeiculos({
+                            ...novoVeiculo,
+                            tipo: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  )}
                   <div className={styles.input}>
                     <Ginput
                       type={"number"}
@@ -330,6 +362,7 @@ export default function Veiculos() {
                           km: "",
                           ano: "",
                         });
+                        setTipoVeiculoSelecionado("");
                       } else {
                         const erro = await response.json();
                         handleNoticeIsOpen();

@@ -198,3 +198,37 @@
   align-items: center;
   gap: 1rem;
 }
+
+
+/* MELHORIA FRONT-END: dropdown do tipo de veículo no cadastro. */
+.choiceboxContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 45px;
+  width: 100%;
+  justify-content: center;
+  background-color: #efeeef;
+  border-color: #a3bc98;
+  border-bottom-width: 2px;
+  box-sizing: border-box;
+}
+
+.choicebox {
+  width: 100%;
+  min-height: 45px;
+  padding: 0 0.75rem;
+  color: #2b2b2b;
+  background-color: transparent;
+  border: 0;
+  outline: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+.selectLabel {
+  display: block;
+  width: 100%;
+  padding: 0.35rem 0.75rem 0;
+  font-size: 0.85rem;
+  color: #555;
+}

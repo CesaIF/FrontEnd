@@ -74,6 +74,41 @@ export default function Dashboard() {
   const [clickPlacaEdicao, setClickPlacaEdicao] = useState(false);
   const [clickMotoristaEdicao, setClickMotoristaEdicao] = useState(false);
 
+  // MELHORIA FRONT-END: relaciona o tipo cadastrado do veículo à imagem exibida no dashboard.
+  // A normalização remove acentos e diferenças entre maiúsculas/minúsculas para aceitar também registros antigos.
+  function normalizarTipoVeiculo(tipo = "") {
+    return tipo
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim()
+      .toLowerCase();
+  }
+
+  function getImagemVeiculo(placa) {
+    const veiculoDaLocacao = veiculo.find(
+      (item) => item.placa?.toLowerCase() === placa?.toLowerCase(),
+    );
+
+    const tipoNormalizado = normalizarTipoVeiculo(veiculoDaLocacao?.tipo);
+
+    const imagensPorTipo = {
+      hatch: "/veiculos-tipos/hatch.png",
+      sedan: "/veiculos-tipos/sedan.png",
+      pickup: "/veiculos-tipos/pickup.png",
+      suv: "/veiculos-tipos/suv.png",
+      van: "/veiculos-tipos/van.png",
+      "micro-onibus": "/veiculos-tipos/micro-onibus.png",
+      onibus: "/veiculos-tipos/onibus.png",
+    };
+
+    // Para um tipo personalizado em "Outro" ou um registro antigo sem tipo conhecido,
+    // mantém a imagem genérica que já era utilizada no sistema.
+    return (
+      imagensPorTipo[tipoNormalizado] ||
+      "https://i.postimg.cc/Fs7ZnVTn/20250603-1649-Cute-Black-Car-simple-compose-01jwvnew1ef6xa5kp9jpyq56mk.png"
+    );
+  }
+
   // função que cria data formatada pra ser utilizada no input de edição.
   function formatarData(data) {
     const d = new Date(data);
@@ -1066,7 +1101,10 @@ export default function Dashboard() {
                 key={index}
               >
                 <div className={styles.img}>
-                  <img src="https://i.postimg.cc/Fs7ZnVTn/20250603-1649-Cute-Black-Car-simple-compose-01jwvnew1ef6xa5kp9jpyq56mk.png"></img>
+                  <img
+                    src={getImagemVeiculo(locacaoAgendada.veiculo_placa_fk)}
+                    alt={`Veículo ${locacaoAgendada.veiculo_placa_fk}`}
+                  ></img>
                 </div>
                 <div>
                   <div className={styles.containerTitles}>
@@ -1115,7 +1153,10 @@ export default function Dashboard() {
                     key={index}
                     >
                     <div className={styles.img}>
-                    <img src="https://i.postimg.cc/Fs7ZnVTn/20250603-1649-Cute-Black-Car-simple-compose-01jwvnew1ef6xa5kp9jpyq56mk.png"></img>
+                    <img
+                      src={getImagemVeiculo(locacao.veiculo_placa_fk)}
+                      alt={`Veículo ${locacao.veiculo_placa_fk}`}
+                    ></img>
                     </div>
                     <div>
                     <div className={styles.containerTitles}>
