@@ -15,6 +15,8 @@ import { ptBR } from "date-fns/locale";
 import { FaFileExport } from "react-icons/fa6";
 import Ginput from "../components/gInput";
 import { IoClose } from "react-icons/io5";
+import SearchBar from "../components/searchBar";
+import { exportarCsv } from "../utils/exportCsv";
 
 export default function History() {
   useAuth();
@@ -22,6 +24,8 @@ export default function History() {
   const [dataFim, setDataFim] = useState("");
 
   const [locacoes, setLocacoes] = useState([]);
+  // MELHORIA FRONT-END: q pesquisa qualquer palavra no histórico de locações.
+  const [busca, setBusca] = useState("");
   const { currentPage, setCurrentPage, totalPages, paginatedItems: paginatedLocacoes } = usePagination(locacoes, 12);
   const [isOpen, setIsOpen] = useState(true);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -39,69 +43,44 @@ export default function History() {
     setNoticeIsOpen(!noticeIsOpen);
   }
 
-  const handleBaixar = async () => {
-    const token = localStorage.getItem("token");
+  const handleBaixar = async (modo = "periodo") => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_LOCAL}/relatorio/gerarcsv`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            dataInicio,
-            dataFim,
-          }),
-        }
-      );
+      const body = modo === "periodo"
+        ? { modo, dataInicio, dataFim }
+        : modo === "filtro"
+          ? { modo, q: busca.trim() }
+          : { modo: "todos" };
 
-      if (response.ok) {
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "Relatorio.csv";
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-
-        handleDateIsOpen();
-        handleNoticeIsOpen();
-        setConteudo("Arquivo baixado com sucesso!");
-      } else {
-        // tenta ler erro como texto
-        const errorText = await response.text();
-        handleNoticeIsOpen();
-        setConteudo("Erro ao baixar: " + errorText);
-      }
+      await exportarCsv({ entidade: "locacoes", body, nomeArquivo: "RelatorioLocacoes.csv" });
+      handleDateIsOpen();
+      handleNoticeIsOpen();
+      setConteudo("Arquivo baixado com sucesso!");
     } catch (error) {
       handleNoticeIsOpen();
-      setConteudo("Erro inesperado: " + error.message);
+      setConteudo(error.message);
     }
   };
 
   useEffect(() => {
-    const fetchLocacoes = async () => {
+    const timer = setTimeout(async () => {
       try {
         const token = localStorage.getItem("token");
+        const params = new URLSearchParams();
+        if (busca.trim()) params.set("q", busca.trim());
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_LOCAL}/locacoes/allhist`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+          `${process.env.NEXT_PUBLIC_LOCAL}/locacoes/allhist?${params.toString()}`,
+          { headers: { Authorization: `Bearer ${token}` } },
         );
         const data = await response.json();
         setLocacoes(data);
+        setCurrentPage(1);
       } catch (error) {
         console.error("Erro ao buscar locações", error);
       }
-    };
-    fetchLocacoes();
-  }, []);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [busca, setCurrentPage]);
 
   function handleOpenModal() {
     setModalIsOpen(!modalIsOpen);
@@ -145,6 +124,14 @@ export default function History() {
                 </button>
               </div>
               <div className={styles.line}></div>
+            </div>
+
+            <div className={styles.filterArea}>
+              <SearchBar
+                value={busca}
+                onChange={(e) => setBusca(e.target.value)}
+                placeholder="Pesquisar em qualquer informação da locação..."
+              />
             </div>
 
             <div className={styles.containerCard}>
@@ -278,6 +265,25 @@ export default function History() {
               <div className={styles.containerInMini}>
                 <h1>Exportar Dados CSV:</h1>
               </div>
+              <div className={styles.exportQuickActions}>
+                <BadButton
+                  textColor={"#48793c"}
+                  cor={"#d1dec7"}
+                  colorHover={"#a3bc98"}
+                  onClick={() => handleBaixar("todos")}
+                >
+                  Toda a relação
+                </BadButton>
+                <BadButton
+                  textColor={"#48793c"}
+                  cor={"#d1dec7"}
+                  colorHover={"#a3bc98"}
+                  onClick={() => handleBaixar("filtro")}
+                >
+                  Filtro atual
+                </BadButton>
+              </div>
+              <p className={styles.exportHint}>Ou informe um período:</p>
               <div className={styles.containerInput}>
                 <Ginput
                   type={"date"}
@@ -304,9 +310,9 @@ export default function History() {
                 <BadButton
                   cor={"#48793c"}
                   colorHover={"#769b6a"}
-                  onClick={handleBaixar}
+                  onClick={() => handleBaixar("periodo")}
                 >
-                  Baixar
+                  Período
                 </BadButton>
               </div>
             </div>

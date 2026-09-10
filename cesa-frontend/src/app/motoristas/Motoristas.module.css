@@ -193,3 +193,8 @@
 .asideOpen .footer {
     margin-left: 200px;
 }
+/* MELHORIA FRONT-END: área de pesquisa dos motoristas. */
+.filterArea {
+  margin-top: 1rem;
+  width: 100%;
+}

@@ -13,11 +13,15 @@ import { useAuth } from "../hooks/useAuth";
 import Pagination from "../components/pagination";
 import { usePagination } from "../hooks/usePagination";
 import { FaFileExport } from "react-icons/fa6";
+import SearchBar from "../components/searchBar";
+import { exportarCsv } from "../utils/exportCsv";
 
 export default function Motoristas() {
   useAuth();
 
   const [motoristas, setMotoristas] = useState([]);
+  // MELHORIA FRONT-END: termo enviado para GET /motoristas?nome=...
+  const [buscaNome, setBuscaNome] = useState("");
   const { currentPage, setCurrentPage, totalPages, paginatedItems: paginatedMotoristas } = usePagination(motoristas, 12);
   const [motoristaEditando, setMotoristaEditando] = useState({
     nome: "",
@@ -33,25 +37,27 @@ export default function Motoristas() {
   });
 
   useEffect(() => {
-    const fetchMotoristas = async () => {
+    // MELHORIA FRONT-END: pequena espera evita uma requisição a cada tecla digitada.
+    const timer = setTimeout(async () => {
       try {
         const token = localStorage.getItem("token");
+        const params = new URLSearchParams();
+        if (buscaNome.trim()) params.set("nome", buscaNome.trim());
+
         const receberAPI = await fetch(
-          `${process.env.NEXT_PUBLIC_LOCAL}/motoristas`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+          `${process.env.NEXT_PUBLIC_LOCAL}/motoristas?${params.toString()}`,
+          { headers: { Authorization: `Bearer ${token}` } },
         );
         const data = await receberAPI.json();
         setMotoristas(data);
+        setCurrentPage(1);
       } catch (error) {
         console.error("Erro ao buscar motorista", error);
       }
-    };
-    fetchMotoristas();
-  }, []);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [buscaNome, setCurrentPage]);
   //Para realizar editar o motorista selecionado
   const handleEditarMotorista = (motorista) => {
     setMotoristaEditando(motorista);
@@ -70,35 +76,20 @@ export default function Motoristas() {
     setNoticeIsOpen(!noticeIsOpen);
   }
   const handleBaixar = async () => {
-    const token = localStorage.getItem("token");
-
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_LOCAL}/relatorio/gerarcsvmotorista`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    if (response.ok) {
-      const blob = await response.blob();
-
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "RelacaoMotoristas.csv";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-
+    try {
+      // MELHORIA FRONT-END: usa a nova exportação unificada; com busca ativa exporta apenas o filtro.
+      await exportarCsv({
+        entidade: "motoristas",
+        body: buscaNome.trim()
+          ? { modo: "filtro", nome: buscaNome.trim() }
+          : { modo: "todos" },
+        nomeArquivo: "RelacaoMotoristas.csv",
+      });
       handleNoticeIsOpen();
       setConteudo("Arquivo baixado com sucesso!");
-    } else {
-      // tenta ler erro como texto
-      const errorText = await response.text();
+    } catch (error) {
       handleNoticeIsOpen();
-      setConteudo("Erro ao baixar: " + errorText);
+      setConteudo(error.message);
     }
   };
 
@@ -144,6 +135,14 @@ export default function Motoristas() {
                 </div>
               </div>
               <div className={styles.line}></div>
+            </div>
+
+            <div className={styles.filterArea}>
+              <SearchBar
+                value={buscaNome}
+                onChange={(e) => setBuscaNome(e.target.value)}
+                placeholder="Pesquisar motorista por nome..."
+              />
             </div>
 
             <div className={styles.containerCard}>

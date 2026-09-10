@@ -16,6 +16,8 @@ import { ptBR } from "date-fns/locale";
 import { FaFileExport } from "react-icons/fa6";
 import Ginput from "../components/gInput";
 import { IoClose } from "react-icons/io5";
+import SearchBar from "../components/searchBar";
+import { exportarCsv } from "../utils/exportCsv";
 
 export default function Manutencao() {
   useAuth();
@@ -23,6 +25,10 @@ export default function Manutencao() {
   const [dataFim, setDataFim] = useState("");
 
   const [manutencao, setManutencao] = useState([]);
+  // MELHORIA FRONT-END: filtros da rota GET /manutencao?q=...&tipoManutencao=...
+  const [busca, setBusca] = useState("");
+  const [filtroTipoManutencao, setFiltroTipoManutencao] = useState("");
+  const [tipoManutencaoSelecionado, setTipoManutencaoSelecionado] = useState("");
   const { currentPage, setCurrentPage, totalPages, paginatedItems: paginatedManutencoes } = usePagination(manutencao, 12);
   const [isOpen, setIsOpen] = useState(true);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -53,46 +59,25 @@ export default function Manutencao() {
     setNoticeIsOpen(!noticeIsOpen);
   }
 
-  const handleBaixar = async () => {
-    const token = localStorage.getItem("token");
+  const handleBaixar = async (modo = "periodo") => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_LOCAL}/relatorio/gerarcsv`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            dataInicio,
-            dataFim,
-          }),
-        },
-      );
+      const body = modo === "periodo"
+        ? { modo, dataInicio, dataFim }
+        : modo === "filtro"
+          ? { modo, q: busca.trim(), tipoManutencao: filtroTipoManutencao }
+          : { modo: "todos" };
 
-      if (response.ok) {
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "Relatorio.csv";
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-
-        handleDateIsOpen();
-        handleNoticeIsOpen();
-        setConteudo("Arquivo baixado com sucesso!");
-      } else {
-        // tenta ler erro como texto
-        const errorText = await response.text();
-        handleNoticeIsOpen();
-        setConteudo("Erro ao baixar: " + errorText);
-      }
+      await exportarCsv({
+        entidade: "manutencoes",
+        body,
+        nomeArquivo: "RelatorioManutencoes.csv",
+      });
+      handleDateIsOpen();
+      handleNoticeIsOpen();
+      setConteudo("Arquivo baixado com sucesso!");
     } catch (error) {
       handleNoticeIsOpen();
-      setConteudo("Erro inesperado: " + error.message);
+      setConteudo(error.message);
     }
   };
 
@@ -121,25 +106,27 @@ export default function Manutencao() {
   }, []);
 
   useEffect(() => {
-    const fetchLocacoes = async () => {
+    const timer = setTimeout(async () => {
       try {
         const token = localStorage.getItem("token");
+        const params = new URLSearchParams();
+        if (busca.trim()) params.set("q", busca.trim());
+        if (filtroTipoManutencao) params.set("tipoManutencao", filtroTipoManutencao);
+
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_LOCAL}/manutencao`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
+          `${process.env.NEXT_PUBLIC_LOCAL}/manutencao?${params.toString()}`,
+          { headers: { Authorization: `Bearer ${token}` } },
         );
         const data = await response.json();
         setManutencao(data);
+        setCurrentPage(1);
       } catch (error) {
         console.error("Erro ao buscar manutenções", error);
       }
-    };
-    fetchLocacoes();
-  }, []);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [busca, filtroTipoManutencao, setCurrentPage]);
 
   function handleOpenModal() {
     setModalIsOpen(!modalIsOpen);
@@ -198,6 +185,23 @@ export default function Manutencao() {
                 </div>
               </div>
               <div className={styles.line}></div>
+            </div>
+
+            <div className={styles.filterArea}>
+              <SearchBar
+                value={busca}
+                onChange={(e) => setBusca(e.target.value)}
+                placeholder="Pesquisar em qualquer informação da manutenção..."
+              />
+              <select
+                className={styles.filterSelect}
+                value={filtroTipoManutencao}
+                onChange={(e) => setFiltroTipoManutencao(e.target.value)}
+              >
+                <option value="">Todos os tipos</option>
+                <option value="Corretiva">Corretiva</option>
+                <option value="Preventiva">Preventiva</option>
+              </select>
             </div>
 
             <div className={styles.containerCard}>
@@ -272,20 +276,44 @@ export default function Manutencao() {
                     </div>
                   </div>
                   <div className={styles.input}>
-                    <Ginput
-                      type={"text"}
-                      placeholder={"EX: 'Preventiva ou Corretiva'"}
-                      maxLength={50}
-                      label={"Tipo de manutenção "}
-                      value={novaManutencao.tipo_manutencao}
-                      onChange={(e) =>
-                        setNovaManutencao({
-                          ...novaManutencao,
-                          tipo_manutencao: e.target.value,
-                        })
-                      }
-                    ></Ginput>
+                    <div className={styles.choiceboxContainer}>
+                      <label className={styles.selectLabel}>Tipo de manutenção</label>
+                      <select
+                        className={styles.choicebox}
+                        value={tipoManutencaoSelecionado}
+                        onChange={(e) => {
+                          const valor = e.target.value;
+                          setTipoManutencaoSelecionado(valor);
+                          setNovaManutencao({
+                            ...novaManutencao,
+                            tipo_manutencao: valor === "Outros" ? "" : valor,
+                          });
+                        }}
+                      >
+                        <option value="">Escolha o tipo</option>
+                        <option value="Corretiva">Corretiva</option>
+                        <option value="Preventiva">Preventiva</option>
+                        <option value="Outros">Outros</option>
+                      </select>
+                    </div>
                   </div>
+                  {tipoManutencaoSelecionado === "Outros" && (
+                    <div className={styles.input}>
+                      <Ginput
+                        type={"text"}
+                        placeholder={"Digite o tipo de manutenção"}
+                        maxLength={50}
+                        label={"Outro tipo de manutenção"}
+                        value={novaManutencao.tipo_manutencao}
+                        onChange={(e) =>
+                          setNovaManutencao({
+                            ...novaManutencao,
+                            tipo_manutencao: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  )}
                   <div className={styles.input}>
                     <Ginput
                       type={"number"}
@@ -402,7 +430,8 @@ export default function Manutencao() {
                       );
                       if (response.ok) {
                         const manutencaoCadastrado = await response.json();
-                        setVeiculos((prev) => [...prev, manutencaoCadastrado]);
+                        // Correção: atualiza a lista de manutenções, não uma variável inexistente de veículos.
+                        setManutencao((prev) => [...prev, manutencaoCadastrado]);
 
                         handleNoticeIsOpen();
                         handleOpenModal();
@@ -418,6 +447,7 @@ export default function Manutencao() {
                           valor_manutencao: "",
                           numero_nota: "",
                         });
+                        setTipoManutencaoSelecionado("");
                       } else {
                         const erro = await response.json();
                         handleNoticeIsOpen();
@@ -504,6 +534,25 @@ export default function Manutencao() {
               <div className={styles.containerInMini}>
                 <h1>Exportar Dados CSV:</h1>
               </div>
+              <div className={styles.exportQuickActions}>
+                <BadButton
+                  textColor={"#48793c"}
+                  cor={"#d1dec7"}
+                  colorHover={"#a3bc98"}
+                  onClick={() => handleBaixar("todos")}
+                >
+                  Toda a relação
+                </BadButton>
+                <BadButton
+                  textColor={"#48793c"}
+                  cor={"#d1dec7"}
+                  colorHover={"#a3bc98"}
+                  onClick={() => handleBaixar("filtro")}
+                >
+                  Filtro atual
+                </BadButton>
+              </div>
+              <p className={styles.exportHint}>Ou informe um período:</p>
               <div className={styles.containerInput}>
                 <Ginput
                   type={"date"}
@@ -530,9 +579,9 @@ export default function Manutencao() {
                 <BadButton
                   cor={"#48793c"}
                   colorHover={"#769b6a"}
-                  onClick={handleBaixar}
+                  onClick={() => handleBaixar("periodo")}
                 >
-                  Baixar
+                  Período
                 </BadButton>
               </div>
             </div>

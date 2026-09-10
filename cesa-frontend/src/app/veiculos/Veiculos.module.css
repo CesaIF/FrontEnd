@@ -187,3 +187,14 @@
 .asideOpen .footer {
     margin-left: 200px;
 }
+/* MELHORIA FRONT-END: pesquisa e ações da listagem de veículos. */
+.filterArea {
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}

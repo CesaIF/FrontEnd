@@ -16,6 +16,8 @@ import { ptBR } from "date-fns/locale";
 import { FaFileExport } from "react-icons/fa6";
 import Ginput from "../components/gInput";
 import { IoClose } from "react-icons/io5";
+import SearchBar from "../components/searchBar";
+import { exportarCsv } from "../utils/exportCsv";
 
 export default function Abastecimento() {
   useAuth();
@@ -23,6 +25,10 @@ export default function Abastecimento() {
   const [dataFim, setDataFim] = useState("");
 
   const [abastecimento, setAbastecimento] = useState([]);
+  // MELHORIA FRONT-END: filtros da rota GET /combustivel?q=...&tipoCombustivel=...
+  const [busca, setBusca] = useState("");
+  const [filtroCombustivel, setFiltroCombustivel] = useState("");
+  const [tipoCombustivelSelecionado, setTipoCombustivelSelecionado] = useState("");
   const { currentPage, setCurrentPage, totalPages, paginatedItems: paginatedAbastecimentos } = usePagination(abastecimento, 12);
   const [isOpen, setIsOpen] = useState(true);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -51,46 +57,25 @@ export default function Abastecimento() {
     setNoticeIsOpen(!noticeIsOpen);
   }
 
-  const handleBaixar = async () => {
-    const token = localStorage.getItem("token");
+  const handleBaixar = async (modo = "periodo") => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_LOCAL}/relatorio/gerarcsv`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            dataInicio,
-            dataFim,
-          }),
-        },
-      );
+      const body = modo === "periodo"
+        ? { modo, dataInicio, dataFim }
+        : modo === "filtro"
+          ? { modo, q: busca.trim(), tipoCombustivel: filtroCombustivel }
+          : { modo: "todos" };
 
-      if (response.ok) {
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "Relatorio.csv";
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-
-        handleDateIsOpen();
-        handleNoticeIsOpen();
-        setConteudo("Arquivo baixado com sucesso!");
-      } else {
-        // tenta ler erro como texto
-        const errorText = await response.text();
-        handleNoticeIsOpen();
-        setConteudo("Erro ao baixar: " + errorText);
-      }
+      await exportarCsv({
+        entidade: "abastecimentos",
+        body,
+        nomeArquivo: "RelatorioAbastecimentos.csv",
+      });
+      handleDateIsOpen();
+      handleNoticeIsOpen();
+      setConteudo("Arquivo baixado com sucesso!");
     } catch (error) {
       handleNoticeIsOpen();
-      setConteudo("Erro inesperado: " + error.message);
+      setConteudo(error.message);
     }
   };
 
@@ -119,25 +104,27 @@ export default function Abastecimento() {
   }, []);
 
   useEffect(() => {
-    const fetchLocacoes = async () => {
+    const timer = setTimeout(async () => {
       try {
         const token = localStorage.getItem("token");
+        const params = new URLSearchParams();
+        if (busca.trim()) params.set("q", busca.trim());
+        if (filtroCombustivel) params.set("tipoCombustivel", filtroCombustivel);
+
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_LOCAL}/combustivel`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
+          `${process.env.NEXT_PUBLIC_LOCAL}/combustivel?${params.toString()}`,
+          { headers: { Authorization: `Bearer ${token}` } },
         );
         const data = await response.json();
         setAbastecimento(data);
+        setCurrentPage(1);
       } catch (error) {
-        console.error("Erro ao buscar manutenções", error);
+        console.error("Erro ao buscar abastecimentos", error);
       }
-    };
-    fetchLocacoes();
-  }, []);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [busca, filtroCombustivel, setCurrentPage]);
 
   function handleOpenModal() {
     setModalIsOpen(!modalIsOpen);
@@ -196,6 +183,26 @@ export default function Abastecimento() {
                 </div>
               </div>
               <div className={styles.line}></div>
+            </div>
+
+            <div className={styles.filterArea}>
+              <SearchBar
+                value={busca}
+                onChange={(e) => setBusca(e.target.value)}
+                placeholder="Pesquisar em qualquer informação do abastecimento..."
+              />
+              <select
+                className={styles.filterSelect}
+                value={filtroCombustivel}
+                onChange={(e) => setFiltroCombustivel(e.target.value)}
+              >
+                <option value="">Todos os combustíveis</option>
+                <option value="Álcool">Álcool</option>
+                <option value="Gasolina">Gasolina</option>
+                <option value="Diesel S500">Diesel S500</option>
+                <option value="S10">S10</option>
+                <option value="Biodiesel">Biodiesel</option>
+              </select>
             </div>
 
             <div className={styles.containerCard}>
@@ -273,20 +280,47 @@ export default function Abastecimento() {
                   </div>
 
                   <div className={styles.input}>
-                    <Ginput
-                      type={"text"}
-                      placeholder={"EX: 'Gasolina/Disel/Álcool'"}
-                      maxLength={50}
-                      label={"Tipo do combustível "}
-                      value={novaAbastecimento.tipo_combustivel}
-                      onChange={(e) =>
-                        setNovaAbastecimento({
-                          ...novaAbastecimento,
-                          tipo_combustivel: e.target.value,
-                        })
-                      }
-                    ></Ginput>
+                    <div className={styles.choiceboxContainer}>
+                      <label className={styles.selectLabel}>Tipo do combustível</label>
+                      <select
+                        className={styles.choicebox}
+                        value={tipoCombustivelSelecionado}
+                        onChange={(e) => {
+                          const valor = e.target.value;
+                          setTipoCombustivelSelecionado(valor);
+                          setNovaAbastecimento({
+                            ...novaAbastecimento,
+                            tipo_combustivel: valor === "Outros" ? "" : valor,
+                          });
+                        }}
+                      >
+                        <option value="">Escolha o combustível</option>
+                        <option value="Álcool">Álcool</option>
+                        <option value="Gasolina">Gasolina</option>
+                        <option value="Diesel S500">Diesel S500</option>
+                        <option value="S10">S10</option>
+                        <option value="Biodiesel">Biodiesel</option>
+                        <option value="Outros">Outros</option>
+                      </select>
+                    </div>
                   </div>
+                  {tipoCombustivelSelecionado === "Outros" && (
+                    <div className={styles.input}>
+                      <Ginput
+                        type={"text"}
+                        placeholder={"Digite o tipo de combustível"}
+                        maxLength={50}
+                        label={"Outro tipo de combustível"}
+                        value={novaAbastecimento.tipo_combustivel}
+                        onChange={(e) =>
+                          setNovaAbastecimento({
+                            ...novaAbastecimento,
+                            tipo_combustivel: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  )}
                   <div className={styles.input}>
                     <Ginput
                       type={"number"}
@@ -388,7 +422,8 @@ export default function Abastecimento() {
                       );
                       if (response.ok) {
                         const abastecimentoCadastrado = await response.json();
-                        setVeiculos((prev) => [
+                        // Correção: atualiza a lista de abastecimentos, não uma variável inexistente de veículos.
+                        setAbastecimento((prev) => [
                           ...prev,
                           abastecimentoCadastrado,
                         ]);
@@ -406,6 +441,7 @@ export default function Abastecimento() {
                           data_abastecimento: "",
                           numero_nota: "",
                         });
+                        setTipoCombustivelSelecionado("");
                       } else {
                         const erro = await response.json();
                         handleNoticeIsOpen();
@@ -490,6 +526,25 @@ export default function Abastecimento() {
               <div className={styles.containerInMini}>
                 <h1>Exportar Dados CSV:</h1>
               </div>
+              <div className={styles.exportQuickActions}>
+                <BadButton
+                  textColor={"#48793c"}
+                  cor={"#d1dec7"}
+                  colorHover={"#a3bc98"}
+                  onClick={() => handleBaixar("todos")}
+                >
+                  Toda a relação
+                </BadButton>
+                <BadButton
+                  textColor={"#48793c"}
+                  cor={"#d1dec7"}
+                  colorHover={"#a3bc98"}
+                  onClick={() => handleBaixar("filtro")}
+                >
+                  Filtro atual
+                </BadButton>
+              </div>
+              <p className={styles.exportHint}>Ou informe um período:</p>
               <div className={styles.containerInput}>
                 <Ginput
                   type={"date"}
@@ -516,9 +571,9 @@ export default function Abastecimento() {
                 <BadButton
                   cor={"#48793c"}
                   colorHover={"#769b6a"}
-                  onClick={handleBaixar}
+                  onClick={() => handleBaixar("periodo")}
                 >
-                  Baixar
+                  Período
                 </BadButton>
               </div>
             </div>

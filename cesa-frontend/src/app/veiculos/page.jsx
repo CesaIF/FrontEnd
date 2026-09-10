@@ -12,10 +12,15 @@ import Ginput from "../components/gInput";
 import { useAuth } from "../hooks/useAuth";
 import Pagination from "../components/pagination";
 import { usePagination } from "../hooks/usePagination";
+import { FaFileExport } from "react-icons/fa6";
+import SearchBar from "../components/searchBar";
+import { exportarCsv } from "../utils/exportCsv";
 
 export default function Veiculos() {
   useAuth();
   const [veiculos, setVeiculos] = useState([]);
+  // MELHORIA FRONT-END: termo enviado para GET /veiculos?placa=...
+  const [buscaPlaca, setBuscaPlaca] = useState("");
   const { currentPage, setCurrentPage, totalPages, paginatedItems: paginatedVeiculos } = usePagination(veiculos, 12);
   const [veiculosEditando, setVeiculosEditando] = useState({
     modelo: "",
@@ -35,25 +40,26 @@ export default function Veiculos() {
   const [conteudo, setConteudo] = useState("");
 
   useEffect(() => {
-    const fetchVeiculos = async () => {
+    const timer = setTimeout(async () => {
       try {
         const token = localStorage.getItem("token");
+        const params = new URLSearchParams();
+        if (buscaPlaca.trim()) params.set("placa", buscaPlaca.trim());
+
         const receberAPI = await fetch(
-          `${process.env.NEXT_PUBLIC_LOCAL}/veiculos`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
+          `${process.env.NEXT_PUBLIC_LOCAL}/veiculos?${params.toString()}`,
+          { headers: { Authorization: `Bearer ${token}` } },
         );
         const data = await receberAPI.json();
         setVeiculos(data);
+        setCurrentPage(1);
       } catch (error) {
-        console.error("Erro ao buscar veiculos".error);
+        console.error("Erro ao buscar veículos", error);
       }
-    };
-    fetchVeiculos();
-  }, []);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [buscaPlaca, setCurrentPage]);
 
   const handleEditarVeiculo = (veiculo) => {
     setVeiculosEditando(veiculo);
@@ -70,6 +76,25 @@ export default function Veiculos() {
   function handleNoticeIsOpen() {
     setNoticeIsOpen(!noticeIsOpen);
   }
+
+
+  const handleBaixar = async () => {
+    try {
+      // MELHORIA FRONT-END: veículos usam a nova rota /relatorio/exportar/veiculos.
+      await exportarCsv({
+        entidade: "veiculos",
+        body: buscaPlaca.trim()
+          ? { modo: "filtro", placa: buscaPlaca.trim() }
+          : { modo: "todos" },
+        nomeArquivo: "RelacaoVeiculos.csv",
+      });
+      handleNoticeIsOpen();
+      setConteudo("Arquivo baixado com sucesso!");
+    } catch (error) {
+      handleNoticeIsOpen();
+      setConteudo(error.message);
+    }
+  };
 
   function handleDeletarIsOpen() {
     setDeletarIsOpen(!deletarIsOpen);
@@ -103,11 +128,24 @@ export default function Veiculos() {
             <div>
               <div className={styles.containerTitle}>
                 <h1 className={styles.titleLocacao}>Veículos Cadastrados</h1>
-                <button className={styles.butaoAdd} onClick={handleOpenModal}>
-                  <CiCirclePlus size={35}></CiCirclePlus>
-                </button>
+                <div className={styles.buttons}>
+                  <button className={styles.butaoAdd} onClick={handleBaixar} title="Exportar">
+                    <FaFileExport size={35} />
+                  </button>
+                  <button className={styles.butaoAdd} onClick={handleOpenModal}>
+                    <CiCirclePlus size={35}></CiCirclePlus>
+                  </button>
+                </div>
               </div>
               <div className={styles.line}></div>
+            </div>
+
+            <div className={styles.filterArea}>
+              <SearchBar
+                value={buscaPlaca}
+                onChange={(e) => setBuscaPlaca(e.target.value)}
+                placeholder="Pesquisar veículo por placa..."
+              />
             </div>
 
             <div className={styles.containerCard}>

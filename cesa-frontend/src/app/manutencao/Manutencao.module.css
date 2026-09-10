@@ -358,3 +358,58 @@
         flex-direction: column;
     }
 }
+
+/* MELHORIA FRONT-END: busca textual combinada com filtro por tipo. */
+.filterArea {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: 0.75rem;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.filterSelect {
+  min-height: 42px;
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid #cfd8cc;
+  border-radius: 10px;
+  background: #fff;
+  color: #222;
+  outline: none;
+}
+
+.filterSelect:focus {
+  border-color: #48793c;
+  box-shadow: 0 0 0 3px rgba(72, 121, 60, 0.12);
+}
+
+.selectLabel {
+  display: block;
+  width: 100%;
+  margin-bottom: 0.35rem;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+@media (max-width: 760px) {
+  .filterArea {
+    grid-template-columns: 1fr;
+  }
+}
+
+.exportQuickActions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.exportHint {
+  width: 100%;
+  text-align: center;
+  margin: 1rem 0 0.25rem;
+  color: #555;
+}
