@@ -109,23 +109,6 @@ export default function Motoristas() {
     setUpdateModal(!updateModal);
   }
 
-  // DESTAQUE VISUAL: identifica portarias cuja data de vencimento já passou.
-  function portariaVencida(vencimento) {
-    if (!vencimento) return false;
-
-    const hoje = new Date();
-    hoje.setHours(0, 0, 0, 0);
-
-    // Datas vindas do banco normalmente chegam como YYYY-MM-DD ou ISO.
-    // Montar a data no horário local evita mudança de dia por causa do fuso.
-    const dataTexto = String(vencimento).slice(0, 10);
-    const [ano, mes, dia] = dataTexto.split("-").map(Number);
-    const dataVencimento = new Date(ano, mes - 1, dia);
-    dataVencimento.setHours(0, 0, 0, 0);
-
-    return !Number.isNaN(dataVencimento.getTime()) && dataVencimento < hoje;
-  }
-
   return (
     <>
       <div
@@ -172,21 +155,12 @@ export default function Motoristas() {
                     onClick={() => {
                       handleEditarMotorista(motorista);
                     }}
-                    className={`${styles.card} ${
-                      portariaVencida(motorista.vencimento)
-                        ? styles.cardPortariaVencida
-                        : ""
-                    }`}
+                    className={styles.card}
                   >
-                    <div className={styles.cardHeader}>
+                    <div>
                       <span className={styles.titleCardTres}>
                         {motorista.nome}
                       </span>
-                      {portariaVencida(motorista.vencimento) && (
-                        <span className={styles.badgeVencido}>
-                          Portaria vencida
-                        </span>
-                      )}
                     </div>
                     <div>
                       <span className={styles.titleCard}>

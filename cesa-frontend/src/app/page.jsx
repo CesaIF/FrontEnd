@@ -3,6 +3,7 @@
 import Input from "./components/input";
 import GoodButton from "./components/goodButton";
 import BadButton from "./components/badButton";
+import Link from "next/link";
 import styles from "./Login.module.css";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -144,6 +145,8 @@ export default function Login() {
           <h1 className={styles.tituloTres}>
             IF BAIANO - <i>campus</i> Itapetinga
           </h1>
+          <Link className={styles.link} href={"https://back-end-qjyp.onrender.com"}>Primeiro Login</Link>
+        
         </div>
         <div className={styles.containerDois}>
           <div className={styles.formContainer}>
