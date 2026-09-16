@@ -123,6 +123,11 @@ export default function Veiculos() {
     setUpdateModal(!updateModal);
   }
 
+  // O back-end utiliza o campo `ativo` para indicar veículo em trânsito/em uso.
+  function veiculoEmTransito(ativo) {
+    return ativo === true || ativo === 1 || ativo === "1";
+  }
+
   return (
     <>
       <div
@@ -173,12 +178,19 @@ export default function Veiculos() {
                     onClick={() => {
                       handleEditarVeiculo(veiculo);
                     }}
-                    className={styles.card}
+                    className={`${styles.card} ${
+                      veiculoEmTransito(veiculo.ativo)
+                        ? styles.veiculoEmTransito
+                        : ""
+                    }`}
                   >
-                    <div>
+                    <div className={styles.cardHeader}>
                       <span className={styles.titleCardTres}>
                         {veiculo.modelo}
                       </span>
+                      {veiculoEmTransito(veiculo.ativo) && (
+                        <span className={styles.statusTransito}>Em trânsito</span>
+                      )}
                     </div>
                     <div>
                       <span className={styles.titleCard}>

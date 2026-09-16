@@ -109,6 +109,22 @@ export default function Motoristas() {
     setUpdateModal(!updateModal);
   }
 
+  // Destaca motoristas cuja portaria já venceu. A comparação é feita
+  // somente pela data para evitar diferenças de fuso horário.
+  function portariaVencida(vencimento) {
+    if (!vencimento) return false;
+
+    const dataTexto = String(vencimento).split("T")[0];
+    const [ano, mes, dia] = dataTexto.split("-").map(Number);
+    if (!ano || !mes || !dia) return false;
+
+    const dataVencimento = new Date(ano, mes - 1, dia);
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+
+    return dataVencimento < hoje;
+  }
+
   return (
     <>
       <div
@@ -155,12 +171,21 @@ export default function Motoristas() {
                     onClick={() => {
                       handleEditarMotorista(motorista);
                     }}
-                    className={styles.card}
+                    className={`${styles.card} ${
+                      portariaVencida(motorista.vencimento)
+                        ? styles.portariaVencida
+                        : ""
+                    }`}
                   >
-                    <div>
+                    <div className={styles.cardHeader}>
                       <span className={styles.titleCardTres}>
                         {motorista.nome}
                       </span>
+                      {portariaVencida(motorista.vencimento) && (
+                        <span className={styles.statusVencido}>
+                          Portaria vencida
+                        </span>
+                      )}
                     </div>
                     <div>
                       <span className={styles.titleCard}>
