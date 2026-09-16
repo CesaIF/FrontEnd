@@ -354,7 +354,7 @@ export default function Veiculos() {
                     onClick={async () => {
                       const token = localStorage.getItem("token");
                       const response = await fetch(
-                        `${process.env.NEXT_PUBLIC_LOCAL}/veiculos`,
+                        `${process.env.NEXT_PUBLIC_LOCAL}/veiculos/cadastrar`,
                         {
                           method: "POST",
                           headers: {
