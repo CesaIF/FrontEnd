@@ -80,6 +80,32 @@
     box-shadow: 6px 6px 10px #e0dee0;
 }
 
+/* DESTAQUE VISUAL: veículo atualmente em trânsito/em uso. */
+.cardEmTransito {
+    background-color: #ecfdf3;
+    border: 1px solid #86efac;
+    box-shadow: 6px 6px 10px #d2ead9;
+}
+
+.cardHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.15rem;
+}
+
+.badgeTransito {
+    flex-shrink: 0;
+    padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+    background-color: #dcfce7;
+    color: #15803d;
+    font-size: 0.72rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
 .img {
     width: 80%;
 }

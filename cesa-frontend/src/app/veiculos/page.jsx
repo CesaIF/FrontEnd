@@ -21,20 +21,13 @@ export default function Veiculos() {
   const [veiculos, setVeiculos] = useState([]);
   // MELHORIA FRONT-END: termo enviado para GET /veiculos?placa=...
   const [buscaPlaca, setBuscaPlaca] = useState("");
-  const {
-    currentPage,
-    setCurrentPage,
-    totalPages,
-    paginatedItems: paginatedVeiculos,
-  } = usePagination(veiculos, 12);
+  const { currentPage, setCurrentPage, totalPages, paginatedItems: paginatedVeiculos } = usePagination(veiculos, 12);
   const [veiculosEditando, setVeiculosEditando] = useState({
     modelo: "",
     cor: "",
     tipo: "",
+    km: "",
     ano: "",
-    chassi: "",
-    renavam: "",
-    cartao: "",
   });
   const [novoVeiculo, setNovoVeiculos] = useState({
     placa: "",
@@ -43,9 +36,6 @@ export default function Veiculos() {
     tipo: "",
     km: "",
     ano: "",
-    chassi: "",
-    renavam: "",
-    cartao: "",
   });
   // MELHORIA FRONT-END: controla o dropdown de tipo do veículo e a opção de digitação manual.
   const [tipoVeiculoSelecionado, setTipoVeiculoSelecionado] = useState("");
@@ -89,6 +79,7 @@ export default function Veiculos() {
     setNoticeIsOpen(!noticeIsOpen);
   }
 
+
   const handleBaixar = async () => {
     try {
       // MELHORIA FRONT-END: veículos usam a nova rota /relatorio/exportar/veiculos.
@@ -123,6 +114,15 @@ export default function Veiculos() {
     setUpdateModal(!updateModal);
   }
 
+  // DESTAQUE VISUAL: no back-end, ativo = 1 indica veículo em uso/trânsito.
+  function veiculoEmTransito(veiculo) {
+    return (
+      veiculo?.ativo === true ||
+      veiculo?.ativo === 1 ||
+      veiculo?.ativo === "1"
+    );
+  }
+
   return (
     <>
       <div
@@ -140,11 +140,7 @@ export default function Veiculos() {
               <div className={styles.containerTitle}>
                 <h1 className={styles.titleLocacao}>Veículos Cadastrados</h1>
                 <div className={styles.buttons}>
-                  <button
-                    className={styles.butaoAdd}
-                    onClick={handleBaixar}
-                    title="Exportar"
-                  >
+                  <button className={styles.butaoAdd} onClick={handleBaixar} title="Exportar">
                     <FaFileExport size={35} />
                   </button>
                   <button className={styles.butaoAdd} onClick={handleOpenModal}>
@@ -173,12 +169,21 @@ export default function Veiculos() {
                     onClick={() => {
                       handleEditarVeiculo(veiculo);
                     }}
-                    className={styles.card}
+                    className={`${styles.card} ${
+                      veiculoEmTransito(veiculo)
+                        ? styles.cardEmTransito
+                        : ""
+                    }`}
                   >
-                    <div>
+                    <div className={styles.cardHeader}>
                       <span className={styles.titleCardTres}>
                         {veiculo.modelo}
                       </span>
+                      {veiculoEmTransito(veiculo) && (
+                        <span className={styles.badgeTransito}>
+                          Em trânsito
+                        </span>
+                      )}
                     </div>
                     <div>
                       <span className={styles.titleCard}>
@@ -333,52 +338,6 @@ export default function Veiculos() {
                       }
                     ></Ginput>
                   </div>
-
-                  <div className={styles.input}>
-                    <Ginput
-                      type={"text"}
-                      placeholder={"EX: '8AFER13P8AJ323520'"}
-                      maxLength={200}
-                      label={"Chassi"}
-                      value={novoVeiculo.chassi}
-                      onChange={(e) =>
-                        setNovoVeiculos({
-                          ...novoVeiculo,
-                          chassi: e.target.value,
-                        })
-                      }
-                    ></Ginput>
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput
-                      type={"number"}
-                      placeholder={"EX: '214278620'"}
-                      maxLength={100}
-                      label={"Renavam"}
-                      value={novoVeiculo.renavam}
-                      onChange={(e) =>
-                        setNovoVeiculos({
-                          ...novoVeiculo,
-                          renavam: parseInt(e.target.value),
-                        })
-                      }
-                    ></Ginput>
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput
-                      type={"number"}
-                      placeholder={"EX: '6796000000000001'"}
-                      maxLength={300}
-                      label={"Cartão"}
-                      value={novoVeiculo.cartao}
-                      onChange={(e) =>
-                        setNovoVeiculos({
-                          ...novoVeiculo,
-                          cartao: parseInt(e.target.value),
-                        })
-                      }
-                    ></Ginput>
-                  </div>
                 </form>
                 <div className={styles.butaoForm}>
                   <BadButton
@@ -395,7 +354,7 @@ export default function Veiculos() {
                     onClick={async () => {
                       const token = localStorage.getItem("token");
                       const response = await fetch(
-                        `${process.env.NEXT_PUBLIC_LOCAL}/veiculos/cadastrar`,
+                        `${process.env.NEXT_PUBLIC_LOCAL}/veiculos`,
                         {
                           method: "POST",
                           headers: {
@@ -420,9 +379,6 @@ export default function Veiculos() {
                           tipo: "",
                           km: "",
                           ano: "",
-                          chassi: "",
-                          renavam: "",
-                          cartao: "",
                         });
                         setTipoVeiculoSelecionado("");
                       } else {
@@ -447,13 +403,13 @@ export default function Veiculos() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={"EX: 'Corsa'"}
-                      maxLength={50}
+                      placeholder={""}
+                      maxLength={200}
                       label={"Modelo"}
-                      value={novoVeiculo.modelo}
+                      value={veiculosEditando.modelo}
                       onChange={(e) =>
-                        setNovoVeiculos({
-                          ...novoVeiculo,
+                        setVeiculosEditando({
+                          ...veiculosEditando,
                           modelo: e.target.value,
                         })
                       }
@@ -462,71 +418,14 @@ export default function Veiculos() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={"EX: 'Branco'"}
-                      maxLength={50}
+                      placeholder={"Branco"}
+                      maxLength={7}
                       label={"Cor"}
-                      value={novoVeiculo.cor}
+                      value={veiculosEditando.cor}
                       onChange={(e) =>
-                        setNovoVeiculos({ ...novoVeiculo, cor: e.target.value })
-                      }
-                    ></Ginput>
-                  </div>
-                  {/* MELHORIA FRONT-END: tipo do veículo agora é selecionado por dropdown. */}
-                  <div className={styles.input}>
-                    <div className={styles.choiceboxContainer}>
-                      <label className={styles.selectLabel}>Tipo</label>
-                      <select
-                        className={styles.choicebox}
-                        value={tipoVeiculoSelecionado}
-                        onChange={(e) => {
-                          const valor = e.target.value;
-                          setTipoVeiculoSelecionado(valor);
-                          setNovoVeiculos({
-                            ...novoVeiculo,
-                            tipo: valor === "Outro" ? "" : valor,
-                          });
-                        }}
-                      >
-                        <option value="">Escolha o tipo</option>
-                        <option value="Hatch">Hatch</option>
-                        <option value="Sedan">Sedan</option>
-                        <option value="Pickup">Pickup</option>
-                        <option value="SUV">SUV</option>
-                        <option value="Van">Van</option>
-                        <option value="Micro-ônibus">Micro-ônibus</option>
-                        <option value="Ônibus">Ônibus</option>
-                        <option value="Outro">Outro</option>
-                      </select>
-                    </div>
-                  </div>
-                  {tipoVeiculoSelecionado === "Outro" && (
-                    <div className={styles.input}>
-                      <Ginput
-                        type={"text"}
-                        placeholder={"Digite o tipo do veículo"}
-                        maxLength={50}
-                        label={"Outro tipo"}
-                        value={novoVeiculo.tipo}
-                        onChange={(e) =>
-                          setNovoVeiculos({
-                            ...novoVeiculo,
-                            tipo: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                  )}
-                  <div className={styles.input}>
-                    <Ginput
-                      type={"number"}
-                      placeholder={"EX: '2022'"}
-                      maxLength={30}
-                      label={"Ano"}
-                      value={novoVeiculo.ano}
-                      onChange={(e) =>
-                        setNovoVeiculos({
-                          ...novoVeiculo,
-                          ano: parseInt(e.target.value),
+                        setVeiculosEditando({
+                          ...veiculosEditando,
+                          cor: e.target.value,
                         })
                       }
                     ></Ginput>
@@ -534,14 +433,14 @@ export default function Veiculos() {
                   <div className={styles.input}>
                     <Ginput
                       type={"text"}
-                      placeholder={"EX: '8AFER13P8AJ323520'"}
-                      maxLength={200}
-                      label={"Chassi"}
-                      value={novoVeiculo.chassi}
+                      placeholder={"Hatch"}
+                      maxLength={30}
+                      label={"Tipo"}
+                      value={veiculosEditando.tipo}
                       onChange={(e) =>
-                        setNovoVeiculos({
-                          ...novoVeiculo,
-                          chassi: e.target.value,
+                        setVeiculosEditando({
+                          ...veiculosEditando,
+                          tipo: e.target.value,
                         })
                       }
                     ></Ginput>
@@ -549,29 +448,29 @@ export default function Veiculos() {
                   <div className={styles.input}>
                     <Ginput
                       type={"number"}
-                      placeholder={"EX: '214278620'"}
-                      maxLength={100}
-                      label={"Renavam"}
-                      value={novoVeiculo.renavam}
-                      onChange={(e) =>
-                        setNovoVeiculos({
-                          ...novoVeiculo,
-                          renavam: parseInt(e.target.value),
-                        })
-                      }
-                    ></Ginput>
-                  </div>
-                  <div className={styles.input}>
-                    <Ginput
-                      type={"number"}
-                      placeholder={"EX: '6796000000000001'"}
+                      placeholder={"20222"}
                       maxLength={300}
-                      label={"Cartão"}
-                      value={novoVeiculo.cartao}
+                      label={"Quilometragem"}
+                      value={veiculosEditando.km}
                       onChange={(e) =>
-                        setNovoVeiculos({
-                          ...novoVeiculo,
-                          cartao: parseInt(e.target.value),
+                        setVeiculosEditando({
+                          ...veiculosEditando,
+                          km: parseInt(e.target.value),
+                        })
+                      }
+                    ></Ginput>
+                  </div>
+                  <div className={styles.input}>
+                    <Ginput
+                      type={"number"}
+                      placeholder={"2022"}
+                      maxLength={30}
+                      label={"Ano"}
+                      value={veiculosEditando.ano}
+                      onChange={(e) =>
+                        setVeiculosEditando({
+                          ...veiculosEditando,
+                          ano: parseInt(e.target.value),
                         })
                       }
                     ></Ginput>
